@@ -34,7 +34,7 @@ export default async function ReflectionsPage() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Reflection vault</h1>
+      <h1 className="h-page">Reflection vault</h1>
       <p className="mt-2 max-w-[60ch] text-muted">Everything you have written while learning. Only you can see it.</p>
       <div className="mt-8">
         <Vault reflections={reflections} notes={notes} />

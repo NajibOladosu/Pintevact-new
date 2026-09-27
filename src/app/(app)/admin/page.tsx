@@ -29,11 +29,11 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-10">
       <AdminNav active="overview" />
-      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-3">
+      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[1.6rem] border border-line bg-line lg:grid-cols-3">
         {figures.map(([label, value]) => (
           <div key={label} className="bg-bg p-5">
             <dt className="text-sm text-subtle">{label}</dt>
-            <dd className="tabular mt-1 text-2xl font-semibold tracking-tight">{value}</dd>
+            <dd className="tabular mt-1 text-2xl font-semibold tracking-[-0.035em]">{value}</dd>
           </div>
         ))}
       </dl>

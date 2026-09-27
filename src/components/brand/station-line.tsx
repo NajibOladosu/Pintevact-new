@@ -10,7 +10,7 @@ export type Station = {
 };
 
 /**
- * The Pintevact line: stations on a 2px rail. Traveled rail and finished
+ * Lesson progress as stations on a rounded rail. Traveled rail and finished
  * stations are orange; the current station is ringed; stations ahead are hollow.
  */
 export function StationLine({ stations, className, size = "md", showLabels = false }: { stations: Station[]; className?: string; size?: "sm" | "md"; showLabels?: boolean }) {
@@ -23,8 +23,8 @@ export function StationLine({ stations, className, size = "md", showLabels = fal
   return (
     <div className={cn("relative", className)}>
       <div className={cn("relative flex items-center justify-between", size === "sm" ? "h-3" : "h-4")}>
-        <span aria-hidden className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-line-strong" />
-        <span aria-hidden className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-accent transition-[width] duration-700 ease-[var(--ease-out-expo)]" style={{ width: `${traveled}%` }} />
+        <span aria-hidden className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-line-strong" />
+        <span aria-hidden className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent transition-[width] duration-700 ease-[var(--ease-out-expo)]" style={{ width: `${traveled}%` }} />
         {stations.map((s) => {
           const marker = (
             <span
@@ -67,8 +67,8 @@ export function LineBullet({ code, className, tone = "outline" }: { code: string
     <span
       aria-hidden
       className={cn(
-        "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-mono text-[0.72rem] font-medium tracking-tight",
-        tone === "solid" ? "bg-fg text-bg" : "border-2 border-fg text-fg",
+        "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[0.72rem] font-semibold tracking-[0.02em]",
+        tone === "solid" ? "bg-accent text-on-accent" : "bg-violet text-on-violet",
         className,
       )}
     >

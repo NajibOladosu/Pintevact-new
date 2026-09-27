@@ -243,7 +243,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
     <div className="grid gap-6 2xl:grid-cols-[1fr_22rem]">
       {/* Stage: always dark, like any video surface */}
       <div>
-        <div ref={stageRef} className={cn("dark relative overflow-hidden rounded-2xl bg-bg text-fg", fullscreen && "flex items-center rounded-none")} data-testid="player">
+        <div ref={stageRef} className={cn("dark relative overflow-hidden rounded-[1.6rem] bg-bg text-fg", fullscreen && "flex items-center rounded-none")} data-testid="player">
           <div className="relative aspect-video w-full">
             {source.kind === "hls" ? (
               <video ref={videoRef} className="absolute inset-0 h-full w-full bg-black" poster={source.poster ?? undefined} playsInline preload="metadata" onClick={() => !active && pb.toggle()} />
@@ -264,7 +264,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
 
             {pb.buffering && pb.playing ? <div className="absolute left-1/2 top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-2 border-fg/20 border-t-accent" aria-label="Loading" /> : null}
 
-            {pb.error ? <p className="absolute inset-x-4 top-4 z-10 rounded-[10px] bg-raised p-3 text-center text-sm text-fg ring-1 ring-danger/50">{pb.error}</p> : null}
+            {pb.error ? <p className="absolute inset-x-4 top-4 z-10 rounded-[0.85rem] bg-raised p-3 text-center text-sm text-fg ring-1 ring-danger/50">{pb.error}</p> : null}
 
             {active ? (
               <div className="fixed inset-0 z-[60] flex overflow-y-auto bg-bg/90 p-3 backdrop-blur-sm sm:absolute sm:z-20 sm:bg-bg/75 sm:p-6">
@@ -281,7 +281,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
                     <Check size={28} weight="bold" />
                   </span>
                   <p className="mt-5 text-sm text-on-violet-muted">{celebration.courseCompleted ? "Course complete" : "Lesson complete"}</p>
-                  <p className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">{celebration.courseCompleted ? "You finished the whole line." : "Station reached."}</p>
+                  <p className="mt-1 h-page">{celebration.courseCompleted ? "You finished the whole line." : "Station reached."}</p>
                   {celebration.xpAwarded ? <p className="tabular mt-2 font-medium text-on-violet-muted">+{celebration.xpAwarded} XP</p> : null}
                   <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">
                     {celebration.certificateId ? (
@@ -293,7 +293,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
                         Next lesson <SkipForward size={16} weight="fill" />
                       </Link>
                     ) : null}
-                    <button type="button" onClick={() => setCelebration(null)} className="inline-flex h-11 items-center justify-center rounded-[10px] px-5 text-sm font-medium text-on-violet ring-1 ring-on-violet/30 hover:ring-on-violet/60">
+                    <button type="button" onClick={() => setCelebration(null)} className="inline-flex h-11 items-center justify-center rounded-[0.85rem] px-5 text-sm font-medium text-on-violet ring-1 ring-on-violet/30 hover:ring-on-violet/60">
                       Stay here
                     </button>
                   </div>
@@ -372,7 +372,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
                     {pb.rate}×
                   </button>
                   {showRates ? (
-                    <div className="absolute bottom-10 right-0 z-30 flex flex-col rounded-xl border border-line bg-raised p-1">
+                    <div className="absolute bottom-10 right-0 z-30 flex flex-col rounded-[1.1rem] bg-raised ring-1 ring-line p-1">
                       {PLAYBACK_RATES.map((r) => (
                         <button
                           key={r}
@@ -414,7 +414,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
       </div>
 
       {/* Side panel */}
-      <aside className="flex max-h-[28rem] flex-col overflow-hidden rounded-2xl border border-line bg-raised 2xl:max-h-[42rem]">
+      <aside className="flex max-h-[28rem] flex-col overflow-hidden rounded-[1.6rem] bg-raised ring-1 ring-line 2xl:max-h-[42rem]">
         <div role="tablist" className="grid grid-cols-3 gap-1 border-b border-line p-1.5">
           {(
             [
@@ -436,7 +436,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
                 const done = answers.has(i.id);
                 return (
                   <li key={i.id}>
-                    <button type="button" onClick={() => openInteraction(i)} className="flex w-full items-start gap-3 rounded-xl p-3 text-left transition-colors hover:bg-fg/[0.04]">
+                    <button type="button" onClick={() => openInteraction(i)} className="flex w-full items-start gap-3 rounded-[1.1rem] p-3 text-left transition-colors hover:bg-fg/[0.04]">
                       <span className={cn("mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2", done ? "border-accent bg-accent text-on-accent" : "border-line-strong text-muted")}>
                         {done ? <Check size={12} weight="bold" /> : <meta.icon size={12} />}
                       </span>
@@ -457,7 +457,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
             <ol>
               {lesson.chapters.map((c) => (
                 <li key={c.atSeconds}>
-                  <button type="button" onClick={() => pb.seek(c.atSeconds)} className={cn("flex w-full items-center justify-between gap-3 rounded-xl p-3 text-left text-sm transition-colors hover:bg-fg/[0.04]", chapter?.atSeconds === c.atSeconds && "bg-fg/[0.05] font-medium")}>
+                  <button type="button" onClick={() => pb.seek(c.atSeconds)} className={cn("flex w-full items-center justify-between gap-3 rounded-[1.1rem] p-3 text-left text-sm transition-colors hover:bg-fg/[0.04]", chapter?.atSeconds === c.atSeconds && "bg-fg/[0.05] font-medium")}>
                     <span>{c.title}</span>
                     <span className="tabular text-xs text-subtle">{formatDuration(c.atSeconds)}</span>
                   </button>
@@ -467,7 +467,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
           ) : null}
           {panel === "notes" ? (
             <div className="p-1">
-              <div className="rounded-xl border border-line bg-bg p-3 focus-within:border-fg">
+              <div className="rounded-[1.1rem] border border-line bg-bg p-3 focus-within:border-fg">
                 <label htmlFor="note-input" className="tabular text-xs text-subtle">
                   Note at {formatDuration(pb.time)}
                 </label>
@@ -492,7 +492,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
               </div>
               <ul className="mt-2">
                 {notes.map((n) => (
-                  <li key={n.id} className="group flex gap-3 rounded-xl p-2.5 hover:bg-fg/[0.04]">
+                  <li key={n.id} className="group flex gap-3 rounded-[1.1rem] p-2.5 hover:bg-fg/[0.04]">
                     <button type="button" onClick={() => pb.seek(n.atSeconds)} className="tabular h-fit shrink-0 rounded-md bg-fg/[0.07] px-1.5 py-0.5 text-xs font-medium hover:bg-accent hover:text-on-accent">
                       {formatDuration(n.atSeconds)}
                     </button>

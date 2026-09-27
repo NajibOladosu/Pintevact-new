@@ -57,7 +57,7 @@ export default async function LessonPage({ params, searchParams }: Props) {
           Lesson {index + 1} of {total}
         </span>
       </nav>
-      <h1 className="mb-6 text-3xl font-semibold tracking-tight sm:text-4xl">{lesson.title}</h1>
+      <h1 className="mb-6 h-page">{lesson.title}</h1>
 
       <LessonPlayer
         key={lesson.id}
@@ -75,7 +75,7 @@ export default async function LessonPage({ params, searchParams }: Props) {
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
         <section>
-          <h2 className="text-lg font-semibold">About this lesson</h2>
+          <h2 className="text-xl font-semibold tracking-[-0.03em]">About this lesson</h2>
           <p className="mt-2 text-muted">{lesson.summary}</p>
           <h3 className="mt-8 flex items-center gap-2 font-semibold">
             <Lightbulb size={16} className="text-accent-ink" /> Key takeaways
@@ -90,7 +90,7 @@ export default async function LessonPage({ params, searchParams }: Props) {
           </ol>
         </section>
         {lesson.exercise ? (
-          <section className="self-start rounded-2xl bg-violet p-6 text-on-violet sm:p-7">
+          <section className="self-start rounded-[1.6rem] bg-violet p-6 text-on-violet sm:p-7">
             <h2 className="flex items-center gap-2 text-sm text-on-violet-muted">
               <Target size={16} /> Try it this week
             </h2>
@@ -101,7 +101,7 @@ export default async function LessonPage({ params, searchParams }: Props) {
 
       <div className="mt-12 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
         {prev ? (
-          <Link href={`/learn/${course.slug}/${prev.slug}`} className="group rounded-xl p-4 transition-colors hover:bg-fg/[0.03]">
+          <Link href={`/learn/${course.slug}/${prev.slug}`} className="group rounded-[1.1rem] p-4 transition-colors hover:bg-fg/[0.03]">
             <span className="inline-flex items-center gap-1 text-sm text-subtle">
               <ArrowLeft size={12} /> Previous
             </span>
@@ -111,7 +111,7 @@ export default async function LessonPage({ params, searchParams }: Props) {
           <span />
         )}
         {next ? (
-          <Link href={nextHref ?? `/courses/${course.slug}`} className={cn("group rounded-xl p-4 text-right transition-colors hover:bg-fg/[0.03]", !nextHref && "opacity-70")}>
+          <Link href={nextHref ?? `/courses/${course.slug}`} className={cn("group rounded-[1.1rem] p-4 text-right transition-colors hover:bg-fg/[0.03]", !nextHref && "opacity-70")}>
             <span className="inline-flex items-center gap-1 text-sm text-subtle">
               {nextHref ? "Next" : "Unlock next"} <ArrowRight size={12} />
             </span>

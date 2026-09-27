@@ -10,7 +10,7 @@ import type { FormState } from "@/lib/validation";
 function Status({ state }: { state: FormState }) {
   if (!state.message) return null;
   return (
-    <p role={state.ok ? "status" : "alert"} className={state.ok ? "rounded-[10px] bg-violet-soft p-3 text-sm text-fg" : "rounded-[10px] border border-danger/40 p-3 text-sm text-danger"}>
+    <p role={state.ok ? "status" : "alert"} className={state.ok ? "rounded-[0.85rem] bg-violet-soft p-3 text-sm text-fg" : "rounded-[0.85rem] border border-danger/40 p-3 text-sm text-danger"}>
       {state.message}
     </p>
   );
@@ -32,7 +32,7 @@ export function ProfileForm({ fullName, headline, emailOptIn }: { fullName: stri
           <Input id="headline" name="headline" defaultValue={headline} placeholder="e.g. Recovering overthinker" />
         </div>
       </div>
-      <label className="flex items-start gap-3 rounded-2xl border border-line p-4">
+      <label className="flex items-start gap-3 rounded-[1.6rem] border border-line p-4">
         <input type="checkbox" name="emailOptIn" defaultChecked={emailOptIn} className="mt-1 h-5 w-5 accent-[var(--accent)]" />
         <span>
           <span className="block font-semibold">Learning emails</span>

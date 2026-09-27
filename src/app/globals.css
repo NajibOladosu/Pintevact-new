@@ -263,3 +263,13 @@
     display: none;
   }
 }
+
+@layer components {
+  /* Page title inside the learner app. */
+  .h-page {
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+}

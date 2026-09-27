@@ -11,7 +11,7 @@ function Status({ ok, message }: { ok?: boolean; message?: string }) {
   return <p role="status" className={ok ? "text-sm font-semibold text-accent-ink" : "text-sm font-semibold text-danger"}>{message}</p>;
 }
 
-const select = "h-11 w-full rounded-[10px] border border-line-strong bg-raised px-3.5 text-fg focus:border-fg focus:outline-none";
+const select = "h-11 w-full rounded-[0.85rem] border border-line bg-raised px-3.5 text-fg focus:border-accent focus:outline-none";
 
 export function CourseForm({ course }: { course: Course }) {
   const [state, action, pending] = useActionState(saveCourse, {});

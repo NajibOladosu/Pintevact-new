@@ -59,7 +59,7 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
       role="dialog"
       aria-modal="false"
       aria-labelledby={`int-${interaction.id}`}
-      className={cn("w-full max-w-xl rounded-2xl p-5 sm:p-7", answered ? "animate-flip bg-violet text-on-violet" : "animate-enter border border-line bg-raised text-fg")}
+      className={cn("w-full max-w-xl rounded-[1.6rem] p-5 sm:p-7", answered ? "animate-flip bg-violet text-on-violet" : "animate-enter bg-raised ring-1 ring-line text-fg")}
       data-testid="interaction-card"
     >
       <div className="flex items-center justify-between gap-3">
@@ -98,7 +98,7 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
                   submit({ optionId: o.id });
                 }}
                 className={cn(
-                  "relative flex items-center gap-3 overflow-hidden rounded-[10px] px-3.5 py-3 text-left text-[0.95rem] font-medium leading-snug transition-colors",
+                  "relative flex items-center gap-3 overflow-hidden rounded-[0.85rem] px-3.5 py-3 text-left text-[0.95rem] font-medium leading-snug transition-colors",
                   !answered && "border border-line-strong hover:border-fg hover:bg-fg/[0.03]",
                   answered && "border border-on-violet/20",
                   isQuizBack && o.correct && "border-on-violet bg-on-violet text-violet",
@@ -132,8 +132,8 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
             maxLength={5000}
             placeholder="Write freely. Only you can see this."
             className={cn(
-              "w-full resize-none rounded-[10px] p-3.5 leading-relaxed focus:outline-none focus-visible:outline-none",
-              answered ? "bg-on-violet/10 text-on-violet" : "border border-line-strong bg-bg focus:border-fg",
+              "w-full resize-none rounded-[0.85rem] p-3.5 leading-relaxed focus:outline-none focus-visible:outline-none",
+              answered ? "bg-on-violet/10 text-on-violet" : "border border-line-strong bg-bg focus:border-accent",
             )}
           />
           <p className={cn("mt-1.5 flex items-center gap-1.5 text-xs", answered ? "text-on-violet-muted" : "text-subtle")}>
@@ -194,7 +194,7 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
           <span />
         )}
         {answered ? (
-          <button ref={continueRef} type="button" onClick={onContinue} className="inline-flex h-10 items-center gap-2 rounded-[10px] bg-on-violet px-4 text-sm font-medium text-violet transition-opacity hover:opacity-90">
+          <button ref={continueRef} type="button" onClick={onContinue} className="inline-flex h-10 items-center gap-2 rounded-[0.85rem] bg-on-violet px-4 text-sm font-medium text-violet transition-opacity hover:opacity-90">
             Continue <ArrowRight size={14} />
           </button>
         ) : interaction.type === "reflection" ? (

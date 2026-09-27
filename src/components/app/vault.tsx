@@ -21,7 +21,7 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
   return (
     <div>
       <div className="flex flex-col gap-4 border-b border-line pb-6 md:flex-row md:items-center md:justify-between">
-        <div role="tablist" className="inline-flex self-start rounded-[10px] bg-sunken p-1">
+        <div role="tablist" className="inline-flex self-start rounded-[0.85rem] bg-sunken p-1">
           {(["reflections", "notes"] as const).map((t) => (
             <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={cn("rounded-lg px-4 py-1.5 text-sm capitalize transition-colors", tab === t ? "bg-raised font-medium text-fg shadow-[0_1px_2px_rgb(17_16_28/0.12)]" : "text-muted hover:text-fg")}>
               {t} <span className="tabular ml-1 text-xs text-subtle">{t === "reflections" ? reflections.length : notes.length}</span>
@@ -32,9 +32,9 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
           <label className="relative flex-1 md:w-64">
             <span className="sr-only">Search your vault</span>
             <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-subtle" />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} type="search" placeholder="Search your writing" className="h-10 w-full rounded-[10px] border border-line-strong bg-raised pl-9 pr-3 text-sm placeholder:text-subtle focus:border-fg focus:outline-none focus-visible:outline-none" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} type="search" placeholder="Search your writing" className="h-10 w-full rounded-[0.85rem] border border-line-strong bg-raised pl-9 pr-3 text-sm placeholder:text-subtle focus:border-accent focus:outline-none focus-visible:outline-none" />
           </label>
-          <select aria-label="Filter by course" value={course} onChange={(e) => setCourse(e.target.value)} className="h-10 max-w-44 rounded-[10px] border border-line-strong bg-raised px-3 text-sm focus:border-fg focus:outline-none">
+          <select aria-label="Filter by course" value={course} onChange={(e) => setCourse(e.target.value)} className="h-10 max-w-44 rounded-[0.85rem] border border-line bg-raised px-3 text-sm focus:border-accent focus:outline-none">
             {courses.map((c) => (
               <option key={c}>{c}</option>
             ))}
@@ -46,7 +46,7 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
         shownReflections.length ? (
           <div className="mt-8 columns-1 gap-4 md:columns-2">
             {shownReflections.map((r) => (
-              <article key={r.id} className="mb-4 break-inside-avoid rounded-2xl border border-line bg-raised p-6">
+              <article key={r.id} className="mb-4 break-inside-avoid rounded-[1.6rem] bg-raised ring-1 ring-line p-6">
                 <p className="text-sm text-subtle">{r.prompt}</p>
                 <p className="mt-3 whitespace-pre-wrap text-lg leading-relaxed">“{r.text}”</p>
                 <div className="mt-5 flex items-center justify-between gap-4 text-sm text-subtle">
@@ -88,7 +88,7 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
 
 function Empty({ text }: { text: string }) {
   return (
-    <div className="mt-8 rounded-2xl border border-dashed border-line-strong px-6 py-14 text-center">
+    <div className="mt-8 rounded-[1.6rem] border border-dashed border-line-strong px-6 py-14 text-center">
       <p className="text-muted">{text}</p>
     </div>
   );

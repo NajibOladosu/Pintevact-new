@@ -46,7 +46,7 @@ export default async function LearnCoursePage({ params }: Props) {
         </span>
         {!hasAccess ? <Badge tone="soft">Preview</Badge> : null}
       </div>
-      <h1 className="mt-5 text-3xl font-semibold tracking-tight sm:text-4xl">{course.title}</h1>
+      <h1 className="mt-5 h-page">{course.title}</h1>
       <p className="mt-3 max-w-[56ch] text-muted">{course.subtitle}</p>
 
       <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -71,7 +71,7 @@ export default async function LearnCoursePage({ params }: Props) {
       </div>
 
       {!hasAccess ? (
-        <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl bg-violet p-6 text-on-violet sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-[1.6rem] bg-violet p-6 text-on-violet sm:flex-row sm:items-center">
           <div>
             <p className="font-semibold">You&apos;re previewing this course.</p>
             <p className="text-sm text-on-violet-muted">Unlock every lesson for {formatPrice(course.priceCents)}, or get every course with All-Access.</p>
@@ -84,7 +84,7 @@ export default async function LearnCoursePage({ params }: Props) {
                 Buy course
               </button>
             </form>
-            <Link href="/pricing" className="inline-flex h-9 items-center rounded-[10px] px-3.5 text-sm font-medium text-on-violet ring-1 ring-on-violet/30 hover:ring-on-violet/60">
+            <Link href="/pricing" className="inline-flex h-9 items-center rounded-[0.85rem] px-3.5 text-sm font-medium text-on-violet ring-1 ring-on-violet/30 hover:ring-on-violet/60">
               All-Access
             </Link>
           </div>
@@ -142,9 +142,9 @@ export default async function LearnCoursePage({ params }: Props) {
                 return (
                   <li key={l.id}>
                     {locked ? (
-                      <div className="flex gap-4 rounded-xl py-3 pr-3 opacity-60">{body}</div>
+                      <div className="flex gap-4 rounded-[1.1rem] py-3 pr-3 opacity-60">{body}</div>
                     ) : (
-                      <Link href={`/learn/${course.slug}/${l.slug}`} className="-ml-0 flex gap-4 rounded-xl py-3 pr-3 transition-colors hover:bg-fg/[0.03]">
+                      <Link href={`/learn/${course.slug}/${l.slug}`} className="-ml-0 flex gap-4 rounded-[1.1rem] py-3 pr-3 transition-colors hover:bg-fg/[0.03]">
                         {body}
                       </Link>
                     )}

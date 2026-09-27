@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export function AccountTabs({ active }: { active: "profile" | "billing" }) {
   return (
-    <div className="inline-flex self-start rounded-[10px] bg-sunken p-1">
+    <div className="inline-flex self-start rounded-[0.85rem] bg-sunken p-1">
       {[
         { id: "profile", href: "/account", label: "Profile and security" },
         { id: "billing", href: "/account/billing", label: "Billing" },

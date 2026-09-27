@@ -27,7 +27,7 @@ export default async function BillingPage() {
         <AccountTabs active="billing" />
       </header>
 
-      <section className="overflow-hidden rounded-2xl border border-line bg-raised">
+      <section className="overflow-hidden rounded-[1.6rem] bg-raised ring-1 ring-line">
         <div className={active ? "bg-violet p-6 text-on-violet sm:p-8" : "p-6 sm:p-8"}>
           <div className="flex items-center gap-3">
             <CreditCard size={18} />
@@ -82,7 +82,7 @@ export default async function BillingPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-line bg-raised p-6 sm:p-8">
+      <section className="rounded-[1.6rem] bg-raised ring-1 ring-line p-6 sm:p-8">
         <div className="flex items-center gap-3">
           <Receipt className="text-accent-ink" />
           <h2 className="text-lg">Purchases</h2>
@@ -120,7 +120,7 @@ export default async function BillingPage() {
         )}
       </section>
 
-      <section className="rounded-2xl border border-line bg-raised p-6 sm:p-8">
+      <section className="rounded-[1.6rem] bg-raised ring-1 ring-line p-6 sm:p-8">
         <div className="flex items-center gap-3">
           <Award className="text-accent-ink" />
           <h2 className="text-lg">Certificates</h2>
@@ -129,7 +129,7 @@ export default async function BillingPage() {
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {certificates.map((cert) => (
               <li key={cert.id}>
-                <Link href={`/certificates/${cert.id}`} className="block rounded-2xl border border-line p-4 transition hover:border-line-strong">
+                <Link href={`/certificates/${cert.id}`} className="block rounded-[1.6rem] border border-line p-4 transition hover:border-line-strong">
                   <p className="font-semibold">{courseById.get(cert.courseId)?.title ?? "Course"}</p>
                   <p className="text-sm text-muted">Issued {formatDate(cert.issuedAt)}</p>
                 </Link>

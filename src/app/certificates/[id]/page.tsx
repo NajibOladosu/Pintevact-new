@@ -26,7 +26,7 @@ export default async function CertificatePage({ params }: Props) {
   if (!cert) notFound();
   return (
     <main id="main" className="flex min-h-dvh flex-col items-center justify-center px-4 py-10 print:p-0">
-      <div className="relative flex aspect-[1.414/1] w-full max-w-5xl flex-col justify-between rounded-2xl bg-violet p-6 text-on-violet sm:p-14 print:rounded-none">
+      <div className="relative flex aspect-[1.414/1] w-full max-w-5xl flex-col justify-between rounded-[1.6rem] bg-violet p-6 text-on-violet sm:p-14 print:rounded-none">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-accent" aria-hidden />
@@ -38,7 +38,7 @@ export default async function CertificatePage({ params }: Props) {
           <p className="text-sm text-on-violet-muted sm:text-lg">This certifies that</p>
           <p className="mt-1 text-3xl font-semibold tracking-tight sm:mt-2 sm:text-6xl">{cert.learnerName}</p>
           <p className="mt-2 text-sm text-on-violet-muted sm:mt-5 sm:text-lg">completed every lesson and checkpoint of</p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight sm:mt-2 sm:text-4xl">{cert.courseTitle}</p>
+          <p className="mt-1 text-2xl font-semibold tracking-[-0.035em] sm:mt-2 sm:text-4xl">{cert.courseTitle}</p>
         </div>
         <div>
           <StationLine

@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Account" };
 
 function Section({ title, description, children, danger }: { title: string; description: string; children: React.ReactNode; danger?: boolean }) {
   return (
-    <section className={`grid gap-6 rounded-2xl border p-6 sm:p-8 lg:grid-cols-[16rem_1fr] ${danger ? "border-danger/40" : "border-line bg-raised"}`}>
+    <section className={`grid gap-6 rounded-[1.6rem] border p-6 sm:p-8 lg:grid-cols-[16rem_1fr] ${danger ? "border-danger/40" : "border-line bg-raised"}`}>
       <div>
         <h2 className={`text-lg ${danger ? "text-danger" : ""}`}>{title}</h2>
         <p className="mt-1 text-sm text-muted">{description}</p>

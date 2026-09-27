@@ -30,7 +30,7 @@ export default async function AdminCoursePage({ params }: { params: Promise<{ sl
           View public page <ExternalLink size={14} />
         </Link>
       </div>
-      <section className="rounded-2xl border border-line bg-raised p-6 sm:p-8">
+      <section className="rounded-[1.6rem] bg-raised ring-1 ring-line p-6 sm:p-8">
         <h2 className="text-2xl tracking-tight">{course.title}</h2>
         <div className="mt-6">
           <CourseForm course={course} />
@@ -44,7 +44,7 @@ export default async function AdminCoursePage({ params }: { params: Promise<{ sl
           </p>
         </div>
         {course.modules.map((m, mi) => (
-          <div key={m.id} className="rounded-2xl border border-line bg-raised p-6">
+          <div key={m.id} className="rounded-[1.6rem] bg-raised ring-1 ring-line p-6">
             <p className="text-sm text-muted">Module {mi + 1}</p>
             <h3 className="mt-1 text-lg">{m.title}</h3>
             <ul className="mt-5 space-y-6">

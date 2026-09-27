@@ -16,10 +16,10 @@ export default async function LearnPage() {
   const locked = snap.recommended.filter((c) => !snap.canAccess(c));
   return (
     <div className="mx-auto max-w-5xl">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">My courses</h1>
+      <h1 className="h-page">My courses</h1>
 
       {snap.enrolled.length ? (
-        <div className="-mx-4 mt-8 md:-mx-5">
+        <div className="mt-8 grid gap-3">
           {snap.enrolled.map((e) => {
             const cert = snap.certificates.find((c) => c.courseId === e.course.id);
             const finished = e.progress.total > 0 && e.progress.completed === e.progress.total;
@@ -41,7 +41,7 @@ export default async function LearnPage() {
           })}
         </div>
       ) : (
-        <div className="mt-8 rounded-2xl border border-dashed border-line-strong px-6 py-14 text-center">
+        <div className="mt-8 rounded-[1.6rem] border border-dashed border-line-strong px-6 py-14 text-center">
           <p className="text-lg font-medium">No courses yet.</p>
           <p className="mt-1 text-muted">The free course is the best place to start.</p>
           <Link href="/learn/meet-your-mind" className={buttonClasses({ className: "mt-6" })}>
@@ -52,8 +52,8 @@ export default async function LearnPage() {
 
       {available.length ? (
         <section className="mt-16">
-          <h2 className="text-lg font-semibold">Included with your access</h2>
-          <div className="-mx-4 mt-3 md:-mx-5">
+          <h2 className="text-xl font-semibold tracking-[-0.03em]">Included with your access</h2>
+          <div className="mt-5 grid gap-3">
             {available.map((c) => (
               <CourseRow key={c.id} course={c} href={`/learn/${c.slug}`} />
             ))}
@@ -63,8 +63,8 @@ export default async function LearnPage() {
 
       {locked.length ? (
         <section className="mt-16">
-          <h2 className="text-lg font-semibold">More courses</h2>
-          <div className="-mx-4 mt-3 md:-mx-5">
+          <h2 className="text-xl font-semibold tracking-[-0.03em]">More courses</h2>
+          <div className="mt-5 grid gap-3">
             {locked.map((c) => (
               <CourseRow key={c.id} course={c} />
             ))}

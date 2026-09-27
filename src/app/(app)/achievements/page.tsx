@@ -25,9 +25,9 @@ export default async function AchievementsPage() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Achievements</h1>
+      <h1 className="h-page">Achievements</h1>
 
-      <section className="mt-8 rounded-2xl border border-line bg-raised p-6 sm:p-8">
+      <section className="mt-8 rounded-[1.6rem] bg-raised ring-1 ring-line p-6 sm:p-8">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <p className="text-sm text-subtle">Current level</p>
@@ -67,7 +67,7 @@ export default async function AchievementsPage() {
 
       <section className="mt-12">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-lg font-semibold">Badges</h2>
+          <h2 className="text-xl font-semibold tracking-[-0.03em]">Badges</h2>
           <p className="tabular text-sm text-subtle">
             {earned} of {snap.badges.length} earned
           </p>
@@ -76,7 +76,7 @@ export default async function AchievementsPage() {
           {snap.badges.map((b) => {
             const Icon = badgeIcon(b.id);
             return (
-              <li key={b.id} className={cn("flex gap-4 rounded-xl border p-4", b.earned ? "border-line-strong bg-raised" : "border-line")}>
+              <li key={b.id} className={cn("flex gap-4 rounded-[1.1rem] border p-4", b.earned ? "border-line-strong bg-raised" : "border-line")}>
                 <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", b.earned ? "bg-accent text-on-accent" : "border-2 border-dashed border-line-strong text-subtle")}>
                   <Icon size={18} weight={b.earned ? "fill" : "regular"} />
                 </span>
@@ -92,7 +92,7 @@ export default async function AchievementsPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-lg font-semibold">Recent XP</h2>
+        <h2 className="text-xl font-semibold tracking-[-0.03em]">Recent XP</h2>
         {snap.xpEvents.length ? (
           <ul className="mt-4 border-t border-line">
             {snap.xpEvents.slice(0, 15).map((e) => {

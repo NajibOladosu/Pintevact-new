@@ -14,7 +14,7 @@ export default async function AdminUsersPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <AdminNav active="users" />
-      <div className="overflow-x-auto rounded-2xl border border-line bg-raised">
+      <div className="overflow-x-auto rounded-[1.6rem] bg-raised ring-1 ring-line">
         <table className="w-full min-w-[44rem] text-left">
           <thead className="text-sm text-muted">
             <tr className="border-b border-line">

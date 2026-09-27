@@ -19,15 +19,15 @@ export function UserMenu({ name, email, isAdmin }: { name: string | null; email:
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-  const item = "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted hover:bg-fg/[0.05] hover:text-fg";
+  const item = "flex items-center gap-3 rounded-full px-3.5 py-2 text-sm text-muted hover:bg-fg/[0.05] hover:text-fg";
   return (
     <div className="relative" ref={ref}>
       <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((v) => !v)} className="rounded-full">
-        <Avatar name={name ?? email} size={34} />
+        <Avatar name={name ?? email} size={40} />
         <span className="sr-only">Open user menu</span>
       </button>
       {open ? (
-        <div role="menu" className="absolute right-0 top-11 z-50 w-60 animate-enter rounded-xl border border-line bg-raised p-1.5 shadow-[0_16px_40px_-16px_rgb(17_16_28/0.35)]">
+        <div role="menu" className="absolute right-0 top-12 z-50 w-64 animate-enter rounded-[1.1rem] bg-raised ring-1 ring-line p-2 shadow-card">
           <div className="px-3 py-2">
             <p className="truncate text-sm font-medium">{name ?? "Learner"}</p>
             <p className="truncate text-xs text-subtle">{email}</p>
