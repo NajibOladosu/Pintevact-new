@@ -6,7 +6,7 @@ export type StreakReminderEmailProps = { name?: string | null; streak: number; n
 export default function StreakReminderEmail({ name, streak, nextLessonTitle, nextLessonUrl }: StreakReminderEmailProps) {
   return (
     <EmailLayout preview={`Your ${streak}-day streak ends at midnight`} footerNote="You can turn off reminder emails in your account settings.">
-      <Heading>Don&apos;t let the flame go out{name ? `, ${name}` : ""}.</Heading>
+      <Heading eyebrow="Your streak">Don&apos;t let the flame go out{name ? `, ${name}` : ""}.</Heading>
       <P>Loss aversion is real, and today, it&apos;s working for you. One lesson keeps your streak alive.</P>
       <Callout>
         <Text style={{ margin: 0, fontSize: 13, color: brand.onVioletMuted }}>Up next</Text>

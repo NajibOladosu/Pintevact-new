@@ -5,7 +5,7 @@ export type InviteEmailProps = { inviteUrl: string };
 export default function InviteEmail({ inviteUrl }: InviteEmailProps) {
   return (
     <EmailLayout preview="You've been invited to Pintevact">
-      <Heading>Your place at Pintevact is ready.</Heading>
+      <Heading eyebrow="You're invited">Your place at Pintevact is ready.</Heading>
       <P>You&apos;ve been invited to Pintevact, interactive psychology courses for understanding yourself and using that knowledge to your advantage.</P>
       <CTA href={inviteUrl}>Accept invitation</CTA>
       <FallbackLink href={inviteUrl} />

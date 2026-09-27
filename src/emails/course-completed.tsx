@@ -6,7 +6,7 @@ export type CourseCompletedEmailProps = { name?: string | null; courseTitle: str
 export default function CourseCompletedEmail({ name, courseTitle, certificateId, xpEarned }: CourseCompletedEmailProps) {
   return (
     <EmailLayout preview={`You completed ${courseTitle}, your certificate is ready`}>
-      <Heading>You did the work{name ? `, ${name}` : ""}.</Heading>
+      <Heading eyebrow="Course complete">You did the work{name ? `, ${name}` : ""}.</Heading>
       <P>
         You&apos;ve completed <strong>{courseTitle}</strong>. Most people who start online courses never finish them. You&apos;re not most people.
       </P>

@@ -19,7 +19,7 @@ export default function PurchaseReceiptEmail({ name, courseTitle, courseSlug, am
   );
   return (
     <EmailLayout preview={`Your receipt for ${courseTitle}`} footerNote="Questions about your order? Just reply to this email.">
-      <Heading>It&apos;s yours{name ? `, ${name}` : ""}. Forever.</Heading>
+      <Heading eyebrow="Receipt">It&apos;s yours{name ? `, ${name}` : ""}. Forever.</Heading>
       <P>
         Thank you for investing in <strong>{courseTitle}</strong>. Research on the IKEA effect says we value what we put effort into, so here&apos;s to the effort ahead.
       </P>

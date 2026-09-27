@@ -5,7 +5,7 @@ export type MembershipCanceledEmailProps = { name?: string | null; accessUntil: 
 export default function MembershipCanceledEmail({ name, accessUntil }: MembershipCanceledEmailProps) {
   return (
     <EmailLayout preview="Your All-Access membership has been canceled">
-      <Heading>Thank you for the journey{name ? `, ${name}` : ""}.</Heading>
+      <Heading eyebrow="Membership">Thank you for the journey{name ? `, ${name}` : ""}.</Heading>
       <P>
         Your All-Access membership has been canceled.{" "}
         {accessUntil ? `You'll keep full access until ${accessUntil}.` : "Your access to member courses has ended."} Your reflections, notes and certificates stay with you forever.

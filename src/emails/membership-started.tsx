@@ -6,7 +6,7 @@ export type MembershipStartedEmailProps = { name?: string | null; plan: "monthly
 export default function MembershipStartedEmail({ name, plan, amount, renewsOn }: MembershipStartedEmailProps) {
   return (
     <EmailLayout preview="All-Access unlocked, every course is now yours" footerNote="Manage or cancel any time from Account → Billing.">
-      <Heading>Every door is open{name ? `, ${name}` : ""}.</Heading>
+      <Heading eyebrow="All-Access">Every door is open{name ? `, ${name}` : ""}.</Heading>
       <P>Your All-Access membership is live. Every current course, and every new one we release, is now part of your library.</P>
       <Callout>
         <Text style={{ margin: 0, fontSize: 14, lineHeight: "22px" }}>

@@ -19,7 +19,7 @@ export default function WeeklyDigestEmail({ name, xp, lessons, reflections, leve
   );
   return (
     <EmailLayout preview={`Your week in review: ${xp} XP, ${lessons} lessons`} footerNote="Weekly digests arrive every Sunday. Turn them off in your account settings.">
-      <Heading>Here&apos;s what you learned about yourself{name ? `, ${name}` : ""}.</Heading>
+      <Heading eyebrow="Your week">Here&apos;s what you learned about yourself{name ? `, ${name}` : ""}.</Heading>
       <Section style={{ backgroundColor: "#f8f2ea", borderRadius: 16, border: "1px solid #e2d9cc", margin: "0 0 20px" }}>
         <Row>
           {stat(xp, "XP")}

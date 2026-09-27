@@ -6,7 +6,7 @@ export type ContactNotificationEmailProps = { name: string; email: string; topic
 export default function ContactNotificationEmail({ name, email, topic, message }: ContactNotificationEmailProps) {
   return (
     <EmailLayout preview={`New ${topic} message from ${name}`}>
-      <Heading>New message from {name}</Heading>
+      <Heading eyebrow="New contact message">New message from {name}</Heading>
       <Text style={{ margin: "0 0 12px", fontSize: 14, color: brand.ink3 }}>Reply directly to this email to respond to {email}.</Text>
       <Section style={{ backgroundColor: "#f8f2ea", borderRadius: 16, padding: "16px 20px", border: "1px solid #e2d9cc" }}>
         <Text style={{ margin: 0, fontSize: 15, lineHeight: "24px", whiteSpace: "pre-wrap" }}>{message}</Text>

@@ -5,7 +5,7 @@ export type EmailChangeEmailProps = { confirmUrl: string; newEmail: string; isCu
 export default function EmailChangeEmail({ confirmUrl, newEmail, isCurrentAddress }: EmailChangeEmailProps) {
   return (
     <EmailLayout preview="Confirm your new Pintevact email address" footerNote="If you didn't request this change, please secure your account by resetting your password.">
-      <Heading>New address, same you.</Heading>
+      <Heading eyebrow="Email change">New address, same you.</Heading>
       <P>
         {isCurrentAddress
           ? `Someone (hopefully you) asked to change your Pintevact email to ${newEmail}. Confirm from this address to approve it.`
