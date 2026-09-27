@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ForgotPasswordForm } from "@/components/auth/simple-forms";
+import { AuthHeading, AuthSwapLine, swapLinkClass } from "@/components/auth/auth-frame";
 
 export const metadata: Metadata = { title: "Forgot password" };
 
 export default function ForgotPasswordPage() {
   return (
     <>
-      <h1 className="text-3xl font-semibold tracking-tight">Reset your password</h1>
-      <p className="mb-8 mt-2 text-muted">Enter your email and we&apos;ll send you a link to choose a new one.</p>
+      <AuthHeading eyebrow="It happens" title="Reset your password." lead="Enter your email and we'll send you a link to choose a new one." />
       <ForgotPasswordForm />
-      <p className="mt-8 text-center text-sm text-muted">
+      <AuthSwapLine>
         Remembered it?{" "}
-        <Link href="/login" className="font-medium text-fg underline decoration-line-strong underline-offset-4 hover:decoration-fg">
+        <Link href="/login" className={swapLinkClass}>
           Back to sign in
         </Link>
-      </p>
+      </AuthSwapLine>
     </>
   );
 }

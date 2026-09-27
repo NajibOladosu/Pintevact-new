@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { requestPasswordReset, resendConfirmation, updatePassword } from "@/app/(auth)/actions";
+import { ArrowUpRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
 import { PasswordInput } from "./password-input";
@@ -10,20 +11,20 @@ export function ForgotPasswordForm() {
   const [state, action, pending] = useActionState(requestPasswordReset, {});
   if (state.ok)
     return (
-      <p role="status" className="rounded-[10px] bg-violet p-5 text-on-violet">
+      <p role="status" className="rounded-[1.1rem] bg-violet p-5 text-on-violet">
         {state.message}
       </p>
     );
   return (
     <form action={action} noValidate className="space-y-5">
-      {state.message ? <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">{state.message}</p> : null}
+      {state.message ? <p role="alert" className="rounded-[0.85rem] border border-danger/40 px-4 py-3 text-sm text-danger">{state.message}</p> : null}
       <div>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" aria-invalid={!!state.errors?.email} aria-describedby="email-error" />
+        <Label htmlFor="email">Email address</Label>
+        <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-invalid={!!state.errors?.email} aria-describedby="email-error" />
         <FieldError id="email-error" message={state.errors?.email} />
       </div>
-      <Button type="submit" size="lg" loading={pending} className="w-full">
-        Send reset link
+      <Button type="submit" size="lg" loading={pending} className="w-full rounded-[0.9rem]">
+        Send reset link <ArrowUpRight size={15} aria-hidden />
       </Button>
     </form>
   );
@@ -33,7 +34,7 @@ export function ResetPasswordForm() {
   const [state, action, pending] = useActionState(updatePassword, {});
   return (
     <form action={action} noValidate className="space-y-5">
-      {state.message ? <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">{state.message}</p> : null}
+      {state.message ? <p role="alert" className="rounded-[0.85rem] border border-danger/40 px-4 py-3 text-sm text-danger">{state.message}</p> : null}
       <div>
         <Label htmlFor="password">New password</Label>
         <PasswordInput id="password" name="password" autoComplete="new-password" showStrength aria-invalid={!!state.errors?.password} aria-describedby="password-error" />
@@ -44,8 +45,8 @@ export function ResetPasswordForm() {
         <PasswordInput id="confirm" name="confirm" autoComplete="new-password" aria-invalid={!!state.errors?.confirm} aria-describedby="confirm-error" />
         <FieldError id="confirm-error" message={state.errors?.confirm} />
       </div>
-      <Button type="submit" size="lg" loading={pending} className="w-full">
-        Save new password
+      <Button type="submit" size="lg" loading={pending} className="w-full rounded-[0.9rem]">
+        Save new password <ArrowUpRight size={15} aria-hidden />
       </Button>
     </form>
   );

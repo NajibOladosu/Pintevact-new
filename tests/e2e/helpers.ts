@@ -9,7 +9,7 @@ export function uniqueEmail(prefix = "learner") {
 export async function signUp(page: Page, opts: { email?: string; name?: string; next?: string } = {}) {
   const email = opts.email ?? uniqueEmail();
   await page.goto(opts.next ? `/signup?next=${encodeURIComponent(opts.next)}` : "/signup");
-  await page.getByLabel("What should we call you?").fill(opts.name ?? "E2E Learner");
+  await page.getByLabel("Full name").fill(opts.name ?? "E2E Learner");
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password", { exact: true }).fill("mindful123");
   await page.getByRole("checkbox").check();
