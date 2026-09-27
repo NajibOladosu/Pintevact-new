@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "@/components/icons";
+import { ArrowUpRight, Menu, X } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { cn } from "@/lib/utils";
 
-export function MobileMenu({ items, signedIn }: { items: { href: string; label: string }[]; signedIn: boolean }) {
+export function MobileMenu({ items, signedIn, overlay }: { items: { href: string; label: string }[]; signedIn: boolean; overlay?: boolean }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -25,35 +25,43 @@ export function MobileMenu({ items, signedIn }: { items: { href: string; label: 
   }, [open]);
 
   return (
-    <div className="flex items-center gap-1 lg:hidden">
-      <ThemeToggle />
+    <div className="lg:hidden">
       <button
         type="button"
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg text-fg hover:bg-fg/5"
+        className={cn(
+          "relative z-50 inline-flex h-12 items-center gap-3 rounded-full py-1 pl-5 pr-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] ring-1 backdrop-blur-md transition-colors",
+          overlay && !open ? "bg-frame/45 text-on-frame ring-on-frame/25" : "bg-raised text-fg ring-line",
+        )}
       >
-        {open ? <X size={20} /> : <Menu size={20} />}
+        {open ? "Close" : "Menu"}
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-on-accent">{open ? <X size={16} /> : <Menu size={16} />}</span>
       </button>
       {open ? (
-        <div className="fixed inset-x-0 bottom-0 top-16 z-40 flex animate-enter flex-col overflow-y-auto border-t border-line bg-bg px-5 pb-10 pt-4">
+        <div className="fixed inset-0 z-40 flex animate-enter flex-col overflow-y-auto bg-bg px-5 pb-10 pt-28">
           <nav aria-label="Mobile" className="flex flex-col">
-            {items.map((item) => (
-              <Link key={item.href} href={item.href} className="border-b border-line py-4 text-2xl font-semibold tracking-tight">
+            {items.map((item, i) => (
+              <Link key={item.href} href={item.href} className="flex items-baseline gap-4 border-b border-line py-4 text-[2rem] font-semibold tracking-[-0.04em]">
+                <span className="text-xs font-semibold tracking-normal text-accent-ink">{String(i + 1).padStart(2, "0")}</span>
                 {item.label}
               </Link>
             ))}
+            <Link href="/contact" className="flex items-baseline gap-4 border-b border-line py-4 text-[2rem] font-semibold tracking-[-0.04em]">
+              <span className="text-xs font-semibold tracking-normal text-accent-ink">{String(items.length + 1).padStart(2, "0")}</span>
+              Contact
+            </Link>
           </nav>
-          <div className="mt-8 grid gap-3">
+          <div className="mt-auto grid gap-3 pt-10">
             {signedIn ? (
-              <Link href="/dashboard" className={buttonClasses({ variant: "secondary", size: "lg" })}>
-                Dashboard
+              <Link href="/dashboard" className={buttonClasses({ variant: "violet", size: "lg" })}>
+                Dashboard <ArrowUpRight size={16} />
               </Link>
             ) : (
               <>
                 <Link href="/signup" className={buttonClasses({ variant: "primary", size: "lg" })}>
-                  Start free
+                  Sign up free <ArrowUpRight size={16} />
                 </Link>
                 <Link href="/login" className={buttonClasses({ variant: "outline", size: "lg" })}>
                   Sign in
