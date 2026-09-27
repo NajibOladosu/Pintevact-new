@@ -1,4 +1,4 @@
-import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P } from "./components/layout";
+import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P } from "./_components/layout";
 
 export type MagicLinkEmailProps = { loginUrl: string; token?: string };
 

@@ -1,5 +1,5 @@
 import { Section, Text } from "@react-email/components";
-import { brand, EmailLayout, Heading } from "./components/layout";
+import { brand, EmailLayout, Heading } from "./_components/layout";
 
 export type ContactNotificationEmailProps = { name: string; email: string; topic: string; message: string };
 

@@ -1,5 +1,5 @@
 import { Column, Row, Section, Text } from "@react-email/components";
-import { brand, CTA, EmailLayout, Heading, P, siteUrl } from "./components/layout";
+import { brand, CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
 
 export type WeeklyDigestEmailProps = {
   name?: string | null;

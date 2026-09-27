@@ -1,4 +1,4 @@
-import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P } from "./components/layout";
+import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P } from "./_components/layout";
 
 export type ConfirmSignupEmailProps = { name?: string | null; confirmUrl: string; token?: string };
 

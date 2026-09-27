@@ -1,4 +1,4 @@
-import { CTA, EmailLayout, FallbackLink, Heading, P } from "./components/layout";
+import { CTA, EmailLayout, FallbackLink, Heading, P } from "./_components/layout";
 
 export type EmailChangeEmailProps = { confirmUrl: string; newEmail: string; isCurrentAddress?: boolean };
 

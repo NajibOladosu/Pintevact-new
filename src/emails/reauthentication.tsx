@@ -1,4 +1,4 @@
-import { EmailLayout, Heading, OtpCode, P } from "./components/layout";
+import { EmailLayout, Heading, OtpCode, P } from "./_components/layout";
 
 export type ReauthenticationEmailProps = { token: string };
 

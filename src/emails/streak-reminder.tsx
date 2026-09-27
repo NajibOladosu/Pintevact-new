@@ -1,5 +1,5 @@
 import { Text } from "@react-email/components";
-import { brand, Callout, CTA, EmailLayout, Heading, P, siteUrl } from "./components/layout";
+import { brand, Callout, CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
 
 export type StreakReminderEmailProps = { name?: string | null; streak: number; nextLessonTitle: string; nextLessonUrl: string };
 

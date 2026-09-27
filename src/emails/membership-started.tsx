@@ -1,5 +1,5 @@
 import { Text } from "@react-email/components";
-import { Callout, CTA, EmailLayout, Heading, P, siteUrl } from "./components/layout";
+import { Callout, CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
 
 export type MembershipStartedEmailProps = { name?: string | null; plan: "monthly" | "yearly"; amount: string; renewsOn: string };
 

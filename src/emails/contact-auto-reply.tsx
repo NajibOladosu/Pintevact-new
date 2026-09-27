@@ -1,4 +1,4 @@
-import { CTA, EmailLayout, Heading, P, siteUrl } from "./components/layout";
+import { CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
 
 export type ContactAutoReplyEmailProps = { name: string };
 

@@ -1,4 +1,4 @@
-import { CTA, EmailLayout, Heading, P, siteUrl } from "./components/layout";
+import { CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
 
 export default function NewsletterWelcomeEmail() {
   return (

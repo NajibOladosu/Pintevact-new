@@ -1,4 +1,4 @@
-import { Callout, CTA, EmailLayout, FallbackLink, Heading, P } from "./components/layout";
+import { Callout, CTA, EmailLayout, FallbackLink, Heading, P } from "./_components/layout";
 import { Text } from "@react-email/components";
 
 export type ResetPasswordEmailProps = { name?: string | null; resetUrl: string };
