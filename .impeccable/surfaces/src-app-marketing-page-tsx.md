@@ -1,24 +1,20 @@
 ---
-version: 1
+version: 2
 slug: "src-app-marketing-page-tsx"
 primary_target: "src/app/(marketing)/page.tsx"
 related_targets: []
 ---
 
-Scope: whole Pintevact web surface (marketing, auth, learner app, player, admin). Visitor mode: Persuade on the public site, Operate in the app.
-
-Audience: ambitious 20-35s plus broader 25-55 self-help buyers. Action: start the free course. Proof: the product itself (a playable checkpoint), real catalog content. No testimonials or stats exist.
+Scope: whole Pintevact web surface (marketing, auth, learner app, player, admin, email).
 
 ## Direction contract
 
-THESIS: Learning is a line you ride card by card: every checkpoint is a card you answer, and each answer moves you one station further. Refuses the category default of pastel wellness illustration and the dark neon AI hero.
+THESIS: Match pintevact.com, the owner's live site: calm editorial paper, big tight Outfit headlines, and content held in large rounded frames, with colour applied as whole blocks.
 
-OWN-WORLD: Grounds #F8F2EA (light) and #11101C (dark), ink text. #EE4216 is the only accent: the traveled line, filled stations, primary buttons. #361A6A is the card back (the answered side) and deep panels. Geist Sans for everything, Geist Mono for numbers and station codes, Outfit caps only for the PINTEVACT wordmark. 2px lines, circle stations (hollow ahead, orange done, ringed current). Cards 16px radius, 1px hairline, flat; stack depth shown by offset card edges, never drop shadows. Buttons 10px radius. Phosphor icons, regular weight.
+OWN-WORLD: Paper #F9F3E9, panel #FEFCF8, ink #0D0D19, signal #EE4217, violet #371A6A, frame #030309. Outfit only. Frames 2.4rem radius with soft shadow; cards 1.5–1.6rem; fields 0.85rem; primary actions are orange pills with an up-right arrow; block buttons are near-black 0.9rem. Papercut artwork is the only imagery.
 
-STORY: The visitor answers a real card, sees it flip and the line advance, understands that lessons ask about them and progress is earned by answering, then browses courses as lines and starts free.
+FIRST VIEWPORT: Full-bleed papercut frame with the header's notched nav cut into its top edge; "Know your / own **mind.**" (light + bold gradient word); lead; Start free pill and underlined secondary link; uppercase feature row; a floating panel card on the right holding a playable checkpoint.
 
-FIRST VIEWPORT: Left column: headline (2 lines), one sentence of subtext, Start free (orange) and See courses (quiet). Right column: a playable deck under a thin line of four stations; the top card holds a real checkpoint question with three answers; answering flips it to a violet back with the explanation, and the orange line fills to the next station.
+AUTH: Split frame, form one side, papercut art the other; the art slides across when switching between sign in and sign up; an orange sliding switch in the top bar.
 
-FORM: fusion of grounded candidates 1 (transit line, structure) and 3 (flashcard deck, interaction), chosen by the user from the re-roll hand. Seed key 0e3f942a (reroll 1).
-
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+FINISH: DESIGN.md documents the shipped system; e2e and axe checks pass on desktop and mobile.

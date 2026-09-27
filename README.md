@@ -8,16 +8,15 @@ Built with **Next.js 16 (App Router)**, **Supabase** (Postgres, Auth, RLS), **St
 
 ## Design
 
-The visual system is documented in [`DESIGN.md`](DESIGN.md) (tokens in `.impeccable/design.json`). In short:
+The look follows **pintevact.com**. The system is documented in [`DESIGN.md`](DESIGN.md), with tokens in `.impeccable/design.json`. In short:
 
-- **The Line:** courses are lines, lessons are stations and progress is the traveled orange rail.
-- **The Deck:** every checkpoint is a card you answer, which flips to its violet back.
-- **Colors:** Signal Orange `#EE4216` is the only accent. Card-back violet is `#361A6A`. The grounds are `#F8F2EA` (light) and `#11101C` (dark).
-- **Themes:** light and dark follow the OS setting, with a toggle in the header. The lesson player is always dark.
-- **Type:** Geist Sans throughout, with Geist Mono for course codes. The PINTEVACT wordmark is Outfit in capitals.
-- **Icons:** Phosphor, re-exported from `src/components/icons.ts`.
-
-Product context for design work lives in [`PRODUCT.md`](PRODUCT.md).
+- **Surfaces:** warm paper (`#F9F3E9`) holds content in large rounded frames with soft shadows. Colour is used in whole blocks: near-black frames, a violet FAQ block and an orange closing band.
+- **Colours:** Signal Orange `#EE4217` for actions and progress, and Deep Violet `#371A6A` as the second voice.
+- **Type:** Outfit throughout, with big tight headlines. The header wordmark reads "Pintevact"; a giant PINTEVACT closes the footer.
+- **Header:** a notched centre nav and a Sign in / Sign up pill. On phones this becomes a MENU pill.
+- **Auth:** a split frame where the papercut artwork slides across when you switch between sign in and sign up.
+- **Themes:** light and dark follow the OS setting. You can switch from the floating settings button (bottom left) or from the app header.
+- **Icons:** Phosphor, re-exported from `src/components/icons.ts`. Artwork lives in `public/art/`.
 
 ---
 

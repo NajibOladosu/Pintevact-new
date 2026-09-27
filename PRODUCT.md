@@ -37,17 +37,16 @@ The video talks back. Every lesson is built around checkpoints on the timeline w
 
 ## Brand Commitments
 
-- Name: Pintevact. Wordmark set in **Outfit, all caps** (user pinned).
-- Palette pinned by the user: **#EE4216** (signal orange), **#361A6A** (deep violet), **#11101C** (dark base), **#F8F2EA** (light base).
-- The giant wordmark closing the footer is kept as a brand moment, now as PINTEVACT in the Outfit wordmark.
-- Feel references named by the user: Linear / Arc (precision, restraint) and Brilliant / Duolingo (learning by doing).
-- The user rejected the previous look as busy and AI-generated.
+- Name: Pintevact. **The look is pintevact.com** (user pinned): warm paper, Outfit, big rounded frames, signal orange, deep violet, near-black frame sections, papercut artwork, and the split sign in / sign up frame.
+- Palette: **#EE4217** signal orange, **#371A6A** deep violet, **#030309** frame, **#F9F3E9** paper, **#0D0D19** ink. Dark theme keeps the same accents on **#10101C**.
+- Wordmark: "Pintevact" in Outfit semibold in the header, and a giant **PINTEVACT** in caps closing the footer.
+- Earlier directions (busy first build; the Line + Deck system) were rejected by the user.
 
 ## Evidence on Hand
 
 - Course catalog content in `src/content/catalog.ts` (7 courses, 26 lessons, interactive checkpoints). Instructors and journal articles are placeholder copy written for the build, not real people or publications.
 - No testimonials, customer logos, press, learner counts or outcome statistics exist. Do not fabricate them.
-- No photography or video assets yet.
+- Artwork: the papercut image and one small portrait from pintevact.com (the owner's site), converted to WebP in `public/art/`. No other photography or video yet.
 
 ## Product Principles
 

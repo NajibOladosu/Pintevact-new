@@ -1,723 +1,248 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-27T15:38:09.014778+00:00",
+  "generatedAt": "2026-09-27T17:16:00.182435+00:00",
   "title": "Design System: Pintevact",
   "extensions": {
     "colorMeta": {
-      "signal-orange": {
-        "role": "primary",
-        "displayName": "Signal Orange",
-        "canonical": "#ee4216",
-        "oklch": "oklch(62.9% 0.214 34.2)",
-        "tonalRamp": [
-          "#220000",
-          "#470a00",
-          "#741b05",
-          "#a92400",
-          "#e33600",
-          "#fe7556",
-          "#fcb8a7",
-          "#fee9e4"
-        ]
+      "paper": {
+        "value": "#f9f3e9",
+        "role": "page ground"
       },
-      "signal-orange-hover": {
-        "role": "primary",
-        "displayName": "Signal Orange, pressed (light)",
-        "canonical": "#d93a10",
-        "oklch": "oklch(58.6% 0.201 34.2)",
-        "tonalRamp": [
-          "#210000",
-          "#480800",
-          "#761700",
-          "#a52b0c",
-          "#de3f18",
-          "#f9795c",
-          "#feb7a5",
-          "#fee9e4"
-        ]
+      "panel": {
+        "value": "#fefcf8",
+        "role": "raised surfaces, header notch, pills"
       },
-      "signal-orange-hover-dark": {
-        "role": "primary",
-        "displayName": "Signal Orange, lit (dark)",
-        "canonical": "#ff5a2e",
-        "oklch": "oklch(68.3% 0.208 35.4)",
-        "tonalRamp": [
-          "#220000",
-          "#460c00",
-          "#731d05",
-          "#a72800",
-          "#e13c00",
-          "#fb7856",
-          "#ffb6a3",
-          "#ffe9e3"
-        ]
+      "paperSunken": {
+        "value": "#f1e8da",
+        "role": "recessed surfaces"
       },
-      "signal-orange-ink": {
-        "role": "primary",
-        "displayName": "Orange Ink",
-        "canonical": "#b5300c",
-        "oklch": "oklch(51.3% 0.175 34.5)",
-        "tonalRamp": [
-          "#220000",
-          "#470a00",
-          "#741b03",
-          "#a32f12",
-          "#d44e2f",
-          "#fe7555",
-          "#fcb7a6",
-          "#fee9e4"
-        ]
+      "ink": {
+        "value": "#0d0d19",
+        "role": "text, block buttons"
       },
-      "signal-orange-ink-dark": {
-        "role": "primary",
-        "displayName": "Orange Ink (dark)",
-        "canonical": "#ff7249",
-        "oklch": "oklch(71.6% 0.181 36.9)",
-        "tonalRamp": [
-          "#230000",
-          "#450e00",
-          "#712005",
-          "#9f3513",
-          "#d64c21",
-          "#f97a56",
-          "#fdb7a3",
-          "#fee9e3"
-        ]
+      "muted": {
+        "value": "#595969",
+        "role": "supporting text"
       },
-      "card-back-violet": {
-        "role": "secondary",
-        "displayName": "Card-Back Violet",
-        "canonical": "#361a6a",
-        "oklch": "oklch(31.0% 0.130 293.3)",
-        "tonalRamp": [
-          "#10002e",
-          "#2a095b",
-          "#452c7c",
-          "#624c9f",
-          "#846fc6",
-          "#a894ee",
-          "#ccc1fe",
-          "#efecfe"
-        ]
+      "subtle": {
+        "value": "#6f6e7e",
+        "role": "tertiary text"
       },
-      "on-violet": {
-        "role": "secondary",
-        "displayName": "Paper on Violet",
-        "canonical": "#f8f2ea",
-        "oklch": "oklch(96.4% 0.012 75.4)",
-        "tonalRamp": [
-          "#0e0a06",
-          "#28231d",
-          "#443f39",
-          "#625d56",
-          "#857f78",
-          "#a9a49c",
-          "#cfcac2",
-          "#f3ede6"
-        ]
+      "line": {
+        "value": "rgb(17 16 26 / 0.12)",
+        "role": "hairlines, rings"
       },
-      "on-violet-muted": {
-        "role": "secondary",
-        "displayName": "Muted Lilac on Violet",
-        "canonical": "#cbbfe0",
-        "oklch": "oklch(82.5% 0.047 301.9)",
-        "tonalRamp": [
-          "#0f061b",
-          "#281e37",
-          "#443a55",
-          "#625774",
-          "#857a98",
-          "#aa9ebe",
-          "#d0c4e5",
-          "#f2eaff"
-        ]
+      "signal": {
+        "value": "#ee4217",
+        "role": "primary action, progress, closing band"
       },
-      "night-ink": {
-        "role": "neutral",
-        "displayName": "Night Ink",
-        "canonical": "#11101c",
-        "oklch": "oklch(18.1% 0.024 287.5)",
-        "tonalRamp": [
-          "#0b0915",
-          "#23222f",
-          "#3f3e4c",
-          "#5c5c6b",
-          "#7f7e8e",
-          "#a3a3b4",
-          "#c9c8da",
-          "#edecff"
-        ]
+      "signalHover": {
+        "value": "#da2300",
+        "role": "primary hover"
       },
-      "paper-ground": {
-        "role": "neutral",
-        "displayName": "Paper Ground",
-        "canonical": "#f8f2ea",
-        "oklch": "oklch(96.4% 0.012 75.4)",
-        "tonalRamp": [
-          "#0e0a06",
-          "#28231d",
-          "#443f39",
-          "#625d56",
-          "#857f78",
-          "#a9a49c",
-          "#cfcac2",
-          "#f3ede6"
-        ]
+      "signalInk": {
+        "value": "#c8340c",
+        "role": "orange text on paper"
       },
-      "paper-raised": {
-        "role": "neutral",
-        "displayName": "Paper Raised",
-        "canonical": "#fffbf6",
-        "oklch": "oklch(99.0% 0.008 73.7)",
-        "tonalRamp": [
-          "#0d0b08",
-          "#262320",
-          "#423f3b",
-          "#605d59",
-          "#83807b",
-          "#a8a49f",
-          "#cecac5",
-          "#f2eee9"
-        ]
+      "onSignal": {
+        "value": "#faf8f4",
+        "role": "text on orange"
       },
-      "paper-sunken": {
-        "role": "neutral",
-        "displayName": "Paper Sunken",
-        "canonical": "#efe7db",
-        "oklch": "oklch(93.1% 0.018 78.2)",
-        "tonalRamp": [
-          "#0f0a04",
-          "#29231a",
-          "#453f35",
-          "#635d52",
-          "#867f74",
-          "#aba398",
-          "#d1c9be",
-          "#f5ede1"
-        ]
+      "violet": {
+        "value": "#371a6a",
+        "role": "sign up pill, FAQ block, All-Access, answered cards"
       },
-      "ink-muted": {
-        "role": "neutral",
-        "displayName": "Ink Muted",
-        "canonical": "#4d4859",
-        "oklch": "oklch(41.3% 0.029 298.6)",
-        "tonalRamp": [
-          "#0d0816",
-          "#262130",
-          "#423d4d",
-          "#5f5a6c",
-          "#827d8f",
-          "#a7a1b5",
-          "#cdc7db",
-          "#f0ebfe"
-        ]
+      "onViolet": {
+        "value": "#f5f1ea",
+        "role": "text on violet"
       },
-      "ink-subtle": {
-        "role": "neutral",
-        "displayName": "Ink Subtle",
-        "canonical": "#6a6475",
-        "oklch": "oklch(51.5% 0.027 301.5)",
-        "tonalRamp": [
-          "#0d0815",
-          "#26212f",
-          "#423d4c",
-          "#605a6b",
-          "#837d8e",
-          "#a7a1b3",
-          "#cdc7da",
-          "#f1ebfe"
-        ]
+      "frame": {
+        "value": "#030309",
+        "role": "dark frames, app rail"
       },
-      "night-ground": {
-        "role": "neutral",
-        "displayName": "Night Ground",
-        "canonical": "#11101c",
-        "oklch": "oklch(18.1% 0.024 287.5)",
-        "tonalRamp": [
-          "#0b0915",
-          "#23222f",
-          "#3f3e4c",
-          "#5c5c6b",
-          "#7f7e8e",
-          "#a3a3b4",
-          "#c9c8da",
-          "#edecff"
-        ]
+      "onFrame": {
+        "value": "#f5f1ea",
+        "role": "text on frame"
       },
-      "night-raised": {
-        "role": "neutral",
-        "displayName": "Night Raised",
-        "canonical": "#1a1828",
-        "oklch": "oklch(21.9% 0.031 289.3)",
-        "tonalRamp": [
-          "#0b0917",
-          "#232232",
-          "#3f3d4f",
-          "#5d5b6e",
-          "#7f7d92",
-          "#a4a2b7",
-          "#c9c8de",
-          "#edecff"
-        ]
-      },
-      "night-sunken": {
-        "role": "neutral",
-        "displayName": "Night Sunken",
-        "canonical": "#0b0a13",
-        "oklch": "oklch(15.1% 0.019 289.0)",
-        "tonalRamp": [
-          "#0b0a13",
-          "#23232d",
-          "#3f3e4a",
-          "#5d5c68",
-          "#7f7f8b",
-          "#a4a3b0",
-          "#cac9d7",
-          "#eeedfb"
-        ]
-      },
-      "night-fg": {
-        "role": "neutral",
-        "displayName": "Night Foreground",
-        "canonical": "#f8f2ea",
-        "oklch": "oklch(96.4% 0.012 75.4)",
-        "tonalRamp": [
-          "#0e0a06",
-          "#28231d",
-          "#443f39",
-          "#625d56",
-          "#857f78",
-          "#a9a49c",
-          "#cfcac2",
-          "#f3ede6"
-        ]
-      },
-      "night-muted": {
-        "role": "neutral",
-        "displayName": "Night Muted",
-        "canonical": "#bcb4c7",
-        "oklch": "oklch(78.2% 0.028 304.7)",
-        "tonalRamp": [
-          "#0e0815",
-          "#27212f",
-          "#433c4c",
-          "#615a6b",
-          "#847c8e",
-          "#a8a1b3",
-          "#cec6da",
-          "#f3eafe"
-        ]
-      },
-      "night-subtle": {
-        "role": "neutral",
-        "displayName": "Night Subtle",
-        "canonical": "#928a9f",
-        "oklch": "oklch(64.7% 0.032 302.8)",
-        "tonalRamp": [
-          "#0e0816",
-          "#272031",
-          "#433c4e",
-          "#61596d",
-          "#847c91",
-          "#a8a0b6",
-          "#cec6dc",
-          "#f2eaff"
-        ]
-      },
-      "focus-violet": {
-        "role": "neutral",
-        "displayName": "Focus Violet",
-        "canonical": "#361a6a",
-        "oklch": "oklch(31.0% 0.130 293.3)",
-        "tonalRamp": [
-          "#10002e",
-          "#2a095b",
-          "#452c7c",
-          "#624c9f",
-          "#846fc6",
-          "#a894ee",
-          "#ccc1fe",
-          "#efecfe"
-        ]
-      },
-      "focus-lilac-dark": {
-        "role": "neutral",
-        "displayName": "Focus Lilac (dark)",
-        "canonical": "#b9a4ff",
-        "oklch": "oklch(77.2% 0.129 293.8)",
-        "tonalRamp": [
-          "#10002e",
-          "#2b095a",
-          "#452c7c",
-          "#634c9e",
-          "#856fc5",
-          "#a994ed",
-          "#cdc0fd",
-          "#efecfe"
-        ]
-      },
-      "hairline": {
-        "role": "neutral",
-        "displayName": "Hairline",
-        "canonical": "rgb(17 16 28 / 0.12)",
-        "tonalRamp": [
-          "#0b0915",
-          "#23222f",
-          "#3f3e4c",
-          "#5c5c6b",
-          "#7f7e8e",
-          "#a3a3b4",
-          "#c9c8da",
-          "#edecff"
-        ]
-      },
-      "hairline-strong": {
-        "role": "neutral",
-        "displayName": "Hairline Strong",
-        "canonical": "rgb(17 16 28 / 0.24)",
-        "tonalRamp": [
-          "#0b0915",
-          "#23222f",
-          "#3f3e4c",
-          "#5c5c6b",
-          "#7f7e8e",
-          "#a3a3b4",
-          "#c9c8da",
-          "#edecff"
-        ]
-      },
-      "night-hairline": {
-        "role": "neutral",
-        "displayName": "Night Hairline",
-        "canonical": "rgb(248 242 234 / 0.11)",
-        "tonalRamp": [
-          "#0e0a06",
-          "#28231d",
-          "#443f39",
-          "#625d56",
-          "#857f78",
-          "#a9a49c",
-          "#cfcac2",
-          "#f3ede6"
-        ]
-      },
-      "night-hairline-strong": {
-        "role": "neutral",
-        "displayName": "Night Hairline Strong",
-        "canonical": "rgb(248 242 234 / 0.22)",
-        "tonalRamp": [
-          "#0e0a06",
-          "#28231d",
-          "#443f39",
-          "#625d56",
-          "#857f78",
-          "#a9a49c",
-          "#cfcac2",
-          "#f3ede6"
-        ]
+      "danger": {
+        "value": "#c02f47",
+        "role": "errors"
       }
     },
     "themes": {
-      "mechanism": "class-driven: .dark on <html>, set by an inline script from the stored choice or prefers-color-scheme; manual toggle in the header",
-      "alwaysDark": [
-        "lesson player stage (.dark applied locally)"
-      ],
-      "lightTokens": [
-        "paper-ground",
-        "paper-raised",
-        "paper-sunken",
-        "night-ink",
-        "ink-muted",
-        "ink-subtle",
-        "hairline",
-        "hairline-strong",
-        "signal-orange-hover",
-        "signal-orange-ink",
-        "focus-violet"
-      ],
-      "darkTokens": [
-        "night-ground",
-        "night-raised",
-        "night-sunken",
-        "night-fg",
-        "night-muted",
-        "night-subtle",
-        "night-hairline",
-        "night-hairline-strong",
-        "signal-orange-hover-dark",
-        "signal-orange-ink-dark",
-        "focus-lilac-dark"
-      ],
-      "sharedTokens": [
-        "signal-orange",
-        "card-back-violet",
-        "on-violet",
-        "on-violet-muted"
-      ]
+      "light": {
+        "bg": "#f9f3e9",
+        "raised": "#fefcf8",
+        "fg": "#0d0d19",
+        "muted": "#595969",
+        "accentInk": "#c8340c"
+      },
+      "dark": {
+        "bg": "#10101c",
+        "raised": "#181727",
+        "fg": "#efebe2",
+        "muted": "#a3a3b1",
+        "accentInk": "#ff7a4f"
+      }
     },
     "typographyMeta": {
+      "family": "Outfit Variable",
       "display": {
-        "displayName": "Display",
-        "purpose": "The one hero headline per page, capped near 14ch."
+        "size": "clamp(3.4rem, 9vw, 8.4rem)",
+        "weights": [
+          300,
+          700
+        ],
+        "lineHeight": 0.92,
+        "tracking": "-0.055em"
       },
-      "headline": {
-        "displayName": "Headline",
-        "purpose": "Section headings, capped at 16 to 20ch."
+      "section": {
+        "size": "clamp(2.4rem, 5vw, 4.6rem)",
+        "weight": 600,
+        "lineHeight": 0.98,
+        "tracking": "-0.05em"
       },
-      "title": {
-        "displayName": "Title",
-        "purpose": "Course names, dashboard panel headings; 1.125rem to 1.5rem."
+      "page": {
+        "size": "clamp(2.2rem, 4vw, 3.4rem)",
+        "weight": 600,
+        "lineHeight": 1,
+        "tracking": "-0.045em"
       },
-      "card-prompt": {
-        "displayName": "Card Prompt",
-        "purpose": "The question on a checkpoint card; 1.125rem mobile to 1.5rem."
+      "sub": {
+        "size": "clamp(1.5rem, 2.15vw, 2.4rem)",
+        "weight": 600,
+        "lineHeight": 1.05,
+        "tracking": "-0.04em"
       },
       "body": {
-        "displayName": "Body",
-        "purpose": "Paragraphs at 42 to 58ch, 1rem to 1.125rem; supporting text in Ink Muted."
+        "size": "0.9375rem",
+        "weight": 400,
+        "lineHeight": 1.58
       },
-      "label": {
-        "displayName": "Label",
-        "purpose": "Buttons, nav, card-kind and meta lines. Sentence case."
-      },
-      "station-code": {
-        "displayName": "Station Code",
-        "purpose": "Two-letter course code inside a line bullet."
+      "eyebrow": {
+        "size": "0.72rem",
+        "weight": 600,
+        "tracking": "0.14em",
+        "transform": "uppercase"
       },
       "wordmark": {
-        "displayName": "Wordmark",
-        "purpose": "PINTEVACT only: header logo and the giant footer wordmark (17.5vw, max 13.6rem, 7% ink)."
+        "header": "Pintevact, 600, -0.02em",
+        "footer": "PINTEVACT, 700, caps, ~15vw"
       }
     },
-    "shadows": [
-      {
-        "name": "float",
-        "value": "0 8px 24px -12px rgb(17 16 28 / 0.35)",
-        "purpose": "Toasts only."
-      },
-      {
-        "name": "menu",
-        "value": "0 16px 40px -16px rgb(17 16 28 / 0.35)",
-        "purpose": "Dropdown menus anchored to a trigger."
-      },
-      {
-        "name": "pill-contact",
-        "value": "0 1px 2px rgb(17 16 28 / 0.12)",
-        "purpose": "Selected segment in a segmented tab control."
-      },
-      {
-        "name": "station-ring",
-        "value": "0 0 0 4px rgb(238 66 22 / 0.2)",
-        "purpose": "Ring around the current station (a ring, not elevation)."
-      },
-      {
-        "name": "focus",
-        "value": "outline: 2px solid var(--focus); outline-offset: 2px",
-        "purpose": "Global focus-visible treatment."
-      }
-    ],
-    "motion": [
-      {
-        "name": "ease-out-expo",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "The house curve for rail fills, flips and entrances."
-      },
-      {
-        "name": "enter",
-        "value": "0.5s ease-out-expo; opacity 0 to 1, translateY 8px to 0",
-        "purpose": "Content and popover entrance."
-      },
-      {
-        "name": "flip",
-        "value": "0.6s ease-out-expo; perspective(1400px) rotateY(-80deg) to none",
-        "purpose": "Checkpoint card turning to its violet back."
-      },
-      {
-        "name": "rail-fill",
-        "value": "width 700ms ease-out-expo",
-        "purpose": "Traveled rail and progress advancing to the next station."
-      },
-      {
-        "name": "state",
-        "value": "150ms colour/border/transform",
-        "purpose": "Button and option hover, 1px press."
-      },
-      {
-        "name": "reduced-motion",
-        "value": "all animation and transition durations to 0.01ms",
-        "purpose": "Honour prefers-reduced-motion; the flip becomes an instant swap."
-      }
-    ],
-    "breakpoints": [
-      {
-        "name": "sm",
-        "value": "640px"
-      },
-      {
-        "name": "md",
-        "value": "768px"
-      },
-      {
-        "name": "lg",
-        "value": "1024px"
-      },
-      {
-        "name": "xl",
-        "value": "1280px"
-      },
-      {
-        "name": "2xl",
-        "value": "1536px"
-      }
-    ],
+    "radii": {
+      "field": "0.85rem",
+      "blockButton": "0.9rem",
+      "card": "1.5rem",
+      "frame": "2.4rem",
+      "pill": "999px"
+    },
+    "shadows": {
+      "frame": "0 clamp(1.4rem,3vw,3rem) clamp(3rem,7vw,7rem) rgb(3 2 12 / 0.18)",
+      "card": "0 1.2rem 2.4rem rgb(3 2 12 / 0.12)",
+      "pill": "0 8px 22px rgb(60 60 90 / 0.1)"
+    },
+    "motion": {
+      "enter": "0.6s cubic-bezier(0.2,0.9,0.2,1), rise 0.9rem + blur 0.3rem",
+      "authSlide": "0.82s cubic-bezier(0.76,0,0.24,1)",
+      "switchPill": "0.5s cubic-bezier(0.2,0.9,0.2,1)",
+      "cardFlip": "0.7s cubic-bezier(0.16,1,0.3,1)",
+      "reducedMotion": "all durations collapse"
+    },
+    "breakpoints": {
+      "sm": "40rem",
+      "md": "48rem",
+      "lg": "64rem",
+      "xl": "80rem",
+      "2xl": "96rem"
+    },
     "icons": {
       "family": "Phosphor",
-      "weight": "regular (fill for active nav)",
-      "sizes": "14 to 20px"
+      "weight": "regular",
+      "module": "src/components/icons.ts"
     }
   },
   "components": [
     {
-      "name": "Primary Button",
-      "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Signal Orange with Night Ink label; the one primary action per view (Start free).",
-      "html": "<button class=\"ds-btn ds-btn-primary\">Start free</button>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:10px;font:500 0.95rem/1 'Geist',ui-sans-serif,system-ui,sans-serif;border:0;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s,transform .15s;} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--focus,#361a6a);outline-offset:2px;} .ds-btn-primary{background:var(--accent);color:var(--on-accent);} .ds-btn-primary:hover{background:var(--accent-hover);}"
+      "name": "Header",
+      "file": "src/components/marketing/header-shell.tsx",
+      "summary": "Wordmark, notched centre nav with concave shoulders, Sign in / Sign up pill; flattens on scroll; MENU pill on phones."
     },
     {
-      "name": "Outline Button",
-      "kind": "button",
-      "refersTo": "button-outline",
-      "description": "The quiet partner to Primary (See courses): strong hairline border, ink on hover.",
-      "html": "<button class=\"ds-btn ds-btn-outline\">See courses</button>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:10px;font:500 0.95rem/1 'Geist',ui-sans-serif,system-ui,sans-serif;border:0;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s,transform .15s;} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--focus,#361a6a);outline-offset:2px;} .ds-btn-outline{background:transparent;color:var(--fg);border:1px solid var(--line-strong);} .ds-btn-outline:hover{border-color:var(--fg);background:rgb(17 16 28/.03);}"
+      "name": "Footer",
+      "file": "src/components/marketing/site-footer.tsx",
+      "summary": "Giant PINTEVACT wordmark, statement + newsletter, three link columns."
     },
     {
-      "name": "Secondary Button",
-      "kind": "button",
-      "refersTo": "button-secondary",
-      "description": "Inverted ink fill; used for Dashboard when signed in.",
-      "html": "<button class=\"ds-btn ds-btn-secondary\">Dashboard</button>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:10px;font:500 0.95rem/1 'Geist',ui-sans-serif,system-ui,sans-serif;border:0;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s,transform .15s;} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid var(--focus,#361a6a);outline-offset:2px;} .ds-btn-secondary{background:var(--fg);color:var(--bg);} .ds-btn-secondary:hover{background:rgb(17 16 28/.85);}"
+      "name": "SettingsDock",
+      "file": "src/components/settings-dock.tsx",
+      "summary": "Floating bottom-left button opening the theme switch."
     },
     {
-      "name": "Text Input",
-      "kind": "input",
-      "refersTo": "input",
-      "description": "10px field with strong hairline; focus goes to ink border plus a 25% orange ring.",
-      "html": "<label class=\"ds-label\" for=\"ds-email\">Email</label><input id=\"ds-email\" class=\"ds-input\" placeholder=\"you@example.com\">",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-label{display:block;margin-bottom:8px;font:500 .875rem/1.4 'Geist',sans-serif;color:var(--fg);} .ds-input{width:100%;height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line-strong);background:var(--raised);color:var(--fg);caret-color:var(--accent);font:400 1rem 'Geist',sans-serif;transition:border-color .15s,box-shadow .15s;} .ds-input::placeholder{color:var(--subtle);} .ds-input:focus{outline:none;border-color:var(--fg);box-shadow:0 0 0 2px rgb(238 66 22/.25);}"
+      "name": "Button",
+      "file": "src/components/ui/button.tsx",
+      "summary": "primary orange pill, secondary near-black block, light panel block, outline pill, ghost, violet, danger."
     },
     {
-      "name": "Station Line",
-      "kind": "custom",
-      "refersTo": "station-line",
-      "description": "The signature 2px rail: orange traveled segment, solid done stations, ringed current, hollow ahead.",
-      "html": "<div class=\"ds-line\"><span class=\"ds-rail\"></span><span class=\"ds-rail-done\" style=\"width:66.6%\"></span><span class=\"ds-st ds-done\"></span><span class=\"ds-st ds-done\"></span><span class=\"ds-st ds-current\"></span><span class=\"ds-st ds-ahead\"></span></div><div class=\"ds-line-labels\"><span>Start</span><span>Checkpoint</span><span>Poll</span><span>Reflection</span></div>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-line{position:relative;display:flex;justify-content:space-between;align-items:center;height:16px;width:320px;} .ds-rail,.ds-rail-done{position:absolute;left:0;top:50%;height:2px;transform:translateY(-50%);} .ds-rail{right:0;background:var(--line-strong);} .ds-rail-done{background:var(--accent);transition:width .7s var(--ease-out-expo);} .ds-st{position:relative;width:14px;height:14px;border-radius:9999px;border:2px solid;box-sizing:border-box;} .ds-done{border-color:var(--accent);background:var(--accent);} .ds-current{border-color:var(--accent);background:var(--bg);box-shadow:0 0 0 4px rgb(238 66 22/.2);} .ds-ahead{border-color:var(--line-strong);background:var(--bg);} .ds-line-labels{display:flex;justify-content:space-between;width:320px;margin-top:12px;font:400 .75rem 'Geist',sans-serif;color:var(--subtle);font-variant-numeric:tabular-nums;}"
+      "name": "AuthFrame",
+      "file": "src/components/auth/auth-frame.tsx",
+      "summary": "Split frame with sliding papercut art and an orange sign in / sign up switch."
     },
     {
-      "name": "Line Bullet",
-      "kind": "chip",
-      "refersTo": "line-bullet",
-      "description": "36px circle with a two-letter course code in Geist Mono, outline or solid ink.",
-      "html": "<span class=\"ds-bullet\">EL</span> <span class=\"ds-bullet ds-bullet-solid\">HB</span>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-bullet{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;border:2px solid var(--fg);color:var(--fg);box-sizing:border-box;font:500 .72rem 'Geist Mono',ui-monospace,monospace;letter-spacing:-.025em;} .ds-bullet-solid{background:var(--fg);color:var(--bg);}"
+      "name": "CourseCard",
+      "file": "src/components/course/course-card.tsx",
+      "summary": "Art crop with chips and index number, meta, title, features, block button; orange variant for the free course."
     },
     {
-      "name": "Checkpoint Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "Front of a checkpoint: raised hairline card, prompt, answer options, with offset deck edges beneath.",
-      "html": "<div class=\"ds-deck\"><div class=\"ds-edge ds-edge-violet\"></div><div class=\"ds-edge ds-edge-raised\"></div><div class=\"ds-card\"><p class=\"ds-kind\"><b>Checkpoint</b>, from The Elephant and the Rider</p><p class=\"ds-prompt\">A bat and a ball cost $1.10. How much is the ball?</p><button class=\"ds-opt\">10 cents <svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/></svg></button><button class=\"ds-opt\">5 cents <svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/></svg></button></div></div>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-deck{position:relative;width:340px;padding-bottom:12px;} .ds-edge{position:absolute;height:100%;border-radius:16px;} .ds-edge-violet{left:24px;right:24px;bottom:0;background:var(--violet);} .ds-edge-raised{left:12px;right:12px;bottom:6px;background:var(--raised);border:1px solid var(--line);} .ds-card{position:relative;border-radius:16px;border:1px solid var(--line);background:var(--raised);padding:24px;color:var(--fg);} .ds-kind{margin:0;font:400 .875rem 'Geist',sans-serif;color:var(--subtle);} .ds-kind b{font-weight:500;color:var(--fg);} .ds-prompt{margin:10px 0 18px;font:600 1.25rem/1.375 'Geist',sans-serif;letter-spacing:-.025em;} .ds-opt{display:flex;width:100%;justify-content:space-between;align-items:center;margin-top:8px;padding:12px 16px;border-radius:10px;border:1px solid var(--line-strong);background:transparent;color:var(--fg);font:500 1rem 'Geist',sans-serif;cursor:pointer;transition:border-color .15s,background-color .15s;} .ds-opt svg{color:var(--subtle);} .ds-opt:hover{border-color:var(--fg);background:rgb(17 16 28/.03);} .ds-opt:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}"
+      "name": "CourseRow",
+      "file": "src/components/course/course-row.tsx",
+      "summary": "Row card with art thumbnail, lesson rail and arrow button, used in the app."
     },
     {
-      "name": "Answered Card Back",
-      "kind": "card",
-      "refersTo": "card-back",
-      "description": "The violet answered side: verdict, explanation in muted lilac, and the way forward.",
-      "html": "<div class=\"ds-back\"><p class=\"ds-verdict\">Right. Your slow system stepped in.</p><p class=\"ds-expl\">Most people say 10 cents first. That quick answer is your fast, intuitive system talking.</p><div class=\"ds-back-foot\"><span>Card 1 of 3</span><button class=\"ds-next\">Next card <svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/></svg></button></div></div>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-back{width:340px;border-radius:16px;background:var(--violet);color:var(--on-violet);padding:28px;} .ds-verdict{margin:0;font:500 .875rem 'Geist',sans-serif;} .ds-expl{margin:12px 0 0;font:400 1.125rem/1.625 'Geist',sans-serif;color:var(--on-violet-muted);} .ds-back-foot{display:flex;justify-content:space-between;align-items:center;margin-top:28px;font:400 .875rem 'Geist',sans-serif;color:var(--on-violet-muted);} .ds-next{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:10px;border:0;background:var(--on-violet);color:var(--violet);font:500 .875rem 'Geist',sans-serif;cursor:pointer;transition:opacity .15s;} .ds-next:hover{opacity:.9;} .ds-next:focus-visible{outline:2px solid var(--on-violet);outline-offset:2px;}"
+      "name": "FaqSection",
+      "file": "src/components/marketing/faq.tsx",
+      "summary": "Violet statement block beside numbered accordion."
     },
     {
-      "name": "App Sidebar Nav",
-      "kind": "nav",
-      "refersTo": "nav-item-active",
-      "description": "8px rows; active row has a 6% ink wash, medium weight and an Orange Ink icon.",
-      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-item ds-active\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z\"/></svg>Dashboard</a><a class=\"ds-nav-item\" href=\"#\">My courses</a><a class=\"ds-nav-item\" href=\"#\">Reflections</a></nav>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-nav{display:flex;flex-direction:column;gap:2px;width:220px;} .ds-nav-item{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:8px;font:400 .875rem 'Geist',sans-serif;color:var(--muted);text-decoration:none;transition:background-color .15s,color .15s;} .ds-nav-item:hover{background:rgb(17 16 28/.04);color:var(--fg);} .ds-nav-item:focus-visible{outline:2px solid var(--focus);outline-offset:2px;} .ds-active{background:rgb(17 16 28/.06);color:var(--fg);font-weight:500;} .ds-active svg{color:var(--accent-ink);}"
+      "name": "CtaBand",
+      "file": "src/components/marketing/cta-band.tsx",
+      "summary": "Orange closing band with a light block button; PageIntro for inner pages."
     },
     {
-      "name": "Badge",
-      "kind": "chip",
-      "refersTo": "badge-accent",
-      "description": "6px-radius label chip in neutral, accent, violet and soft tones.",
-      "html": "<span class=\"ds-badge ds-b-neutral\">4 lessons</span> <span class=\"ds-badge ds-b-accent\">Free</span> <span class=\"ds-badge ds-b-violet\">+50 XP</span>",
-      "css": ":host{--bg:#f8f2ea;--raised:#fffbf6;--sunken:#efe7db;--fg:#11101c;--muted:#4d4859;--subtle:#6a6475;--line:rgb(17 16 28/.12);--line-strong:rgb(17 16 28/.24);--accent:#ee4216;--accent-hover:#d93a10;--accent-ink:#b5300c;--on-accent:#11101c;--violet:#361a6a;--on-violet:#f8f2ea;--on-violet-muted:#cbbfe0;--focus:#361a6a;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;} .ds-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;font:500 .75rem 'Geist',sans-serif;} .ds-b-neutral{border:1px solid var(--line-strong);color:var(--muted);} .ds-b-accent{background:var(--accent);color:var(--on-accent);} .ds-b-violet{background:var(--violet);color:var(--on-violet);}"
+      "name": "HeroDeck",
+      "file": "src/components/marketing/hero-deck.tsx",
+      "summary": "Playable checkpoint card that flips to a violet back."
+    },
+    {
+      "name": "AppShell",
+      "file": "src/app/(app)/layout.tsx",
+      "summary": "Dark floating rail with orange pill links and level card; floating tab pill on phones."
     }
   ],
   "narrative": {
-    "northStar": "The Line You Ride",
-    "overview": "Pintevact draws learning as a transit line. Every lesson is a line, every checkpoint is a station, and every station is a card you answer. Answering flips the card to its deep violet back and fills the next stretch of rail in signal orange. The whole interface is built from three materials: a warm paper (or night) ground, 2px rails with circle stations, and flat hairline cards. Nothing else is decorative; progress is the ornament.\n\nThe mood is calm precision with a single hot signal: Linear-grade restraint in the chrome, Brilliant-style learning by doing in the content. Density is moderate and editorial on the public site (one idea per section, generous section rhythm) and tighter in the app (dashboard, player, vault), but both share the same tokens, radii and line grammar. Light and dark are equal citizens: the theme is class-driven (`.dark` on `html`), follows the OS setting by default, and has a manual toggle. The lesson player stage is always dark, whatever the page theme.\n\nThe system rejects pastel wellness illustration and the dark neon AI hero, and it replaces a previous look the user rejected as busy and AI-generated.",
+    "northStar": "Look and feel like pintevact.com.",
+    "overview": "Calm editorial paper, Outfit headlines, rounded frames, colour in blocks, papercut art.",
     "keyCharacteristics": [
-      "One accent, signal orange, reserved for the traveled line, finished stations and the primary action.",
-      "Deep violet is the answered side of a card and the colour of deep panels; it never appears as a gradient.",
-      "Geist Sans for everything; Geist Mono only for line codes and literal code; Outfit caps only for the PINTEVACT wordmark.",
-      "2px rails, circle stations: hollow ahead, orange done, ringed current.",
-      "Flat hairline cards (16px); stack depth by offset card edges, not drop shadows.",
-      "Phosphor icons, regular weight (fill weight marks the active nav item)."
+      "Rounded frames with soft shadows",
+      "Signal orange pills with up-right arrows",
+      "Violet and near-black blocks",
+      "Numbered orange index lists",
+      "Split auth frame with sliding art"
     ],
     "rules": [
-      {
-        "name": "The One Signal Rule",
-        "body": "Orange means \"traveled\" or \"go\". It marks the rail you have covered, stations you have filled, and the single primary action in a view. It is never a background wash, a heading colour or a decorative stripe.",
-        "section": "colors"
-      },
-      {
-        "name": "The Answered Side Rule",
-        "body": "Violet means \"answered\" or \"yours\". A surface turns violet when the learner has responded, completed, or earned something; it is not a generic brand panel colour for arbitrary content.",
-        "section": "colors"
-      },
-      {
-        "name": "The Sentence Case Rule",
-        "body": "All labels, card kinds and meta lines are sentence case at normal tracking. Uppercase and wide tracking belong to the wordmark alone.",
-        "section": "typography"
-      },
-      {
-        "name": "The Tabular Numbers Rule",
-        "body": "Any number that changes or sits in a column (time, XP, price, counts, percentages) is set with tabular figures.",
-        "section": "typography"
-      },
-      {
-        "name": "The Stacked Deck Rule",
-        "body": "A card that is part of a sequence shows its depth by the offset edges of the cards behind it, never by a drop shadow. Cards at rest are flat.",
-        "section": "elevation"
-      },
-      {
-        "name": "The Floating-Only Shadow Rule",
-        "body": "Shadows are reserved for layers that float over the page (toasts, menus). Cards, panels, buttons and inputs never cast one.",
-        "section": "elevation"
-      }
+      "Only the hero's last word uses gradient text",
+      "Imagery is the papercut artwork",
+      "Every interactive element is rounded"
     ],
     "dos": [
-      "Do draw progress as a 2px rail with circle stations: hollow ahead, orange done, ringed current.",
-      "Do keep Signal Orange to the traveled line, finished stations and one primary action per view, with Night Ink text on it.",
-      "Do flip answered cards to Card-Back Violet and put feedback, XP and the next action on that back.",
-      "Do show stack depth with offset card edges beneath the active card.",
-      "Do use Geist Sans throughout, tabular figures for every changing number, and sentence case labels.",
-      "Do use Orange Ink rather than Signal Orange for small text and icons on the ground, so contrast holds in both themes.",
-      "Do keep the lesson player stage dark in both themes, and verify every screen in light and dark.",
-      "Do use Phosphor icons at regular weight, inlined at 14 to 20px."
+      "Use whole colour blocks",
+      "Keep headlines short and tight",
+      "Close pages with the orange band"
     ],
     "donts": [
-      "Don't put drop shadows on cards, panels, buttons or inputs; shadows belong only to floating toasts and menus.",
-      "Don't use orange or violet as gradients, background washes or decorative stripes.",
-      "Don't set the wordmark face, uppercase or wide tracking on anything but PINTEVACT.",
-      "Don't introduce a second accent hue, pastel illustration, or neon-on-black hero treatments.",
-      "Don't put white text on Signal Orange.",
-      "Don't add progress visuals other than the rail (no rings, gauges or chunky bars)."
+      "No glows or neon",
+      "No stock illustration",
+      "No invented social proof"
     ]
   }
 }
