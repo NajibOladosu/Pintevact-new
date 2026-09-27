@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Pintevact",
-  tagline: "Learn the psychology of you",
+  tagline: "Psychology you answer",
   description:
-    "Pintevact is an interactive learning studio for self-knowledge. Science-backed psychology courses with videos that talk back — so you understand your mind and use it to your advantage.",
+    "Short video lessons in psychology that stop to ask about your life. Answer, reflect and see your own patterns, one lesson at a time.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   email: "hello@pintevact.com",
   social: {

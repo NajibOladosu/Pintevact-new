@@ -23,21 +23,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={api}>
       {children}
-      <div aria-live="polite" className="pointer-events-none fixed bottom-4 left-1/2 z-[100] flex w-[min(92vw,380px)] -translate-x-1/2 flex-col gap-2 sm:left-auto sm:right-4 sm:translate-x-0">
+      <div aria-live="polite" className="pointer-events-none fixed bottom-4 left-1/2 z-[100] flex w-[min(92vw,360px)] -translate-x-1/2 flex-col gap-2 sm:left-auto sm:right-4 sm:translate-x-0">
         {toasts.map((t) => (
           <div
             key={t.id}
             role="status"
             className={cn(
-              "pointer-events-auto animate-rise rounded-2xl border-2 border-ink p-4 text-ink shadow-hard",
-              t.tone === "success" && "bg-lucid",
-              t.tone === "error" && "bg-ember",
-              t.tone === "xp" && "bg-iris text-white",
-              (!t.tone || t.tone === "default") && "bg-paper",
+              "pointer-events-auto animate-enter rounded-xl border px-4 py-3 shadow-[0_8px_24px_-12px_rgb(17_16_28/0.35)]",
+              t.tone === "xp" ? "border-transparent bg-violet text-on-violet" : t.tone === "error" ? "border-danger/40 bg-raised text-fg" : "border-line bg-raised text-fg",
             )}
           >
-            <p className="font-semibold">{t.title}</p>
-            {t.description ? <p className="mt-0.5 text-sm opacity-80">{t.description}</p> : null}
+            <p className="text-sm font-medium">{t.title}</p>
+            {t.description ? <p className={cn("mt-0.5 text-sm", t.tone === "xp" ? "text-on-violet-muted" : "text-muted")}>{t.description}</p> : null}
           </div>
         ))}
       </div>

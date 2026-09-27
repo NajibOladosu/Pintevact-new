@@ -45,11 +45,29 @@ export function isLessonComplete(lesson: Lesson, watchedSeconds: number, answere
   return watchedEnough && requiredDone;
 }
 
-export const themeClasses: Record<Course["theme"], { bg: string; text: string; soft: string; ring: string }> = {
-  ember: { bg: "bg-ember", text: "text-ember", soft: "bg-ember/15", ring: "ring-ember" },
-  iris: { bg: "bg-iris", text: "text-iris", soft: "bg-iris/15", ring: "ring-iris" },
-  lucid: { bg: "bg-lucid", text: "text-lucid", soft: "bg-lucid/20", ring: "ring-lucid" },
-  tide: { bg: "bg-tide", text: "text-tide", soft: "bg-tide/15", ring: "ring-tide" },
-  sun: { bg: "bg-sun", text: "text-sun", soft: "bg-sun/20", ring: "ring-sun" },
-  blush: { bg: "bg-blush", text: "text-blush", soft: "bg-blush/25", ring: "ring-blush" },
+const LINE_CODES: Record<string, string> = {
+  "meet-your-mind": "MM",
+  "emotional-alchemy": "EA",
+  "the-persuasion-lab": "PL",
+  "habit-architecture": "HA",
+  "attachment-and-you": "AY",
+  "deep-focus-mind": "DF",
+  "shadow-work": "SW",
 };
+
+/** Two-letter line code for a course, like a transit line bullet. */
+export function courseCode(course: Pick<Course, "slug" | "title">) {
+  if (LINE_CODES[course.slug]) return LINE_CODES[course.slug];
+  const words = course.title.replace(/^the\s+/i, "").split(/[^A-Za-z]+/).filter((w) => w.length > 1 && !/^(and|of|the|you)$/i.test(w));
+  return ((words[0]?.[0] ?? "P") + (words[1]?.[0] ?? words[0]?.[1] ?? "")).toUpperCase();
+}
+
+/** Stations for a course line given which lessons are complete and which is next. */
+export function courseStations(course: Course, completed: Set<string>, nextId?: string | null, hrefFor?: (lessonSlug: string) => string) {
+  return flattenLessons(course).map((l) => ({
+    id: l.id,
+    title: l.title,
+    state: completed.has(l.id) ? ("done" as const) : l.id === nextId ? ("current" as const) : ("ahead" as const),
+    href: hrefFor?.(l.slug),
+  }));
+}

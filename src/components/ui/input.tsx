@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils";
 import type { InputHTMLAttributes, LabelHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 const field =
-  "w-full rounded-2xl border-2 border-ink/15 bg-white/70 px-4 text-ink placeholder:text-ink-3/70 transition focus:border-ink focus:bg-white focus:outline-none focus:ring-4 focus:ring-lucid/60 aria-[invalid=true]:border-ember dark:border-white/10 dark:bg-night-3 dark:text-paper dark:placeholder:text-mist/50 dark:focus:border-iris dark:focus:ring-iris/30";
+  "w-full rounded-[10px] border border-line-strong bg-raised px-3.5 text-fg placeholder:text-subtle transition-colors focus:border-fg focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-accent/25 aria-[invalid=true]:border-danger";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={cn(field, "h-12", className)} {...props} />;
+  return <input className={cn(field, "h-11", className)} {...props} />;
 }
 
 export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
@@ -13,13 +13,13 @@ export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTex
 }
 
 export function Label({ className, ...props }: LabelHTMLAttributes<HTMLLabelElement>) {
-  return <label className={cn("mb-1.5 block text-sm font-semibold", className)} {...props} />;
+  return <label className={cn("mb-2 block text-sm font-medium text-fg", className)} {...props} />;
 }
 
 export function FieldError({ id, message }: { id?: string; message?: string | null }) {
   if (!message) return null;
   return (
-    <p id={id} role="alert" className="mt-1.5 text-sm font-medium text-ember">
+    <p id={id} role="alert" className="mt-2 text-sm text-danger">
       {message}
     </p>
   );

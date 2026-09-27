@@ -41,3 +41,19 @@ describe("course helpers", () => {
     expect(isLessonComplete(lesson, lesson.durationSeconds * 0.95, new Set(required))).toBe(true);
   });
 });
+
+import { courseCode, courseStations } from "@/lib/course";
+
+describe("line helpers", () => {
+  it("gives every catalog course a unique two-letter code", () => {
+    const codes = catalog.map(courseCode);
+    expect(new Set(codes).size).toBe(codes.length);
+    for (const c of codes) expect(c).toMatch(/^[A-Z]{2}$/);
+    expect(courseCode({ slug: "new", title: "The Inner Critic" })).toBe("IC");
+  });
+  it("marks stations done, current and ahead", () => {
+    const stations = courseStations(course, new Set([lessons[0].id]), lessons[1].id, (s) => `/x/${s}`);
+    expect(stations.map((s) => s.state).slice(0, 3)).toEqual(["done", "current", "ahead"]);
+    expect(stations[0].href).toBe(`/x/${lessons[0].slug}`);
+  });
+});
