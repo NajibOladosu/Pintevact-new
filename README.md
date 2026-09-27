@@ -6,6 +6,21 @@ Built with **Next.js 16 (App Router)**, **Supabase** (Postgres, Auth, RLS), **St
 
 ---
 
+## Design
+
+The visual system is documented in [`DESIGN.md`](DESIGN.md) (tokens in `.impeccable/design.json`). In short:
+
+- **The Line:** courses are lines, lessons are stations and progress is the traveled orange rail.
+- **The Deck:** every checkpoint is a card you answer, which flips to its violet back.
+- **Colors:** Signal Orange `#EE4216` is the only accent. Card-back violet is `#361A6A`. The grounds are `#F8F2EA` (light) and `#11101C` (dark).
+- **Themes:** light and dark follow the OS setting, with a toggle in the header. The lesson player is always dark.
+- **Type:** Geist Sans throughout, with Geist Mono for course codes. The PINTEVACT wordmark is Outfit in capitals.
+- **Icons:** Phosphor, re-exported from `src/components/icons.ts`.
+
+Product context for design work lives in [`PRODUCT.md`](PRODUCT.md).
+
+---
+
 ## What's inside
 
 | Area | Routes |
