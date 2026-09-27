@@ -30,7 +30,7 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // Do not run code between createServerClient and getClaims — it refreshes the session.
+  // Do not run code between createServerClient and getClaims, it refreshes the session.
   const { data } = await supabase.auth.getClaims();
   const decision = routeDecision(pathname, search, Boolean(data?.claims?.sub));
   if (decision) {

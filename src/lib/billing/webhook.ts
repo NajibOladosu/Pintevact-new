@@ -1,7 +1,7 @@
 import type Stripe from "stripe";
 import type { Subscription } from "@/lib/types";
 
-/** Persistence the webhook needs — implemented with the Supabase service role in production. */
+/** Persistence the webhook needs, implemented with the Supabase service role in production. */
 export interface CommerceRepo {
   claimEvent(id: string, type: string): Promise<boolean>;
   releaseEvent(id: string): Promise<void>;

@@ -15,7 +15,7 @@ export type EngagementEmail =
 
 const insights = [
   "People who reflect in writing after learning retain noticeably more of it. Your reflections are compounding.",
-  "Spacing your learning across days beats cramming — your streak is doing real cognitive work.",
+  "Spacing your learning across days beats cramming, your streak is doing real cognitive work.",
   "Naming a pattern is the first step to changing it. You've been naming a lot of them.",
 ];
 

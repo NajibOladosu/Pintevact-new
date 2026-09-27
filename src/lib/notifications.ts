@@ -44,7 +44,7 @@ export const notify = {
         name: to.name,
         plan: p.interval === "year" ? "yearly" : "monthly",
         amount: `${formatPrice(p.amountCents, p.currency)} / ${p.interval}`,
-        renewsOn: p.renewsOn ? formatDate(p.renewsOn) : "—",
+        renewsOn: p.renewsOn ? formatDate(p.renewsOn) : "-",
       }),
       tags: [{ name: "category", value: "membership" }],
     }),

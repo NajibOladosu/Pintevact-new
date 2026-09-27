@@ -175,7 +175,7 @@ export function createSupabaseStore(): Store {
       if (!data.user) return null;
       let row = check(await client.from("profiles").select("*").eq("id", data.user.id).maybeSingle());
       if (!row) {
-        // Trigger may not have run (e.g. user created before migration) — create lazily.
+        // Trigger may not have run (e.g. user created before migration), create lazily.
         row = check(
           await admin()
             .from("profiles")
