@@ -13,18 +13,18 @@ export type WeeklyDigestEmailProps = {
 export default function WeeklyDigestEmail({ name, xp, lessons, reflections, levelName, insight }: WeeklyDigestEmailProps) {
   const stat = (value: string | number, label: string) => (
     <Column style={{ textAlign: "center", padding: "12px 4px" }}>
-      <Text style={{ margin: 0, fontFamily: brand.display, fontSize: 30 }}>{value}</Text>
-      <Text style={{ margin: 0, fontFamily: brand.mono, fontSize: 10, letterSpacing: 2, color: brand.ink3 }}>{label}</Text>
+      <Text style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>{value}</Text>
+      <Text style={{ margin: 0, fontSize: 12, color: brand.ink3 }}>{label}</Text>
     </Column>
   );
   return (
     <EmailLayout preview={`Your week in review: ${xp} XP, ${lessons} lessons`} footerNote="Weekly digests arrive every Sunday. Turn them off in your account settings.">
-      <Heading eyebrow="Your week in the mirror">Here&apos;s what you learned about yourself{name ? `, ${name}` : ""}.</Heading>
-      <Section style={{ backgroundColor: "#ffffff", borderRadius: 16, border: "1px solid #d8cfbd", margin: "0 0 20px" }}>
+      <Heading>Here&apos;s what you learned about yourself{name ? `, ${name}` : ""}.</Heading>
+      <Section style={{ backgroundColor: "#f8f2ea", borderRadius: 16, border: "1px solid #e2d9cc", margin: "0 0 20px" }}>
         <Row>
           {stat(xp, "XP")}
-          {stat(lessons, "LESSONS")}
-          {stat(reflections, "REFLECTIONS")}
+          {stat(lessons, "Lessons")}
+          {stat(reflections, "Reflections")}
         </Row>
       </Section>
       <P>

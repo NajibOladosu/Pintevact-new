@@ -5,8 +5,8 @@ export type MagicLinkEmailProps = { loginUrl: string; token?: string };
 export default function MagicLinkEmail({ loginUrl, token }: MagicLinkEmailProps) {
   return (
     <EmailLayout preview="Your Pintevact sign-in link" footerNote="This link expires in 1 hour and can only be used once. Didn't request it? You can safely ignore this email.">
-      <Heading eyebrow="Sign in">Your door back in.</Heading>
-      <P>Tap the button below to sign in to Pintevact — no password needed.</P>
+      <Heading>Your door back in.</Heading>
+      <P>Tap the button below to sign in to Pintevact, no password needed.</P>
       <CTA href={loginUrl}>Sign me in</CTA>
       {token ? (
         <>

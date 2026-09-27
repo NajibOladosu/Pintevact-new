@@ -2,15 +2,17 @@ import { Body, Container, Head, Hr, Html, Link, Preview, Section, Text } from "@
 import type { ReactNode } from "react";
 
 export const brand = {
-  paper: "#f4efe6",
-  paper2: "#ebe4d6",
-  ink: "#15122b",
-  ink3: "#6c6788",
-  ember: "#ff5a36",
-  lucid: "#c8f547",
-  iris: "#8b7cff",
-  night: "#0f0c22",
-  display: "Georgia, 'Times New Roman', serif",
+  paper: "#f8f2ea",
+  paper2: "#efe7db",
+  ink: "#11101c",
+  ink3: "#5f5a6b",
+  line: "#e2d9cc",
+  ember: "#ee4216",
+  violet: "#361a6a",
+  onViolet: "#f8f2ea",
+  onVioletMuted: "#cbbfe0",
+  wordmark: "Outfit, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+  display: "'Helvetica Neue', Helvetica, Arial, sans-serif",
   body: "'Helvetica Neue', Helvetica, Arial, sans-serif",
   mono: "'SFMono-Regular', Menlo, Consolas, monospace",
 };
@@ -29,38 +31,17 @@ export function EmailLayout({ preview, children, footerNote }: { preview: string
       <Preview>{preview}</Preview>
       <Body style={{ backgroundColor: brand.paper2, margin: 0, padding: "32px 12px", fontFamily: brand.body, color: brand.ink }}>
         <Container style={{ maxWidth: 560, margin: "0 auto" }}>
-          <Section style={{ backgroundColor: brand.night, borderRadius: "24px 24px 0 0", padding: "28px 32px" }}>
-            <table role="presentation" cellPadding={0} cellSpacing={0} style={{ width: "100%" }}>
-              <tbody>
-                <tr>
-                  <td>
-                    <span
-                      style={{
-                        display: "inline-block",
-                        width: 28,
-                        height: 28,
-                        borderRadius: 999,
-                        backgroundColor: brand.ember,
-                        border: `6px solid ${brand.paper}`,
-                        verticalAlign: "middle",
-                      }}
-                    />
-                    <span style={{ fontFamily: brand.display, fontSize: 24, color: brand.paper, marginLeft: 10, verticalAlign: "middle" }}>Pintevact</span>
-                  </td>
-                  <td style={{ textAlign: "right" }}>
-                    <span style={{ fontFamily: brand.mono, fontSize: 10, letterSpacing: 2, color: brand.lucid, textTransform: "uppercase" }}>Know thyself</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <Section style={{ padding: "8px 8px 20px" }}>
+            <span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 999, backgroundColor: brand.ember, verticalAlign: "middle" }} />
+            <span style={{ fontFamily: brand.wordmark, fontWeight: 600, fontSize: 15, letterSpacing: "0.08em", textTransform: "uppercase", color: brand.ink, marginLeft: 8, verticalAlign: "middle" }}>Pintevact</span>
           </Section>
-          <Section style={{ backgroundColor: brand.paper, padding: "36px 32px 28px", borderRadius: "0 0 24px 24px", border: `2px solid ${brand.ink}`, borderTop: "none" }}>
+          <Section style={{ backgroundColor: "#fffbf6", padding: "36px 32px 28px", borderRadius: 16, border: `1px solid ${brand.line}` }}>
             {children}
           </Section>
           <Section style={{ padding: "24px 12px", textAlign: "center" }}>
             {footerNote ? <Text style={{ fontSize: 12, color: brand.ink3, margin: "0 0 8px" }}>{footerNote}</Text> : null}
             <Text style={{ fontSize: 12, color: brand.ink3, margin: 0 }}>
-              Pintevact · Learn the psychology of you ·{" "}
+              Pintevact, psychology you answer.{" "}
               <Link href={`${url}/account`} style={{ color: brand.ink3, textDecoration: "underline" }}>
                 Email preferences
               </Link>
@@ -72,15 +53,8 @@ export function EmailLayout({ preview, children, footerNote }: { preview: string
   );
 }
 
-export function Heading({ children, eyebrow }: { children: ReactNode; eyebrow?: string }) {
-  return (
-    <>
-      {eyebrow ? (
-        <Text style={{ fontFamily: brand.mono, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: brand.ember, margin: "0 0 10px" }}>{eyebrow}</Text>
-      ) : null}
-      <Text style={{ fontFamily: brand.display, fontSize: 32, lineHeight: "38px", fontStyle: "italic", margin: "0 0 16px", color: brand.ink }}>{children}</Text>
-    </>
-  );
+export function Heading({ children }: { children: ReactNode; eyebrow?: string }) {
+  return <Text style={{ fontFamily: brand.display, fontSize: 26, lineHeight: "32px", fontWeight: 600, letterSpacing: "-0.01em", margin: "0 0 16px", color: brand.ink }}>{children}</Text>;
 }
 
 export function P({ children }: { children: ReactNode }) {
@@ -96,12 +70,10 @@ export function CTA({ href, children }: { href: string; children: ReactNode }) {
           display: "inline-block",
           backgroundColor: brand.ember,
           color: brand.ink,
-          fontWeight: 700,
-          fontSize: 16,
-          padding: "14px 28px",
-          borderRadius: 999,
-          border: `2px solid ${brand.ink}`,
-          boxShadow: `4px 4px 0 ${brand.ink}`,
+          fontWeight: 600,
+          fontSize: 15,
+          padding: "13px 22px",
+          borderRadius: 10,
           textDecoration: "none",
         }}
       >
@@ -114,11 +86,11 @@ export function CTA({ href, children }: { href: string; children: ReactNode }) {
 export function FallbackLink({ href }: { href: string }) {
   return (
     <>
-      <Hr style={{ borderColor: "#d8cfbd", margin: "24px 0 16px" }} />
+      <Hr style={{ borderColor: brand.line, margin: "24px 0 16px" }} />
       <Text style={{ fontSize: 12, lineHeight: "18px", color: brand.ink3, margin: 0 }}>
         Button not working? Paste this link into your browser:
         <br />
-        <Link href={href} style={{ color: brand.iris, wordBreak: "break-all" }}>
+        <Link href={href} style={{ color: brand.violet, wordBreak: "break-all" }}>
           {href}
         </Link>
       </Text>
@@ -126,13 +98,8 @@ export function FallbackLink({ href }: { href: string }) {
   );
 }
 
-export function Callout({ children, tone = "lucid" }: { children: ReactNode; tone?: "lucid" | "iris" | "ember" }) {
-  const bg = tone === "lucid" ? brand.lucid : tone === "iris" ? "#e4e0ff" : "#ffd9cf";
-  return (
-    <Section style={{ backgroundColor: bg, borderRadius: 16, padding: "16px 20px", margin: "8px 0 20px", border: `2px solid ${brand.ink}` }}>
-      {children}
-    </Section>
-  );
+export function Callout({ children }: { children: ReactNode; tone?: string }) {
+  return <Section style={{ backgroundColor: brand.violet, color: brand.onViolet, borderRadius: 12, padding: "16px 20px", margin: "8px 0 20px" }}>{children}</Section>;
 }
 
 export function OtpCode({ code }: { code: string }) {
@@ -140,12 +107,12 @@ export function OtpCode({ code }: { code: string }) {
     <Text
       style={{
         fontFamily: brand.mono,
-        fontSize: 32,
+        fontSize: 30,
         letterSpacing: 10,
         textAlign: "center",
-        backgroundColor: "#ffffff",
-        border: `2px dashed ${brand.ink}`,
-        borderRadius: 16,
+        backgroundColor: brand.paper,
+        border: `1px solid ${brand.line}`,
+        borderRadius: 10,
         padding: "16px 0",
         margin: "8px 0 20px",
       }}

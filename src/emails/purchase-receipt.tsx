@@ -19,19 +19,19 @@ export default function PurchaseReceiptEmail({ name, courseTitle, courseSlug, am
   );
   return (
     <EmailLayout preview={`Your receipt for ${courseTitle}`} footerNote="Questions about your order? Just reply to this email.">
-      <Heading eyebrow="Receipt">It&apos;s yours{name ? `, ${name}` : ""}. Forever.</Heading>
+      <Heading>It&apos;s yours{name ? `, ${name}` : ""}. Forever.</Heading>
       <P>
-        Thank you for investing in <strong>{courseTitle}</strong>. Research on the IKEA effect says we value what we put effort into — so here&apos;s to the effort ahead.
+        Thank you for investing in <strong>{courseTitle}</strong>. Research on the IKEA effect says we value what we put effort into, so here&apos;s to the effort ahead.
       </P>
-      <Section style={{ backgroundColor: "#ffffff", borderRadius: 16, padding: "8px 20px", border: "1px solid #d8cfbd" }}>
+      <Section style={{ backgroundColor: "#f8f2ea", borderRadius: 16, padding: "8px 20px", border: "1px solid #e2d9cc" }}>
         <table role="presentation" style={{ width: "100%" }}>
           <tbody>
             {row("Course", courseTitle)}
             {row("Date", date)}
             {row("Order", orderId)}
             <tr>
-              <td style={{ padding: "12px 0 8px", fontSize: 16, borderTop: "1px solid #d8cfbd" }}>Total paid</td>
-              <td style={{ padding: "12px 0 8px", fontSize: 20, textAlign: "right", fontFamily: brand.display, borderTop: "1px solid #d8cfbd" }}>{amount}</td>
+              <td style={{ padding: "12px 0 8px", fontSize: 16, borderTop: "1px solid #e2d9cc" }}>Total paid</td>
+              <td style={{ padding: "12px 0 8px", fontSize: 20, textAlign: "right", fontWeight: 600, borderTop: "1px solid #e2d9cc" }}>{amount}</td>
             </tr>
           </tbody>
         </table>
