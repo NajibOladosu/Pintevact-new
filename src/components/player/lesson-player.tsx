@@ -30,7 +30,10 @@ export type LessonPlayerProps = {
 };
 
 export function LessonPlayer(props: LessonPlayerProps) {
-  const { lesson, source } = props;
+  const { lesson } = props;
+  // The page re-renders after XP is awarded (router.refresh), which signs a fresh stream URL.
+  // Keep the first one for this lesson (the player is keyed by lesson) so the stream never reattaches mid-play.
+  const [source] = useState(props.source);
   const { toast } = useToast();
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement | null>(null);
