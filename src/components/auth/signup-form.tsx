@@ -12,7 +12,7 @@ export function SignupForm({ next }: { next?: string }) {
   return (
     <form action={action} noValidate className="space-y-5">
       {state.message ? (
-        <p role="alert" className="rounded-2xl bg-ember/15 p-3 text-sm font-medium text-ember">
+        <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">
           {state.message}
         </p>
       ) : null}
@@ -33,15 +33,15 @@ export function SignupForm({ next }: { next?: string }) {
         <FieldError id="password-error" message={state.errors?.password} />
       </div>
       <div>
-        <label className="flex items-start gap-3 text-sm text-ink-2">
-          <input type="checkbox" name="terms" className="mt-0.5 h-5 w-5 shrink-0 rounded accent-[var(--color-ember)]" aria-describedby="terms-error" />
+        <label className="flex items-start gap-3 text-sm text-muted">
+          <input type="checkbox" name="terms" className="mt-0.5 h-5 w-5 shrink-0 rounded accent-[var(--accent)]" aria-describedby="terms-error" />
           <span>
             I agree to the{" "}
-            <Link href="/terms" className="font-semibold underline underline-offset-2">
+            <Link href="/terms" className="font-medium text-fg underline decoration-line-strong underline-offset-2 hover:decoration-fg">
               Terms
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="font-semibold underline underline-offset-2">
+            <Link href="/privacy" className="font-medium text-fg underline decoration-line-strong underline-offset-2 hover:decoration-fg">
               Privacy Policy
             </Link>
             .

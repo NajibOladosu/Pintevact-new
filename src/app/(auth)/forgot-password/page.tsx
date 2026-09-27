@@ -7,15 +7,12 @@ export const metadata: Metadata = { title: "Forgot password" };
 export default function ForgotPasswordPage() {
   return (
     <>
-      <p className="eyebrow text-ember">Password reset</p>
-      <h1 className="mt-3 text-5xl leading-none sm:text-6xl">
-        Memory is <span className="display-italic">reconstructive.</span>
-      </h1>
-      <p className="mb-8 mt-4 text-ink-2">So are passwords. Enter your email and we&apos;ll send you a link to choose a new one.</p>
+      <h1 className="text-3xl font-semibold tracking-tight">Reset your password</h1>
+      <p className="mb-8 mt-2 text-muted">Enter your email and we&apos;ll send you a link to choose a new one.</p>
       <ForgotPasswordForm />
-      <p className="mt-8 text-center text-ink-2">
+      <p className="mt-8 text-center text-sm text-muted">
         Remembered it?{" "}
-        <Link href="/login" className="font-semibold text-ink underline underline-offset-4">
+        <Link href="/login" className="font-medium text-fg underline decoration-line-strong underline-offset-4 hover:decoration-fg">
           Back to sign in
         </Link>
       </p>

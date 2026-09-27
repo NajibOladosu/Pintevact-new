@@ -16,7 +16,7 @@ export function LoginForm({ next, error }: { next?: string; error?: string }) {
   const message = error ?? state.message;
   return (
     <div>
-      <div role="tablist" aria-label="Sign-in method" className="mb-6 grid grid-cols-2 rounded-full border-2 border-ink p-1">
+      <div role="tablist" aria-label="Sign-in method" className="mb-6 grid grid-cols-2 rounded-[10px] bg-sunken p-1">
         {(["password", "link"] as const).map((m) => (
           <button
             key={m}
@@ -24,7 +24,7 @@ export function LoginForm({ next, error }: { next?: string; error?: string }) {
             role="tab"
             aria-selected={mode === m}
             onClick={() => setMode(m)}
-            className={cn("rounded-full py-2 text-sm font-semibold transition", mode === m ? "bg-ink text-paper" : "hover:bg-ink/5")}
+            className={cn("rounded-lg py-2 text-sm font-medium transition-colors", mode === m ? "bg-raised text-fg shadow-[0_1px_2px_rgb(17_16_28/0.12)]" : "text-muted hover:text-fg")}
           >
             {m === "password" ? "Password" : "Email me a link"}
           </button>
@@ -34,7 +34,7 @@ export function LoginForm({ next, error }: { next?: string; error?: string }) {
       {mode === "password" ? (
         <form action={action} noValidate className="space-y-5">
           {message ? (
-            <p role="alert" className="rounded-2xl bg-ember/15 p-3 text-sm font-medium text-ember">
+            <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">
               {message}
             </p>
           ) : null}
@@ -49,7 +49,7 @@ export function LoginForm({ next, error }: { next?: string; error?: string }) {
               <Label htmlFor="password" className="mb-0">
                 Password
               </Label>
-              <Link href="/forgot-password" className="text-sm font-semibold text-ink-2 underline-offset-4 hover:underline">
+              <Link href="/forgot-password" className="text-sm text-muted underline-offset-4 hover:text-fg hover:underline">
                 Forgot?
               </Link>
             </div>
@@ -61,13 +61,13 @@ export function LoginForm({ next, error }: { next?: string; error?: string }) {
           </Button>
         </form>
       ) : linkState.ok ? (
-        <p role="status" className="rounded-2xl border-2 border-ink bg-lucid p-5 font-medium">
+        <p role="status" className="rounded-[10px] bg-violet p-5 text-on-violet">
           {linkState.message}
         </p>
       ) : (
         <form action={linkAction} noValidate className="space-y-5">
           {linkState.message ? (
-            <p role="alert" className="rounded-2xl bg-ember/15 p-3 text-sm font-medium text-ember">
+            <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">
               {linkState.message}
             </p>
           ) : null}

@@ -9,16 +9,13 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { next, error } = await searchParams;
   return (
     <>
-      <p className="eyebrow text-ember">Welcome back</p>
-      <h1 className="mt-3 text-5xl leading-none sm:text-6xl">
-        Your mind <span className="display-italic">missed you.</span>
-      </h1>
-      <p className="mb-8 mt-4 text-ink-2">Sign in to pick up exactly where you left off.</p>
+      <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
+      <p className="mb-8 mt-2 text-muted">Pick up exactly where you left off.</p>
       <GoogleButton next={next} />
       <LoginForm next={next} error={error} />
-      <p className="mt-8 text-center text-ink-2">
+      <p className="mt-8 text-center text-sm text-muted">
         New here?{" "}
-        <Link href={next ? `/signup?next=${encodeURIComponent(next)}` : "/signup"} className="font-semibold text-ink underline underline-offset-4">
+        <Link href={next ? `/signup?next=${encodeURIComponent(next)}` : "/signup"} className="font-medium text-fg underline decoration-line-strong underline-offset-4 hover:decoration-fg">
           Create a free account
         </Link>
       </p>

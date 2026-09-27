@@ -10,13 +10,13 @@ export function ForgotPasswordForm() {
   const [state, action, pending] = useActionState(requestPasswordReset, {});
   if (state.ok)
     return (
-      <p role="status" className="rounded-2xl border-2 border-ink bg-lucid p-5 font-medium">
+      <p role="status" className="rounded-[10px] bg-violet p-5 text-on-violet">
         {state.message}
       </p>
     );
   return (
     <form action={action} noValidate className="space-y-5">
-      {state.message ? <p role="alert" className="rounded-2xl bg-ember/15 p-3 text-sm font-medium text-ember">{state.message}</p> : null}
+      {state.message ? <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">{state.message}</p> : null}
       <div>
         <Label htmlFor="email">Email</Label>
         <Input id="email" name="email" type="email" autoComplete="email" aria-invalid={!!state.errors?.email} aria-describedby="email-error" />
@@ -33,7 +33,7 @@ export function ResetPasswordForm() {
   const [state, action, pending] = useActionState(updatePassword, {});
   return (
     <form action={action} noValidate className="space-y-5">
-      {state.message ? <p role="alert" className="rounded-2xl bg-ember/15 p-3 text-sm font-medium text-ember">{state.message}</p> : null}
+      {state.message ? <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">{state.message}</p> : null}
       <div>
         <Label htmlFor="password">New password</Label>
         <PasswordInput id="password" name="password" autoComplete="new-password" showStrength aria-invalid={!!state.errors?.password} aria-describedby="password-error" />
@@ -59,7 +59,7 @@ export function ResendConfirmationForm({ email }: { email: string }) {
       <Button type="submit" variant="outline" loading={pending} disabled={state.ok}>
         {state.ok ? "Sent ✓" : "Resend the email"}
       </Button>
-      {state.message ? <p className="mt-3 text-sm text-ink-2" role="status">{state.message}</p> : null}
+      {state.message ? <p className="mt-3 text-sm text-muted" role="status">{state.message}</p> : null}
     </form>
   );
 }

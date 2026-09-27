@@ -9,16 +9,13 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
   const { next } = await searchParams;
   return (
     <>
-      <p className="eyebrow text-ember">Free forever · no card needed</p>
-      <h1 className="mt-3 text-5xl leading-none sm:text-6xl">
-        Meet the <span className="display-italic">real</span> you.
-      </h1>
-      <p className="mb-8 mt-4 text-ink-2">Create your account and start the free Meet Your Mind course in under a minute.</p>
+      <h1 className="text-3xl font-semibold tracking-tight">Create your free account</h1>
+      <p className="mb-8 mt-2 text-muted">Start Meet Your Mind in under a minute. No card needed.</p>
       <GoogleButton next={next} />
       <SignupForm next={next} />
-      <p className="mt-8 text-center text-ink-2">
+      <p className="mt-8 text-center text-sm text-muted">
         Already have an account?{" "}
-        <Link href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"} className="font-semibold text-ink underline underline-offset-4">
+        <Link href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"} className="font-medium text-fg underline decoration-line-strong underline-offset-4 hover:decoration-fg">
           Sign in
         </Link>
       </p>
