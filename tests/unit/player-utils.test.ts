@@ -41,3 +41,12 @@ describe("helpers", () => {
     expect(parseStartTime(undefined, 100)).toBeNull();
   });
 });
+
+describe("fast playback", () => {
+  it("counts larger steps as watching when the allowed step grows with the playback rate", () => {
+    expect(crossedInteraction(list, 8, 12, new Set())).toBeNull();
+    expect(crossedInteraction(list, 8, 12, new Set(), 2.5 * 2)?.id).toBe("a");
+    expect(accumulateWatched(0, 8, 12)).toBe(0);
+    expect(accumulateWatched(0, 8, 12, 5)).toBe(4);
+  });
+});

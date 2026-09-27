@@ -8,6 +8,7 @@ import { addNoteAction, deleteNoteAction, saveProgressAction, submitResponseActi
 import { interactionMeta } from "@/components/course/interaction-icon";
 import { useToast } from "@/components/ui/toast";
 import { buttonClasses } from "@/components/ui/button";
+import { Sparks } from "@/components/motion/sparks";
 import { cn, formatDuration } from "@/lib/utils";
 import type { Chapter, Interaction, InteractionResponse, Note, PlaybackSource } from "@/lib/types";
 import type { ProgressResult } from "@/lib/lesson-service";
@@ -96,10 +97,12 @@ export function LessonPlayer(props: LessonPlayerProps) {
     initialTime: props.initialTime,
     callbacks: {
       onTick: (prev, now, playing) => {
-        if (playing) watched.current = accumulateWatched(watched.current, prev, now);
+        // A playing step can span more media time at higher speeds; anything beyond that is a seek.
+        const maxStep = 2.5 * Math.max(1, videoRef.current?.playbackRate ?? 1);
+        if (playing) watched.current = accumulateWatched(watched.current, prev, now, maxStep);
         prevTime.current = now;
         if (!playing || activeRef.current) return;
-        const hit = crossedInteraction(lesson.interactions, prev, now, handledRef.current);
+        const hit = crossedInteraction(lesson.interactions, prev, now, handledRef.current, maxStep);
         if (hit) {
           activeRef.current = hit;
           pbRef.current?.pause();
@@ -284,11 +287,12 @@ export function LessonPlayer(props: LessonPlayerProps) {
             {celebration ? (
               <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto bg-violet p-4 text-center text-on-violet" role="dialog" aria-label="Lesson complete">
                 <div className="animate-enter">
-                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent text-on-accent">
+                  <span className="pop-in relative mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent text-on-accent">
                     <Check size={28} weight="bold" />
+                    <Sparks count={18} radius={120} />
                   </span>
                   <p className="mt-5 text-sm text-on-violet-muted">{celebration.courseCompleted ? "Course complete" : "Lesson complete"}</p>
-                  <p className="mt-1 h-page">{celebration.courseCompleted ? "You finished the whole line." : "Station reached."}</p>
+                  <p className="mt-1 h-page">{celebration.courseCompleted ? "You finished the whole course." : "Nicely done."}</p>
                   {celebration.xpAwarded ? <p className="tabular mt-2 font-medium text-on-violet-muted">+{celebration.xpAwarded} XP</p> : null}
                   <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">
                     {celebration.certificateId ? (
