@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "email:dev": "email dev --dir src/emails --port 3001",
-    "db:seed:generate": "tsx scripts/generate-seed.ts"
+    "db:seed:generate": "tsx scripts/generate-seed.ts",
+    "db:test": "supabase/tests/run.sh"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
