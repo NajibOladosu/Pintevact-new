@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { Flash } from "@/components/app/flash";
 import { Logo } from "@/components/brand/logo";
 import { MobileTabBar, SidebarNav } from "@/components/app/app-nav";
 import { UserMenu } from "@/components/app/user-menu";
@@ -40,6 +42,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </div>
         </header>
         <main id="main" className="px-4 pb-28 pt-8 sm:px-6 lg:px-10 lg:pb-16">
+          <Suspense>
+            <Flash />
+          </Suspense>
           {children}
         </main>
       </div>

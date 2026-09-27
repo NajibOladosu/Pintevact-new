@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { Award, CreditCard, Receipt } from "lucide-react";
 import { AccountTabs } from "@/components/app/account-tabs";
-import { Flash } from "@/components/app/flash";
 import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
 import { requireViewer } from "@/lib/auth/session";
@@ -24,9 +22,6 @@ export default async function BillingPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <Suspense>
-        <Flash />
-      </Suspense>
       <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-4xl sm:text-5xl">Billing</h1>
         <AccountTabs active="billing" />

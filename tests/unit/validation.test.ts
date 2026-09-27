@@ -36,7 +36,7 @@ describe("contact validation", () => {
 describe("passwordStrength", () => {
   it("scores passwords", () => {
     expect(passwordStrength("").score).toBe(0);
-    expect(passwordStrength("abc").score).toBe(1);
+    expect(passwordStrength("abc")).toEqual({ score: 1, label: "Too short" });
     expect(passwordStrength("abcdefgh").label).toBe("Weak");
     expect(passwordStrength("Abcdefgh12!@xyz").score).toBe(4);
   });

@@ -317,38 +317,34 @@ export function LessonPlayer(props: LessonPlayerProps) {
 
           {/* ── Controls ─────────────────────────────────── */}
           <div className={cn("relative z-10 bg-gradient-to-t from-night via-night/95 to-night/80 px-4 pb-3 pt-3 sm:px-5", fullscreen && "absolute inset-x-0 bottom-0")}>
-            <div
-              ref={trackRef}
-              className="relative flex h-6 cursor-pointer items-center"
-              onPointerMove={(e) => setHover(timeAt(e.clientX))}
-              onPointerLeave={() => setHover(null)}
-              onClick={(e) => pb.seek(timeAt(e.clientX))}
-              role="slider"
-              tabIndex={0}
-              aria-label="Seek"
-              aria-valuemin={0}
-              aria-valuemax={Math.round(pb.duration)}
-              aria-valuenow={Math.round(pb.time)}
-              aria-valuetext={`${formatDuration(pb.time)} of ${formatDuration(pb.duration)}`}
-              onKeyDown={(e) => {
-                if (e.key === "ArrowRight") pb.seek(pb.time + 5);
-                if (e.key === "ArrowLeft") pb.seek(pb.time - 5);
-              }}
-            >
-              <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-white/15">
-                <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-iris via-ember to-lucid" style={{ width: pct(pb.time) }} />
+            <div ref={trackRef} className="relative h-6" onPointerMove={(e) => setHover(timeAt(e.clientX))} onPointerLeave={() => setHover(null)}>
+              <div
+                className="absolute inset-0 flex cursor-pointer items-center"
+                onClick={(e) => pb.seek(timeAt(e.clientX))}
+                role="slider"
+                tabIndex={0}
+                aria-label="Seek"
+                aria-valuemin={0}
+                aria-valuemax={Math.round(pb.duration)}
+                aria-valuenow={Math.round(pb.time)}
+                aria-valuetext={`${formatDuration(pb.time)} of ${formatDuration(pb.duration)}`}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowRight") pb.seek(pb.time + 5);
+                  if (e.key === "ArrowLeft") pb.seek(pb.time - 5);
+                }}
+              >
+                <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-white/15">
+                  <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-iris via-ember to-lucid" style={{ width: pct(pb.time) }} />
+                </div>
+                {lesson.chapters.slice(1).map((c) => (
+                  <span key={c.atSeconds} className="absolute h-1.5 w-0.5 bg-night" style={{ left: pct(c.atSeconds) }} aria-hidden />
+                ))}
               </div>
-              {lesson.chapters.slice(1).map((c) => (
-                <span key={c.atSeconds} className="absolute h-1.5 w-0.5 bg-night" style={{ left: pct(c.atSeconds) }} aria-hidden />
-              ))}
               {lesson.interactions.map((i) => (
                 <button
                   key={i.id}
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openInteraction(i);
-                  }}
+                  onClick={() => openInteraction(i)}
                   title={`${interactionMeta[i.type].label} · ${formatDuration(i.atSeconds)}`}
                   aria-label={`${interactionMeta[i.type].label} at ${formatDuration(i.atSeconds)}${answers.has(i.id) ? " (answered)" : ""}`}
                   className={cn(

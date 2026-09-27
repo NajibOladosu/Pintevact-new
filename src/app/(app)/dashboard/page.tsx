@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { ArrowRight, BookOpenCheck, Flame, NotebookPen, Sparkles } from "lucide-react";
 import { buttonClasses } from "@/components/ui/button";
 import { Progress, ProgressRing } from "@/components/ui/progress";
@@ -8,7 +7,6 @@ import { CourseCover } from "@/components/course/course-cover";
 import { MindConstellation } from "@/components/app/mind-constellation";
 import { HeatStrip } from "@/components/app/heat-strip";
 import { StatCard } from "@/components/app/stat-card";
-import { Flash } from "@/components/app/flash";
 import { requireViewer } from "@/lib/auth/session";
 import { getLearnerSnapshot } from "@/lib/learner";
 import { summarizeCourse } from "@/lib/course";
@@ -46,9 +44,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-8">
-      <Suspense>
-        <Flash />
-      </Suspense>
       <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="eyebrow text-lucid">

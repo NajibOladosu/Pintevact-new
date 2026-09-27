@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { AccountTabs } from "@/components/app/account-tabs";
 import { DeleteAccountForm, EmailForm, PasswordForm, ProfileForm } from "@/components/app/account-forms";
-import { Flash } from "@/components/app/flash";
 import { requireViewer } from "@/lib/auth/session";
 import { formatDate } from "@/lib/utils";
 
@@ -26,9 +24,6 @@ export default async function AccountPage() {
   const p = viewer.profile;
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <Suspense>
-        <Flash />
-      </Suspense>
       <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-5">
           <Avatar name={p.fullName ?? viewer.email} size={72} />
