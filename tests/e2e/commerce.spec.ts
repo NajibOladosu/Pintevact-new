@@ -24,7 +24,7 @@ test.describe("payments (demo checkout)", () => {
     await page.goto("/learn/shadow-work");
     await expect(page.getByText("You're previewing this course.")).toHaveCount(0);
     await page.goto("/account/billing");
-    await expect(page.getByText("All-Access · Monthly")).toBeVisible();
+    await expect(page.getByText("All-Access, Monthly")).toBeVisible();
     await page.goto("/pricing");
     await expect(page.getByRole("link", { name: "Manage membership" })).toBeVisible();
   });

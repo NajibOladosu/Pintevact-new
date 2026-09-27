@@ -5,25 +5,35 @@ test.describe("public site", () => {
   test("home page tells the story and links to courses", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Pintevact/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Finally understand why you");
-    await expect(page.getByText("Videos that talk back")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Psychology you answer");
+    await expect(page.getByText("Every lesson stops to ask about you.")).toBeVisible();
     await expectNoHorizontalScroll(page);
     await openMobileMenuIfNeeded(page);
     await page.getByRole("link", { name: "Courses" }).first().click();
     await expect(page).toHaveURL(/\/courses$/);
   });
 
-  test("hero demo player pauses to ask a question", async ({ page }) => {
+  test("hero deck: answering flips the card and moves along the line", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("the video paused for you")).toBeVisible({ timeout: 15_000 });
-    await page.getByRole("button", { name: "5 cents" }).click();
-    await expect(page.getByText(/Your rider stepped in/)).toBeVisible();
+    const deck = page.getByTestId("hero-deck");
+    await deck.getByRole("button", { name: "5 cents", exact: true }).click();
+    await expect(deck.getByText("Right. Your slow system stepped in.")).toBeVisible();
+    await deck.getByRole("button", { name: /Next card/ }).click();
+    await expect(deck.getByText("Right now, which one feels more in charge of your life?")).toBeVisible();
+    await deck.getByRole("button", { name: "They take turns" }).click();
+    await deck.getByRole("button", { name: /Next card/ }).click();
+    await deck.getByRole("button", { name: "See what happens to it" }).click();
+    await expect(deck.getByRole("link", { name: "Start free" })).toBeVisible();
   });
 
-  test("interaction showcase switches tabs", async ({ page }) => {
-    await page.goto("/");
-    await page.getByRole("tab", { name: /Live polls/ }).click();
-    await expect(page.getByRole("tabpanel")).toContainText("See how your mind compares");
+  test("theme toggle switches between light and dark", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/pricing");
+    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await page.getByRole("button", { name: "Switch to dark theme" }).first().click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.reload();
+    await expect(page.locator("html")).toHaveClass(/dark/);
   });
 
   test("catalog filters by category and search", async ({ page }) => {
@@ -34,7 +44,7 @@ test.describe("public site", () => {
     await expect(page.getByRole("heading", { name: "Attachment & You" })).toBeVisible();
     await page.getByRole("button", { name: "All" }).click();
     await page.getByPlaceholder(/Search/).fill("zzzz");
-    await expect(page.getByText("Nothing matches — yet.")).toBeVisible();
+    await expect(page.getByText("No courses match those filters.")).toBeVisible();
     await page.getByRole("button", { name: "Clear filters" }).click();
     await expect(page.getByText("7 courses")).toBeVisible();
   });
@@ -50,7 +60,7 @@ test.describe("public site", () => {
   test("unknown course returns 404", async ({ page }) => {
     const res = await page.goto("/courses/not-a-course");
     expect(res?.status()).toBe(404);
-    await expect(page.getByText("Lost in thought?")).toBeVisible();
+    await expect(page.getByText("This station doesn't exist.")).toBeVisible();
   });
 
   test("pricing toggles billing interval", async ({ page }) => {
@@ -65,10 +75,10 @@ test.describe("public site", () => {
   test("mind quiz reveals an archetype and recommendation", async ({ page }) => {
     await page.goto("/discover");
     for (let i = 0; i < 6; i++) {
-      await page.locator("main button").filter({ hasText: /^B/ }).first().click();
+      await page.getByTestId("quiz-answer").nth(1).click();
     }
     await expect(page.getByRole("heading", { name: "The Feeler" })).toBeVisible();
-    await expect(page.getByText("Recommended for you")).toBeVisible();
+    await expect(page.getByText("Recommended course")).toBeVisible();
     await expect(page.getByRole("link", { name: "See the course" })).toHaveAttribute("href", "/courses/emotional-alchemy");
   });
 

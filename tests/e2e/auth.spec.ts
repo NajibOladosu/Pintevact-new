@@ -26,8 +26,8 @@ test.describe("authentication", () => {
     await signUp(page, { name: "Maya Angelou" });
     await expect(page).toHaveURL(/\/dashboard/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Maya");
-    await expect(page.getByText("Welcome to Pintevact ✦")).toBeVisible();
-    await expect(page.getByText("Start with the free course: Meet Your Mind.")).toBeVisible();
+    await expect(page.getByText("Welcome to Pintevact", { exact: true })).toBeVisible();
+    await expect(page.getByText("Start with Meet Your Mind.")).toBeVisible();
   });
 
   test("signed-in users skip auth pages and can sign out", async ({ page }) => {

@@ -29,7 +29,7 @@ test.describe("account & admin", () => {
     await signIn(page, `admin@${uniqueEmail("x").split("@")[0]}.test`);
     await expect(page).toHaveURL(/\/dashboard/);
     await page.goto("/admin");
-    await expect(page.getByRole("heading", { name: "Mission control" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Admin", level: 1 })).toBeVisible();
     await expect(page.getByText("Integrations")).toBeVisible();
     await page.goto("/admin/courses/habit-architecture");
     await page.getByLabel("Subtitle").fill("Design your environment so good habits run themselves.");

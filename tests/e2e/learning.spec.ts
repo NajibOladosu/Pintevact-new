@@ -47,7 +47,7 @@ test.describe("interactive learning", () => {
     await page.goto("/reflections");
     await expect(page.getByText("I bought shoes I didn't need")).toBeVisible();
     await page.goto("/dashboard");
-    await expect(page.getByText("1 stars lit")).toBeVisible();
+    await expect(page.getByText("1 stations reached")).toBeVisible();
     await page.goto("/achievements");
     await expect(page.getByText("First Light")).toBeVisible();
   });
