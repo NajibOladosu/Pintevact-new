@@ -1,13 +1,15 @@
+import { Plus } from "@/components/icons";
+
 export function Faq({ items }: { items: { q: string; a: string }[] }) {
   return (
-    <div className="divide-y-2 divide-ink/10 rounded-[2rem] border-2 border-ink bg-paper">
+    <div className="border-t border-line">
       {items.map((item) => (
-        <details key={item.q} className="group p-6 [&_summary::-webkit-details-marker]:hidden">
-          <summary className="flex cursor-pointer items-center justify-between gap-6 text-lg font-semibold">
+        <details key={item.q} className="group border-b border-line [&_summary::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer items-center justify-between gap-6 py-5 font-medium">
             {item.q}
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-ink transition group-open:rotate-45">+</span>
+            <Plus size={16} className="shrink-0 text-subtle transition-transform duration-200 group-open:rotate-45" aria-hidden />
           </summary>
-          <p className="mt-3 max-w-3xl leading-relaxed text-ink-2">{item.a}</p>
+          <p className="max-w-[65ch] pb-6 leading-relaxed text-muted">{item.a}</p>
         </details>
       ))}
     </div>

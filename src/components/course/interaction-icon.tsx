@@ -1,18 +1,19 @@
-import { BarChart3, Brain, Lightbulb, PenLine, SlidersHorizontal } from "lucide-react";
+import { BarChart3, Brain, Lightbulb, PenLine, SlidersHorizontal, type IconType } from "@/components/icons";
+import { cn } from "@/lib/utils";
 import type { InteractionType } from "@/lib/types";
 
-export const interactionMeta: Record<InteractionType, { label: string; icon: typeof Brain; color: string }> = {
-  quiz: { label: "Checkpoint", icon: Brain, color: "bg-lucid" },
-  reflection: { label: "Reflection", icon: PenLine, color: "bg-ember" },
-  poll: { label: "Poll", icon: BarChart3, color: "bg-iris" },
-  scale: { label: "Self-rating", icon: SlidersHorizontal, color: "bg-tide" },
-  insight: { label: "Insight", icon: Lightbulb, color: "bg-sun" },
+export const interactionMeta: Record<InteractionType, { label: string; icon: IconType }> = {
+  quiz: { label: "Checkpoint", icon: Brain },
+  reflection: { label: "Reflection", icon: PenLine },
+  poll: { label: "Poll", icon: BarChart3 },
+  scale: { label: "Self-rating", icon: SlidersHorizontal },
+  insight: { label: "Insight", icon: Lightbulb },
 };
 
-export function InteractionIcon({ type, size = 14 }: { type: InteractionType; size?: number }) {
+export function InteractionIcon({ type, size = 16, className }: { type: InteractionType; size?: number; className?: string }) {
   const meta = interactionMeta[type];
   return (
-    <span title={meta.label} className={`inline-flex h-6 w-6 items-center justify-center rounded-full border border-ink text-ink ${meta.color}`}>
+    <span title={meta.label} className={cn("inline-flex text-muted", className)}>
       <meta.icon size={size} aria-hidden />
       <span className="sr-only">{meta.label}</span>
     </span>

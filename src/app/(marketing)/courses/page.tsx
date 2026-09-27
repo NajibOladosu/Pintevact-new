@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { CourseBrowser } from "@/components/marketing/course-browser";
 import { getCourses } from "@/lib/data";
-import { summarizeCourse } from "@/lib/course";
 
 export const metadata: Metadata = {
   title: "Courses",
@@ -9,16 +8,11 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-  const courses = (await getCourses()).map(summarizeCourse);
+  const courses = await getCourses();
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-24 pt-14 sm:px-6 lg:px-8">
-      <header className="max-w-3xl">
-        <p className="eyebrow text-ember">The catalog</p>
-        <h1 className="text-balance mt-4 text-6xl leading-[0.95] sm:text-7xl">
-          Pick the part of your mind you want to <span className="display-italic">meet next.</span>
-        </h1>
-        <p className="mt-6 text-lg text-ink-2">Every course is interactive, evidence-based and designed to be finished. Start with the free course, or dive straight into what&apos;s calling you.</p>
-      </header>
+    <div className="mx-auto max-w-6xl px-5 pb-24 pt-14 sm:px-8 md:pt-20">
+      <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Courses</h1>
+      <p className="mt-4 max-w-[52ch] text-lg text-muted">Each course is a line of short lessons. Start with the free one, or go straight to what you want to understand.</p>
       <div className="mt-12">
         <CourseBrowser courses={courses} />
       </div>

@@ -1,37 +1,34 @@
 import type { Metadata } from "next";
-import { Mail, MessageCircle, Users } from "lucide-react";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { siteConfig } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Contact", description: "Questions, team plans or just a hello — we read every message." };
+export const metadata: Metadata = { title: "Contact", description: "Questions, team plans or just a hello. We read every message." };
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
   const { topic } = await searchParams;
   return (
-    <div className="mx-auto grid max-w-7xl gap-14 px-4 pb-24 pt-14 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+    <div className="mx-auto grid max-w-5xl gap-12 px-5 pb-24 pt-14 sm:px-8 md:pt-20 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
       <div>
-        <p className="eyebrow text-ember">Contact</p>
-        <h1 className="mt-4 text-6xl leading-[0.95] sm:text-7xl">
-          Talk to a <span className="display-italic">human.</span>
-        </h1>
-        <p className="mt-6 text-lg text-ink-2">We read every message and reply within one or two working days.</p>
-        <ul className="mt-10 space-y-5">
-          {[
-            { icon: Mail, title: "Email", body: siteConfig.email },
-            { icon: Users, title: "Teams & organisations", body: "Seats, onboarding and reporting for groups of 5+" },
-            { icon: MessageCircle, title: "Course questions", body: "Stuck on a lesson? Tell us which one." },
-          ].map((i) => (
-            <li key={i.title} className="flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border-2 border-ink bg-lucid">
-                <i.icon size={20} />
-              </span>
-              <span>
-                <span className="block font-semibold">{i.title}</span>
-                <span className="text-ink-2">{i.body}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Contact</h1>
+        <p className="mt-4 text-lg text-muted">A person reads every message and replies within one or two working days.</p>
+        <dl className="mt-10 space-y-6 text-sm">
+          <div>
+            <dt className="text-subtle">Email</dt>
+            <dd className="mt-1">
+              <a href={`mailto:${siteConfig.email}`} className="font-medium underline decoration-line-strong hover:decoration-fg">
+                {siteConfig.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt className="text-subtle">Teams and organisations</dt>
+            <dd className="mt-1 text-muted">Seats, onboarding and reporting for groups of five or more.</dd>
+          </div>
+          <div>
+            <dt className="text-subtle">Stuck on a lesson?</dt>
+            <dd className="mt-1 text-muted">Tell us which one and what happened.</dd>
+          </div>
+        </dl>
       </div>
       <ContactForm defaultTopic={topic} />
     </div>

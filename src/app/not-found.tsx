@@ -1,19 +1,28 @@
 import Link from "next/link";
+import { Logo } from "@/components/brand/logo";
+import { StationLine } from "@/components/brand/station-line";
 import { buttonClasses } from "@/components/ui/button";
-import { Constellation } from "@/components/brand/constellation";
 
 export default function NotFound() {
   return (
-    <main id="main" className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-night px-4 text-center text-paper">
-      <Constellation className="absolute inset-0 h-full w-full text-mist" count={50} seed={404} />
-      <p className="eyebrow relative text-lucid">Error 404 · Uncharted territory</p>
-      <h1 className="relative mt-6 text-7xl italic sm:text-9xl">Lost in thought?</h1>
-      <p className="relative mt-6 max-w-md text-lg text-mist">This page doesn&apos;t exist — but the feeling of being lost is usually the start of finding something.</p>
-      <div className="relative mt-10 flex flex-col gap-3 sm:flex-row">
-        <Link href="/" className={buttonClasses({ variant: "lucid" })}>
+    <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col justify-center px-5 py-16">
+      <Logo />
+      <StationLine
+        className="mt-16"
+        stations={[
+          { id: "a", state: "done" },
+          { id: "b", state: "done" },
+          { id: "c", state: "ahead" },
+          { id: "d", state: "ahead" },
+        ]}
+      />
+      <h1 className="mt-10 text-4xl font-semibold tracking-tight sm:text-5xl">This station doesn&apos;t exist.</h1>
+      <p className="mt-4 text-lg text-muted">The page may have moved, or the link was mistyped. Error 404.</p>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/" className={buttonClasses({ variant: "secondary" })}>
           Back home
         </Link>
-        <Link href="/courses" className={buttonClasses({ variant: "outline", className: "text-paper" })}>
+        <Link href="/courses" className={buttonClasses({ variant: "outline" })}>
           Browse courses
         </Link>
       </div>

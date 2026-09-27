@@ -1,48 +1,43 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { journal } from "@/content/journal";
-import { themeClasses } from "@/lib/course";
-import { cn, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Journal", description: "Short, research-backed essays on the psychology of everyday life." };
 
 export default function JournalPage() {
   const [lead, ...rest] = journal;
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-24 pt-14 sm:px-6 lg:px-8">
-      <header className="max-w-3xl">
-        <p className="eyebrow text-ember">The Journal</p>
-        <h1 className="mt-4 text-6xl leading-[0.95] sm:text-7xl">
-          Field notes from the <span className="display-italic">inner</span> world.
-        </h1>
-      </header>
-      <Link href={`/journal/${lead.slug}`} className="group mt-14 grid overflow-hidden rounded-[2rem] border-2 border-ink bg-paper transition hover:shadow-hard-lg lg:grid-cols-2">
-        <div className={cn("relative min-h-64 border-b-2 border-ink lg:border-b-0 lg:border-r-2", themeClasses[lead.theme].bg)}>
-          <p className="absolute bottom-6 left-6 right-6 font-display text-5xl italic leading-none sm:text-6xl">“{lead.excerpt}”</p>
-        </div>
-        <div className="flex flex-col justify-center p-8 sm:p-12">
-          <p className="eyebrow text-ink-3">
-            {lead.category} · {lead.readingMinutes} min read
-          </p>
-          <h2 className="mt-3 text-4xl leading-tight transition group-hover:text-ember">{lead.title}</h2>
-          <p className="mt-4 text-ink-2">
-            {lead.author} · {formatDate(lead.publishedAt)}
-          </p>
-        </div>
+    <div className="mx-auto max-w-4xl px-5 pb-24 pt-14 sm:px-8 md:pt-20">
+      <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Journal</h1>
+      <p className="mt-4 max-w-[50ch] text-lg text-muted">Short essays on the psychology of everyday life, each with one thing to try.</p>
+
+      <Link href={`/journal/${lead.slug}`} className="group mt-14 block rounded-2xl bg-violet p-7 text-on-violet sm:p-10">
+        <p className="text-sm text-on-violet-muted">
+          {lead.category}, {lead.readingMinutes} min read
+        </p>
+        <h2 className="mt-3 max-w-[22ch] text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{lead.title}</h2>
+        <p className="mt-4 max-w-[52ch] text-on-violet-muted">{lead.excerpt}</p>
+        <p className="mt-8 text-sm">
+          {lead.author}, {formatDate(lead.publishedAt)}
+        </p>
       </Link>
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
+
+      <ul className="mt-6">
         {rest.map((p) => (
-          <Link key={p.slug} href={`/journal/${p.slug}`} className="group flex flex-col rounded-[2rem] border-2 border-ink bg-paper p-7 transition hover:-translate-y-1 hover:shadow-hard">
-            <span className={cn("h-3 w-16 rounded-full border-2 border-ink", themeClasses[p.theme].bg)} />
-            <p className="eyebrow mt-6 text-ink-3">
-              {p.category} · {p.readingMinutes} min
-            </p>
-            <h2 className="mt-3 text-2xl leading-snug transition group-hover:text-ember">{p.title}</h2>
-            <p className="mt-3 flex-1 text-ink-2">{p.excerpt}</p>
-            <p className="mt-6 text-sm text-ink-3">{formatDate(p.publishedAt)}</p>
-          </Link>
+          <li key={p.slug}>
+            <Link href={`/journal/${p.slug}`} className="group grid gap-2 border-b border-line py-7 sm:grid-cols-[1fr_auto] sm:items-baseline sm:gap-8">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight group-hover:underline group-hover:decoration-line-strong">{p.title}</h2>
+                <p className="mt-2 text-muted">{p.excerpt}</p>
+              </div>
+              <p className="tabular text-sm text-subtle">
+                {p.category}, {p.readingMinutes} min
+              </p>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

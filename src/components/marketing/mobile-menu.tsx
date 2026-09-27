@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
-import { Constellation } from "@/components/brand/constellation";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function MobileMenu({ items, signedIn }: { items: { href: string; label: string }[]; signedIn: boolean }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  // Close when navigating.
   const [lastPath, setLastPath] = useState(pathname);
   if (pathname !== lastPath) {
     setLastPath(pathname);
@@ -26,42 +25,37 @@ export function MobileMenu({ items, signedIn }: { items: { href: string; label: 
   }, [open]);
 
   return (
-    <div className="lg:hidden">
+    <div className="flex items-center gap-1 lg:hidden">
+      <ThemeToggle />
       <button
         type="button"
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="relative z-[60] inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-ink bg-paper"
+        className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg text-fg hover:bg-fg/5"
       >
         {open ? <X size={20} /> : <Menu size={20} />}
       </button>
       {open ? (
-        <div className="fixed inset-0 z-[55] flex flex-col overflow-y-auto bg-night px-6 pb-10 pt-24 text-paper">
-          <Constellation className="absolute inset-0 h-full w-full text-mist" count={30} seed={3} />
-          <nav aria-label="Mobile" className="relative flex flex-col gap-1">
-            {items.map((item, i) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="animate-rise border-b border-white/10 py-4 font-display text-4xl italic"
-                style={{ animationDelay: `${i * 50}ms` }}
-              >
+        <div className="fixed inset-x-0 bottom-0 top-16 z-40 flex animate-enter flex-col overflow-y-auto border-t border-line bg-bg px-5 pb-10 pt-4">
+          <nav aria-label="Mobile" className="flex flex-col">
+            {items.map((item) => (
+              <Link key={item.href} href={item.href} className="border-b border-line py-4 text-2xl font-semibold tracking-tight">
                 {item.label}
               </Link>
             ))}
           </nav>
-          <div className="relative mt-10 flex flex-col gap-3">
+          <div className="mt-8 grid gap-3">
             {signedIn ? (
-              <Link href="/dashboard" className={buttonClasses({ variant: "primary", size: "lg" })}>
-                My dashboard
+              <Link href="/dashboard" className={buttonClasses({ variant: "secondary", size: "lg" })}>
+                Dashboard
               </Link>
             ) : (
               <>
                 <Link href="/signup" className={buttonClasses({ variant: "primary", size: "lg" })}>
                   Start free
                 </Link>
-                <Link href="/login" className={buttonClasses({ variant: "outline", size: "lg", className: "text-paper" })}>
+                <Link href="/login" className={buttonClasses({ variant: "outline", size: "lg" })}>
                   Sign in
                 </Link>
               </>

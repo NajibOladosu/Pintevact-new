@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { Send } from "lucide-react";
+import { Send } from "@/components/icons";
 import { submitContact } from "@/app/(marketing)/actions";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/input";
@@ -19,17 +19,17 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: string }) {
   const [state, action, pending] = useActionState(submitContact, {});
   if (state.ok) {
     return (
-      <div role="status" className="rounded-[2rem] border-2 border-ink bg-lucid p-10 text-center shadow-hard-lg">
-        <p className="font-display text-4xl italic">Message received.</p>
-        <p className="mt-3 text-lg">{state.message}</p>
+      <div role="status" className="rounded-2xl bg-violet p-8 text-on-violet">
+        <p className="text-2xl font-semibold tracking-tight">Message received.</p>
+        <p className="mt-2 text-on-violet-muted">{state.message}</p>
       </div>
     );
   }
   const v = state.values ?? {};
   return (
-    <form action={action} noValidate className="space-y-5 rounded-[2rem] border-2 border-ink bg-paper p-6 shadow-hard-lg sm:p-8">
+    <form action={action} noValidate className="space-y-5 rounded-2xl border border-line bg-raised p-6 sm:p-8">
       {state.message ? (
-        <p role="alert" className="rounded-2xl bg-ember/15 p-3 font-medium text-ember">
+        <p role="alert" className="rounded-[10px] border border-danger/40 p-3 text-sm text-danger">
           {state.message}
         </p>
       ) : null}
@@ -51,7 +51,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: string }) {
           id="topic"
           name="topic"
           defaultValue={v.topic ?? (contactTopics.includes(defaultTopic as never) ? defaultTopic : "general")}
-          className="h-12 w-full rounded-2xl border-2 border-ink/15 bg-white/70 px-4 focus:border-ink focus:outline-none focus:ring-4 focus:ring-lucid/60"
+          className="h-11 w-full rounded-[10px] border border-line-strong bg-raised px-3.5 text-fg focus:border-fg focus:outline-none"
         >
           {contactTopics.map((t) => (
             <option key={t} value={t}>
@@ -69,7 +69,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: string }) {
         <label htmlFor="company">Company</label>
         <input id="company" name="company" tabIndex={-1} autoComplete="off" />
       </div>
-      <Button type="submit" size="lg" loading={pending} className="w-full sm:w-auto">
+      <Button type="submit" variant="secondary" loading={pending} className="w-full sm:w-auto">
         Send message <Send size={16} />
       </Button>
     </form>

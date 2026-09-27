@@ -2,74 +2,62 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
 import { buttonClasses } from "@/components/ui/button";
-import { Constellation } from "@/components/brand/constellation";
 import { getCourses } from "@/lib/data";
 
-export const metadata: Metadata = { title: "About", description: "Why we built Pintevact: psychology education that talks back." };
+export const metadata: Metadata = { title: "About", description: "Why Pintevact exists: psychology lessons that ask about your life." };
 
 const beliefs = [
-  { n: "01", title: "Self-knowledge is a skill.", body: "Not a personality trait you're born with. It can be taught, practised and measured — so we built a place to do exactly that." },
-  { n: "02", title: "Watching isn't learning.", body: "Passive video creates the illusion of competence. Retrieval, reflection and self-reference create the real thing." },
-  { n: "03", title: "Psychology belongs to everyone.", body: "The research that explains your mind shouldn't be locked in journals or therapy rooms. It should be in your pocket." },
-  { n: "04", title: "Kindness is a performance strategy.", body: "The data is clear: self-compassion drives growth better than self-criticism. We design every lesson with that in mind." },
+  { title: "Self-knowledge is a skill.", body: "It is not a trait you are born with. It can be taught, practised and noticed improving." },
+  { title: "Watching is not learning.", body: "Passive video feels productive and fades fast. Answering, recalling and relating an idea to your own life is what makes it stay." },
+  { title: "Psychology belongs to everyone.", body: "The research that explains your mind should not live only in journals and therapy rooms." },
+  { title: "Kindness works better.", body: "Self-compassion drives change more reliably than self-criticism, so every lesson is written with that in mind." },
 ];
 
 export default async function AboutPage() {
   const courses = await getCourses();
   const instructors = Array.from(new Map(courses.map((c) => [c.instructor.name, c.instructor])).values());
   return (
-    <>
-      <section className="mx-auto max-w-7xl px-4 pb-20 pt-14 sm:px-6 lg:px-8">
-        <p className="eyebrow text-ember">About Pintevact</p>
-        <h1 className="text-balance mt-4 max-w-5xl text-6xl leading-[0.92] sm:text-8xl">
-          We believe the most important course you&apos;ll ever take is <span className="display-italic text-ember">you.</span>
-        </h1>
-        <div className="mt-12 grid gap-10 text-lg leading-relaxed text-ink-2 lg:grid-cols-2">
-          <p>
-            Pintevact (from <em>pint</em>, to paint, and <em>evact</em>, to draw out) started with a frustration: people were spending hours watching psychology content and changing nothing. The insight felt good in the moment, then evaporated.
-          </p>
-          <p>
-            So we built a different kind of classroom — one where the video stops and asks you a question, where your answers become a private map of your mind, and where progress is measured in understanding, not minutes watched.
-          </p>
-        </div>
-      </section>
+    <div className="mx-auto max-w-5xl px-5 pb-24 pt-14 sm:px-8 md:pt-20">
+      <h1 className="max-w-[18ch] text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">We built the psychology class that asks about you.</h1>
+      <div className="mt-10 grid max-w-4xl gap-6 text-lg leading-relaxed text-muted md:grid-cols-2">
+        <p>People spend hours on psychology podcasts and videos and change very little. The insight feels good for a moment, then it is gone.</p>
+        <p>Pintevact lessons stop and ask a question about your own life. Your answers become a private record you can look back on, and progress is measured by what you understand, not minutes watched.</p>
+      </div>
 
-      <section className="relative overflow-hidden bg-night text-paper">
-        <Constellation className="absolute inset-0 h-full w-full text-mist" count={40} seed={5} />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <h2 className="text-5xl sm:text-6xl">What we believe</h2>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-2">
-            {beliefs.map((b) => (
-              <div key={b.n} className="bg-night p-8 sm:p-10">
-                <p className="font-mono text-lucid">{b.n}</p>
-                <h3 className="mt-4 text-3xl italic">{b.title}</h3>
-                <p className="mt-3 text-mist">{b.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <p className="eyebrow text-ember">The guides</p>
-        <h2 className="mt-4 text-5xl sm:text-6xl">Researchers who can actually teach.</h2>
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {instructors.map((i) => (
-            <div key={i.name} className="rounded-[2rem] border-2 border-ink bg-paper p-6">
-              <Avatar name={i.name} size={72} />
-              <h3 className="mt-5 text-2xl">{i.name}</h3>
-              <p className="eyebrow mt-1 text-ink-3">{i.title}</p>
-              <p className="mt-3 text-ink-2">{i.bio}</p>
+      <section className="mt-24">
+        <h2 className="text-2xl font-semibold tracking-tight">What we believe</h2>
+        <dl className="mt-8 grid gap-x-12 gap-y-10 md:grid-cols-2">
+          {beliefs.map((b) => (
+            <div key={b.title} className="border-t border-line pt-5">
+              <dt className="text-lg font-semibold">{b.title}</dt>
+              <dd className="mt-2 text-muted">{b.body}</dd>
             </div>
           ))}
-        </div>
-        <div className="mt-20 flex flex-col items-start justify-between gap-6 rounded-[2rem] border-2 border-ink bg-lucid p-8 sm:flex-row sm:items-center sm:p-12">
-          <p className="max-w-xl font-display text-4xl leading-tight">Ready to meet the most interesting person you know?</p>
-          <Link href="/signup" className={buttonClasses({ variant: "ink", size: "lg" })}>
-            Start free
-          </Link>
-        </div>
+        </dl>
       </section>
-    </>
+
+      <section className="mt-24">
+        <h2 className="text-2xl font-semibold tracking-tight">Who teaches</h2>
+        <ul className="mt-8 grid gap-5 sm:grid-cols-2">
+          {instructors.map((i) => (
+            <li key={i.name} className="flex gap-4 rounded-2xl border border-line p-5">
+              <Avatar name={i.name} size={44} />
+              <div>
+                <p className="font-semibold">{i.name}</p>
+                <p className="text-sm text-subtle">{i.title}</p>
+                <p className="mt-2 text-sm text-muted">{i.bio}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <div className="mt-24 flex flex-col items-start justify-between gap-6 border-t border-line pt-10 sm:flex-row sm:items-center">
+        <p className="max-w-[28ch] text-2xl font-semibold tracking-tight">The free course takes about half an hour.</p>
+        <Link href="/signup" className={buttonClasses({ size: "lg" })}>
+          Start free
+        </Link>
+      </div>
+    </div>
   );
 }

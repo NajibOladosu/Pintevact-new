@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
 import { MEMBERSHIP, yearlySavingsPercent, type BillingInterval } from "@/lib/pricing";
 import { cn, formatPrice } from "@/lib/utils";
@@ -13,119 +13,80 @@ export function PricingPlans({ signedIn, isMember, minCoursePrice }: { signedIn:
   const perMonth = interval === "year" ? Math.round(plan.amountCents / 12) : plan.amountCents;
 
   return (
-    <div>
-      <div className="flex justify-center">
-        <div role="radiogroup" aria-label="Billing interval" className="inline-flex rounded-full border-2 border-ink bg-paper p-1">
-          {(["month", "year"] as const).map((i) => (
-            <button
-              key={i}
-              type="button"
-              role="radio"
-              aria-checked={interval === i}
-              onClick={() => setInterval(i)}
-              className={cn("rounded-full px-5 py-2 text-sm font-semibold transition", interval === i ? "bg-ink text-paper" : "hover:bg-ink/5")}
-            >
-              {MEMBERSHIP[i].label}
-              {i === "year" ? <span className={cn("ml-2 rounded-full px-2 py-0.5 text-xs", interval === i ? "bg-lucid text-ink" : "bg-lucid/60")}>Save {yearlySavingsPercent()}%</span> : null}
-            </button>
+    <div className="grid gap-5 md:grid-cols-2">
+      <div className="flex flex-col rounded-2xl border border-line p-7 sm:p-8">
+        <h2 className="text-lg font-semibold">One course</h2>
+        <p className="mt-1 text-sm text-muted">For when you know exactly what you want to work on.</p>
+        <p className="mt-8 flex items-baseline gap-2">
+          <span className="text-sm text-subtle">from</span>
+          <span className="tabular text-4xl font-semibold tracking-tight">{formatPrice(minCoursePrice)}</span>
+        </p>
+        <p className="mt-1 text-sm text-subtle">One-time, yours to keep</p>
+        <ul className="mt-8 flex-1 space-y-3 text-sm">
+          {["Lifetime access to that course", "Every lesson and checkpoint", "Certificate when you finish", "30-day money-back guarantee"].map((f) => (
+            <li key={f} className="flex items-start gap-2.5">
+              <Check size={16} className="mt-0.5 shrink-0 text-accent-ink" /> {f}
+            </li>
           ))}
+        </ul>
+        <Link href="/courses" className={buttonClasses({ variant: "outline", className: "mt-8 w-full" })}>
+          Browse courses
+        </Link>
+      </div>
+
+      <div className="flex flex-col rounded-2xl bg-violet p-7 text-on-violet sm:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold">All-Access</h2>
+            <p className="mt-1 text-sm text-on-violet-muted">Every course, including the ones we release next.</p>
+          </div>
+          <div role="radiogroup" aria-label="Billing interval" className="inline-flex rounded-lg bg-black/20 p-1">
+            {(["month", "year"] as const).map((i) => (
+              <button
+                key={i}
+                type="button"
+                role="radio"
+                aria-checked={interval === i}
+                onClick={() => setInterval(i)}
+                className={cn("rounded-md px-3 py-1 text-sm transition-colors", interval === i ? "bg-on-violet text-violet" : "text-on-violet-muted hover:text-on-violet")}
+              >
+                {MEMBERSHIP[i].label}
+              </button>
+            ))}
+          </div>
         </div>
+        <p className="mt-8 flex items-baseline gap-2">
+          <span className="tabular text-4xl font-semibold tracking-tight">{formatPrice(perMonth)}</span>
+          <span className="text-sm text-on-violet-muted">per month</span>
+        </p>
+        <p className="mt-1 text-sm text-on-violet-muted">
+          {interval === "year" ? `Billed ${formatPrice(plan.amountCents)} yearly, save ${yearlySavingsPercent()}%` : "Billed monthly"}
+        </p>
+        <ul className="mt-8 flex-1 space-y-3 text-sm">
+          {["All seven courses, and every new one", "Early access to new courses", "Live workshops for members", "Cancel in one click, any time"].map((f) => (
+            <li key={f} className="flex items-start gap-2.5">
+              <Check size={16} className="mt-0.5 shrink-0 text-accent" /> {f}
+            </li>
+          ))}
+        </ul>
+        {isMember ? (
+          <Link href="/account/billing" className={buttonClasses({ className: "mt-8 w-full" })}>
+            Manage membership
+          </Link>
+        ) : signedIn ? (
+          <form action="/api/stripe/checkout" method="post" className="mt-8">
+            <input type="hidden" name="mode" value="membership" />
+            <input type="hidden" name="interval" value={interval} />
+            <button type="submit" className={buttonClasses({ className: "w-full" })}>
+              Unlock All-Access
+            </button>
+          </form>
+        ) : (
+          <Link href={`/signup?next=${encodeURIComponent("/pricing")}`} className={buttonClasses({ className: "mt-8 w-full" })}>
+            Unlock All-Access
+          </Link>
+        )}
       </div>
-
-      <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-3">
-        <Plan
-          name="Explorer"
-          price="Free"
-          caption="forever"
-          description="Meet your mind with our free interactive starter course."
-          features={["Meet Your Mind course", "Preview lessons from every course", "Reflection Vault", "XP, streaks & badges"]}
-          cta={
-            <Link href={signedIn ? "/learn/meet-your-mind" : "/signup"} className={buttonClasses({ variant: "outline", className: "w-full" })}>
-              {signedIn ? "Go to free course" : "Start free"}
-            </Link>
-          }
-        />
-        <Plan
-          name="Single course"
-          price={`from ${formatPrice(minCoursePrice)}`}
-          caption="one-time"
-          description="Own one course for life. Perfect if you know exactly what you want to work on."
-          features={["Lifetime access to one course", "All interactive lessons", "Certificate of completion", "30-day money-back guarantee"]}
-          cta={
-            <Link href="/courses" className={buttonClasses({ variant: "ink", className: "w-full" })}>
-              Browse courses
-            </Link>
-          }
-        />
-        <Plan
-          highlight
-          name="All-Access"
-          price={formatPrice(perMonth)}
-          caption={interval === "year" ? `/ month · billed ${formatPrice(plan.amountCents)} yearly` : "/ month"}
-          description="Every course, every new release, every tool. The complete Pintevact experience."
-          features={["Every current & future course", "Member-only live workshops", "Priority new-course access", "Cancel anytime in one click"]}
-          cta={
-            isMember ? (
-              <Link href="/account/billing" className={buttonClasses({ variant: "ink", className: "w-full" })}>
-                Manage membership
-              </Link>
-            ) : signedIn ? (
-              <form action="/api/stripe/checkout" method="post">
-                <input type="hidden" name="mode" value="membership" />
-                <input type="hidden" name="interval" value={interval} />
-                <button type="submit" className={buttonClasses({ variant: "ink", className: "w-full" })}>
-                  Unlock All-Access
-                </button>
-              </form>
-            ) : (
-              <Link href={`/signup?next=${encodeURIComponent("/pricing")}`} className={buttonClasses({ variant: "ink", className: "w-full" })}>
-                Unlock All-Access
-              </Link>
-            )
-          }
-        />
-      </div>
-    </div>
-  );
-}
-
-function Plan({
-  name,
-  price,
-  caption,
-  description,
-  features,
-  cta,
-  highlight,
-}: {
-  name: string;
-  price: string;
-  caption: string;
-  description: string;
-  features: string[];
-  cta: React.ReactNode;
-  highlight?: boolean;
-}) {
-  return (
-    <div className={cn("relative flex flex-col rounded-[2rem] border-2 border-ink p-7 sm:p-8", highlight ? "bg-ember shadow-hard-lg lg:-translate-y-4" : "bg-paper")}>
-      {highlight ? (
-        <span className="absolute -top-4 right-6 rotate-3 rounded-full border-2 border-ink bg-lucid px-3 py-1 font-mono text-xs font-semibold uppercase">Most loved</span>
-      ) : null}
-      <p className="eyebrow">{name}</p>
-      <p className="mt-4 font-display text-5xl">{price}</p>
-      <p className="mt-1 text-sm opacity-80">{caption}</p>
-      <p className="mt-5 opacity-90">{description}</p>
-      <ul className="mt-6 flex-1 space-y-3">
-        {features.map((f) => (
-          <li key={f} className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-paper">
-              <Check size={12} />
-            </span>
-            {f}
-          </li>
-        ))}
-      </ul>
-      <div className="mt-8">{cta}</div>
     </div>
   );
 }

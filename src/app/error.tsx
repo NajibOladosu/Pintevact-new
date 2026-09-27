@@ -8,11 +8,10 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
     console.error(error);
   }, [error]);
   return (
-    <main id="main" className="flex min-h-[70dvh] flex-col items-center justify-center px-4 text-center">
-      <p className="eyebrow text-ember">Something slipped</p>
-      <h1 className="mt-4 text-6xl italic">Even minds glitch.</h1>
-      <p className="mt-4 max-w-md text-ink-2">An unexpected error occurred. Take a breath — then try again.</p>
-      <Button onClick={reset} className="mt-8">
+    <main id="main" className="mx-auto flex min-h-[70dvh] max-w-xl flex-col justify-center px-5">
+      <h1 className="text-4xl font-semibold tracking-tight">Something went wrong.</h1>
+      <p className="mt-4 text-muted">An unexpected error stopped this page from loading. Try again, and if it keeps happening, contact us.</p>
+      <Button onClick={reset} variant="secondary" className="mt-8 self-start">
         Try again
       </Button>
     </main>
