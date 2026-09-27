@@ -30,7 +30,7 @@ export type Playback = {
 
 /**
  * Unified playback controller. Streams Bunny HLS through hls.js (or native HLS on Safari),
- * or runs a simulated timeline when a lesson has no video yet — so interactive checkpoints
+ * or runs a simulated timeline when a lesson has no video yet, so interactive checkpoints
  * work identically in both cases.
  */
 export function usePlayback({
@@ -165,7 +165,7 @@ export function usePlayback({
         }
         const instance = new Hls({ enableWorker: true, capLevelToPlayerSize: true });
         instance.on(Hls.Events.ERROR, (_e, data) => {
-          if (data.fatal) setError("Streaming error — please refresh the page.");
+          if (data.fatal) setError("Streaming error, please refresh the page.");
         });
         instance.loadSource(source.src);
         instance.attachMedia(video);

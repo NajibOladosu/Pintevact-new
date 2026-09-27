@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { ArrowRight, Check, Lock, Sparkles, X } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { ArrowRight, Check, Lock, X } from "@/components/icons";
 import { interactionMeta } from "@/components/course/interaction-icon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,10 @@ type Props = {
   onDismiss?: () => void;
 };
 
-/** The card that appears over the video when a checkpoint is reached. */
+/**
+ * A checkpoint card. The front asks; once answered the card flips to its violet back,
+ * which carries the feedback, the XP and the way forward.
+ */
 export function InteractionCard({ interaction, previous, onSubmit, onContinue, onDismiss }: Props) {
   const meta = interactionMeta[interaction.type];
   const [pending, startTransition] = useTransition();
@@ -29,6 +32,11 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
   const [value, setValue] = useState<number>(previous?.value ?? Math.round(((interaction.scale?.min ?? 1) + (interaction.scale?.max ?? 10)) / 2));
 
   const answered = Boolean(result?.ok);
+  const continueRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    // Move focus to the way forward without scrolling the page under the overlay.
+    if (answered) continueRef.current?.focus({ preventScroll: true });
+  }, [answered]);
   const submit = (payload: SubmitPayload) => {
     setError(null);
     startTransition(async () => {
@@ -37,7 +45,7 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
         if (!res.ok) setError(res.error ?? "Something went wrong.");
         else setResult(res);
       } catch {
-        setError("Couldn't save — check your connection and try again.");
+        setError("Couldn't save. Check your connection and try again.");
       }
     });
   };
@@ -46,34 +54,39 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
   const chosen = interaction.options?.find((o) => o.id === optionId);
 
   return (
-    <div role="dialog" aria-modal="false" aria-labelledby={`int-${interaction.id}`} className="w-full max-w-xl animate-rise rounded-[1.75rem] border-2 border-ink bg-paper p-5 text-ink shadow-hard-lg sm:p-6" data-testid="interaction-card">
+    <div
+      key={answered ? "back" : "front"}
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby={`int-${interaction.id}`}
+      className={cn("w-full max-w-xl rounded-2xl p-5 sm:p-7", answered ? "animate-flip bg-violet text-on-violet" : "animate-enter border border-line bg-raised text-fg")}
+      data-testid="interaction-card"
+    >
       <div className="flex items-center justify-between gap-3">
-        <p className="eyebrow inline-flex items-center gap-2">
-          <span className={cn("inline-flex h-6 w-6 items-center justify-center rounded-full border border-ink", meta.color)}>
-            <meta.icon size={13} aria-hidden />
-          </span>
-          {meta.label}
-          {interaction.required ? <span className="rounded-full bg-ink px-2 py-0.5 text-[0.6rem] text-paper">Required</span> : null}
+        <p className={cn("inline-flex items-center gap-2 text-sm", answered ? "text-on-violet-muted" : "text-subtle")}>
+          <meta.icon size={16} aria-hidden />
+          <span className={answered ? "text-on-violet" : "font-medium text-fg"}>{meta.label}</span>
+          {interaction.required ? <span>, required</span> : null}
         </p>
-        {onDismiss && !interaction.required ? (
-          <button type="button" onClick={onDismiss} aria-label="Skip for now" className="rounded-full p-1.5 text-ink-3 hover:bg-ink/5 hover:text-ink">
+        {onDismiss && !interaction.required && !answered ? (
+          <button type="button" onClick={onDismiss} aria-label="Skip for now" className="rounded-lg p-1.5 text-subtle hover:bg-fg/5 hover:text-fg">
             <X size={18} />
           </button>
         ) : null}
       </div>
 
-      <h3 id={`int-${interaction.id}`} className="mt-2 text-balance text-xl leading-snug sm:text-2xl">
+      <h3 id={`int-${interaction.id}`} className="mt-3 text-balance text-xl font-semibold leading-snug tracking-tight sm:text-2xl">
         {interaction.prompt}
       </h3>
 
       {/* Quiz & poll */}
       {(interaction.type === "quiz" || interaction.type === "poll") && interaction.options ? (
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
           {interaction.options.map((o, i) => {
             const isChosen = optionId === o.id;
             const votes = result?.pollResults?.[o.id] ?? 0;
             const pct = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
-            const showQuiz = answered && interaction.type === "quiz";
+            const isQuizBack = answered && interaction.type === "quiz";
             return (
               <button
                 key={o.id}
@@ -85,19 +98,19 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
                   submit({ optionId: o.id });
                 }}
                 className={cn(
-                  "relative flex items-center gap-3 overflow-hidden rounded-2xl border-2 border-ink px-3 py-2.5 text-left text-[0.95rem] font-semibold leading-snug transition",
-                  !answered && "bg-white hover:-translate-y-0.5 hover:bg-lucid hover:shadow-hard",
-                  showQuiz && o.correct && "bg-lucid",
-                  showQuiz && isChosen && !o.correct && "bg-ember",
-                  answered && interaction.type === "poll" && "bg-white",
+                  "relative flex items-center gap-3 overflow-hidden rounded-[10px] px-3.5 py-3 text-left text-[0.95rem] font-medium leading-snug transition-colors",
+                  !answered && "border border-line-strong hover:border-fg hover:bg-fg/[0.03]",
+                  answered && "border border-on-violet/20",
+                  isQuizBack && o.correct && "border-on-violet bg-on-violet text-violet",
+                  isQuizBack && isChosen && !o.correct && "line-through decoration-on-violet/60",
                 )}
               >
-                {answered && interaction.type === "poll" ? <span className="absolute inset-y-0 left-0 bg-iris/30 transition-all duration-700" style={{ width: `${pct}%` }} /> : null}
-                <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-paper font-mono text-xs">
-                  {showQuiz && o.correct ? <Check size={14} /> : showQuiz && isChosen ? <X size={14} /> : "ABCDEF"[i]}
+                {answered && interaction.type === "poll" ? <span aria-hidden className="absolute inset-y-0 left-0 bg-on-violet/15 transition-[width] duration-700" style={{ width: `${pct}%` }} /> : null}
+                <span className="tabular relative w-4 shrink-0 text-xs opacity-60">
+                  {isQuizBack && o.correct ? <Check size={14} weight="bold" /> : isQuizBack && isChosen ? <X size={14} weight="bold" /> : "ABCDEF"[i]}
                 </span>
                 <span className="relative flex-1">{o.label}</span>
-                {answered && interaction.type === "poll" ? <span className="relative font-mono text-sm">{pct}%</span> : null}
+                {answered && interaction.type === "poll" ? <span className="tabular relative text-sm">{pct}%</span> : null}
               </button>
             );
           })}
@@ -118,10 +131,13 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
             rows={3}
             maxLength={5000}
             placeholder="Write freely. Only you can see this."
-            className="w-full resize-none rounded-2xl border-2 border-ink bg-white p-4 leading-relaxed focus:outline-none focus:ring-4 focus:ring-lucid/60 disabled:opacity-80"
+            className={cn(
+              "w-full resize-none rounded-[10px] p-3.5 leading-relaxed focus:outline-none focus-visible:outline-none",
+              answered ? "bg-on-violet/10 text-on-violet" : "border border-line-strong bg-bg focus:border-fg",
+            )}
           />
-          <p className="mt-1 flex items-center gap-1.5 font-mono text-xs text-ink-3">
-            <Lock size={12} /> Private · saved to your Reflection Vault
+          <p className={cn("mt-1.5 flex items-center gap-1.5 text-xs", answered ? "text-on-violet-muted" : "text-subtle")}>
+            <Lock size={12} /> Private, saved to your reflection vault
           </p>
         </div>
       ) : null}
@@ -129,9 +145,7 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
       {/* Scale */}
       {interaction.type === "scale" && interaction.scale ? (
         <div className="mt-6">
-          <div className="flex items-end justify-center">
-            <span className="font-display text-6xl">{value}</span>
-          </div>
+          <p className="tabular text-center text-5xl font-semibold tracking-tight">{value}</p>
           <input
             type="range"
             min={interaction.scale.min}
@@ -140,9 +154,9 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
             disabled={answered}
             onChange={(e) => setValue(Number(e.target.value))}
             aria-label={interaction.prompt}
-            className="mt-2 w-full accent-[var(--color-ember)]"
+            className="mt-3 w-full accent-[var(--accent)]"
           />
-          <div className="flex justify-between font-mono text-xs text-ink-3">
+          <div className={cn("flex justify-between text-xs", answered ? "text-on-violet-muted" : "text-subtle")}>
             <span>{interaction.scale.minLabel}</span>
             <span>{interaction.scale.maxLabel}</span>
           </div>
@@ -150,53 +164,53 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
       ) : null}
 
       {/* Insight */}
-      {interaction.type === "insight" ? <p className="mt-4 text-lg leading-relaxed text-ink-2">{interaction.body}</p> : null}
+      {interaction.type === "insight" ? <p className={cn("mt-4 text-lg leading-relaxed", answered ? "text-on-violet-muted" : "text-muted")}>{interaction.body}</p> : null}
 
-      {/* Feedback */}
+      {/* Feedback on the back */}
       {answered && interaction.type === "quiz" ? (
-        <div className={cn("mt-3 rounded-2xl p-3 text-sm", result?.isCorrect ? "bg-lucid/40" : "bg-ember/20")} role="status">
-          <p className="font-semibold">{result?.isCorrect ? "Spot on." : "Not quite — and that's the point."}</p>
-          {chosen?.feedback ? <p className="mt-1 text-ink-2">{chosen.feedback}</p> : null}
-          {interaction.explanation ? <p className="mt-1 text-ink-2">{interaction.explanation}</p> : null}
+        <div className="mt-5 space-y-1.5" role="status">
+          <p className="font-semibold">{result?.isCorrect ? "Spot on." : "Not quite, and that's the point."}</p>
+          {chosen?.feedback ? <p className="text-on-violet-muted">{chosen.feedback}</p> : null}
+          {interaction.explanation ? <p className="text-on-violet-muted">{interaction.explanation}</p> : null}
         </div>
       ) : null}
       {answered && interaction.type === "poll" ? (
-        <p className="mt-3 text-sm text-ink-3" role="status">
+        <p className="tabular mt-3 text-sm text-on-violet-muted" role="status">
           {totalVotes.toLocaleString()} learners have answered.
         </p>
       ) : null}
       {error ? (
-        <p role="alert" className="mt-3 text-sm font-medium text-ember">
+        <p role="alert" className="mt-3 text-sm text-danger">
           {error}
         </p>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         {answered ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-iris px-3 py-1 font-mono text-xs font-semibold text-white" role="status">
-            <Sparkles size={12} /> {result?.xpAwarded ? `+${result.xpAwarded} XP` : "Saved"}
+          <span className="tabular text-sm font-medium" role="status">
+            {result?.xpAwarded ? `+${result.xpAwarded} XP` : "Saved"}
           </span>
         ) : (
           <span />
         )}
         {answered ? (
-          <Button onClick={onContinue} variant="ink" autoFocus>
-            Continue <ArrowRight size={16} />
-          </Button>
+          <button ref={continueRef} type="button" onClick={onContinue} className="inline-flex h-10 items-center gap-2 rounded-[10px] bg-on-violet px-4 text-sm font-medium text-violet transition-opacity hover:opacity-90">
+            Continue <ArrowRight size={14} />
+          </button>
         ) : interaction.type === "reflection" ? (
-          <Button onClick={() => submit({ text })} loading={pending} disabled={text.trim().length < 3}>
+          <Button onClick={() => submit({ text })} loading={pending} disabled={text.trim().length < 3} variant="secondary">
             Save reflection
           </Button>
         ) : interaction.type === "scale" ? (
-          <Button onClick={() => submit({ value })} loading={pending}>
+          <Button onClick={() => submit({ value })} loading={pending} variant="secondary">
             Lock in {value}
           </Button>
         ) : interaction.type === "insight" ? (
-          <Button onClick={() => submit({ acknowledged: true })} loading={pending}>
+          <Button onClick={() => submit({ acknowledged: true })} loading={pending} variant="secondary">
             Got it
           </Button>
         ) : pending ? (
-          <span className="text-sm text-ink-3">Checking…</span>
+          <span className="text-sm text-subtle">Checking</span>
         ) : null}
       </div>
     </div>

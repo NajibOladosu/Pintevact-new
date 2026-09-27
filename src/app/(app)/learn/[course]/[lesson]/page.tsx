@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, ArrowRight, Lightbulb, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, Lightbulb, Target } from "@/components/icons";
 import { LessonPlayer } from "@/components/player/lesson-player";
 import { parseStartTime } from "@/components/player/player-utils";
 import { requireViewer } from "@/lib/auth/session";
@@ -47,17 +47,17 @@ export default async function LessonPage({ params, searchParams }: Props) {
   const nextHref = nextAllowed ? `/learn/${course.slug}/${nextAllowed.slug}` : null;
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-widest text-mist">
-        <Link href={`/learn/${course.slug}`} className="inline-flex items-center gap-1 hover:text-paper">
+    <div className="mx-auto max-w-6xl">
+      <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-2 text-sm text-muted">
+        <Link href={`/learn/${course.slug}`} className="inline-flex items-center gap-1.5 hover:text-fg">
           <ArrowLeft size={14} /> {course.title}
         </Link>
-        <span>/</span>
-        <span>
+        <span className="text-subtle">/</span>
+        <span className="tabular">
           Lesson {index + 1} of {total}
         </span>
       </nav>
-      <h1 className="mb-6 text-4xl leading-tight sm:text-5xl">{lesson.title}</h1>
+      <h1 className="mb-6 text-3xl font-semibold tracking-tight sm:text-4xl">{lesson.title}</h1>
 
       <LessonPlayer
         key={lesson.id}
@@ -73,52 +73,49 @@ export default async function LessonPage({ params, searchParams }: Props) {
         courseHref={`/learn/${course.slug}`}
       />
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <section className="rounded-[1.75rem] border border-white/10 bg-night-2 p-6 sm:p-8">
-          <h2 className="text-2xl">About this lesson</h2>
-          <p className="mt-2 text-lg text-mist">{lesson.summary}</p>
-          <h3 className="eyebrow mt-8 flex items-center gap-2 text-lucid">
-            <Lightbulb size={14} /> Key takeaways
+      <div className="mt-12 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+        <section>
+          <h2 className="text-lg font-semibold">About this lesson</h2>
+          <p className="mt-2 text-muted">{lesson.summary}</p>
+          <h3 className="mt-8 flex items-center gap-2 font-semibold">
+            <Lightbulb size={16} className="text-accent-ink" /> Key takeaways
           </h3>
-          <ul className="mt-4 space-y-3">
+          <ol className="mt-4 space-y-3">
             {lesson.takeaways.map((k, i) => (
               <li key={k} className="flex gap-4">
-                <span className="font-mono text-sm text-ember">{String(i + 1).padStart(2, "0")}</span>
+                <span className="tabular w-4 shrink-0 text-sm text-subtle">{i + 1}</span>
                 <span>{k}</span>
               </li>
             ))}
-          </ul>
+          </ol>
         </section>
         {lesson.exercise ? (
-          <section className="rounded-[1.75rem] border-2 border-ink bg-lucid p-6 text-ink sm:p-8">
-            <h2 className="eyebrow flex items-center gap-2">
-              <Target size={14} /> Try it this week
+          <section className="self-start rounded-2xl bg-violet p-6 text-on-violet sm:p-7">
+            <h2 className="flex items-center gap-2 text-sm text-on-violet-muted">
+              <Target size={16} /> Try it this week
             </h2>
-            <p className="mt-4 font-display text-2xl leading-snug">{lesson.exercise}</p>
+            <p className="mt-3 text-lg font-medium leading-relaxed">{lesson.exercise}</p>
           </section>
         ) : null}
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <div className="mt-12 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
         {prev ? (
-          <Link href={`/learn/${course.slug}/${prev.slug}`} className="group rounded-3xl border border-white/10 p-5 transition hover:border-lucid/40">
-            <span className="eyebrow inline-flex items-center gap-1 text-mist">
+          <Link href={`/learn/${course.slug}/${prev.slug}`} className="group rounded-xl p-4 transition-colors hover:bg-fg/[0.03]">
+            <span className="inline-flex items-center gap-1 text-sm text-subtle">
               <ArrowLeft size={12} /> Previous
             </span>
-            <span className="mt-1 block text-lg font-semibold group-hover:text-lucid">{prev.title}</span>
+            <span className="mt-1 block font-medium">{prev.title}</span>
           </Link>
         ) : (
           <span />
         )}
         {next ? (
-          <Link
-            href={nextHref ?? `/courses/${course.slug}`}
-            className={cn("group rounded-3xl border border-white/10 p-5 text-right transition hover:border-lucid/40", !nextHref && "opacity-70")}
-          >
-            <span className="eyebrow inline-flex items-center gap-1 text-mist">
+          <Link href={nextHref ?? `/courses/${course.slug}`} className={cn("group rounded-xl p-4 text-right transition-colors hover:bg-fg/[0.03]", !nextHref && "opacity-70")}>
+            <span className="inline-flex items-center gap-1 text-sm text-subtle">
               {nextHref ? "Next" : "Unlock next"} <ArrowRight size={12} />
             </span>
-            <span className="mt-1 block text-lg font-semibold group-hover:text-lucid">{next.title}</span>
+            <span className="mt-1 block font-medium">{next.title}</span>
           </Link>
         ) : null}
       </div>

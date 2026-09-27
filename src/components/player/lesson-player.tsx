@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { Check, FastForward, Maximize, Minimize, Pause, Play, RotateCcw, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { Check, FastForward, Maximize, Minimize, Pause, Play, RotateCcw, SkipForward, Volume2, VolumeX } from "@/components/icons";
 import { addNoteAction, deleteNoteAction, saveProgressAction, submitResponseAction } from "@/app/(app)/learn/actions";
 import { interactionMeta } from "@/components/course/interaction-icon";
 import { useToast } from "@/components/ui/toast";
@@ -27,14 +27,6 @@ export type LessonPlayerProps = {
   notes: Note[];
   nextHref: string | null;
   courseHref: string;
-};
-
-const markerColor: Record<Interaction["type"], string> = {
-  quiz: "bg-lucid",
-  reflection: "bg-ember",
-  poll: "bg-iris",
-  scale: "bg-tide",
-  insight: "bg-sun",
 };
 
 export function LessonPlayer(props: LessonPlayerProps) {
@@ -81,7 +73,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
           setCompleted(true);
         }
       } catch {
-        /* offline — retry on next tick */
+        /* offline, retry on next tick */
       } finally {
         saving.current = false;
       }
@@ -249,64 +241,59 @@ export function LessonPlayer(props: LessonPlayerProps) {
 
   return (
     <div className="grid gap-6 2xl:grid-cols-[1fr_22rem]">
-      {/* ── Stage ─────────────────────────────────────────── */}
+      {/* Stage: always dark, like any video surface */}
       <div>
-        <div ref={stageRef} className={cn("group/stage relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-black", fullscreen && "flex items-center rounded-none")} data-testid="player">
+        <div ref={stageRef} className={cn("dark relative overflow-hidden rounded-2xl bg-bg text-fg", fullscreen && "flex items-center rounded-none")} data-testid="player">
           <div className="relative aspect-video w-full">
             {source.kind === "hls" ? (
-              <video ref={videoRef} className="absolute inset-0 h-full w-full" poster={source.poster ?? undefined} playsInline preload="metadata" onClick={() => !active && pb.toggle()} />
+              <video ref={videoRef} className="absolute inset-0 h-full w-full bg-black" poster={source.poster ?? undefined} playsInline preload="metadata" onClick={() => !active && pb.toggle()} />
             ) : (
               <SimulatedStage title={lesson.title} courseTitle={props.courseTitle} chapter={chapter?.title ?? null} takeaways={lesson.takeaways} time={pb.time} playing={pb.playing} reason={source.reason} onClick={() => !active && pb.toggle()} />
             )}
 
-            {/* Big play button */}
             {!pb.playing && !active && !celebration ? (
               <button
                 type="button"
                 onClick={pb.ended ? () => { pb.seek(0); pb.play(); } : pb.play}
                 aria-label={pb.ended ? "Replay" : "Play"}
-                className="absolute left-1/2 top-1/2 z-10 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-ink bg-lucid text-ink shadow-hard transition hover:scale-105"
+                className="absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent text-on-accent transition-transform duration-200 hover:scale-105 active:scale-95"
               >
-                <span className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-lucid" aria-hidden />
-                {pb.ended ? <RotateCcw size={30} /> : <Play size={32} className="ml-1 fill-ink" />}
+                {pb.ended ? <RotateCcw size={24} weight="bold" /> : <Play size={26} weight="fill" className="ml-0.5" />}
               </button>
             ) : null}
 
-            {pb.buffering && pb.playing ? <div className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-4 border-white/20 border-t-lucid" aria-label="Loading" /> : null}
+            {pb.buffering && pb.playing ? <div className="absolute left-1/2 top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-2 border-fg/20 border-t-accent" aria-label="Loading" /> : null}
 
-            {pb.error ? <p className="absolute inset-x-4 top-4 z-10 rounded-2xl bg-ember p-3 text-center text-sm font-semibold text-ink">{pb.error}</p> : null}
+            {pb.error ? <p className="absolute inset-x-4 top-4 z-10 rounded-[10px] bg-raised p-3 text-center text-sm text-fg ring-1 ring-danger/50">{pb.error}</p> : null}
 
-            {/* Interaction overlay */}
             {active ? (
-              <div className="fixed inset-0 z-[60] flex overflow-y-auto bg-night/90 p-3 backdrop-blur-sm sm:absolute sm:z-20 sm:bg-night/70 sm:p-6">
+              <div className="fixed inset-0 z-[60] flex overflow-y-auto bg-bg/90 p-3 backdrop-blur-sm sm:absolute sm:z-20 sm:bg-bg/75 sm:p-6">
                 <div className="m-auto flex w-full justify-center">
-                <InteractionCard key={active.id} interaction={active} previous={answers.get(active.id)} onSubmit={submit} onContinue={continueAfter} onDismiss={skipActive} />
+                  <InteractionCard key={active.id} interaction={active} previous={answers.get(active.id)} onSubmit={submit} onContinue={continueAfter} onDismiss={skipActive} />
                 </div>
               </div>
             ) : null}
 
-            {/* Completion overlay */}
             {celebration ? (
-              <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto bg-night/85 p-4 text-center backdrop-blur" role="dialog" aria-label="Lesson complete">
-                <div className="relative animate-rise">
-                  <div className="pointer-events-none absolute left-1/2 top-8 -z-10 h-40 w-40 -translate-x-1/2 animate-pulse-ring rounded-full border-4 border-lucid" aria-hidden />
-                  <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-ink bg-lucid text-ink shadow-hard sm:h-20 sm:w-20">
-                    <Check size={36} />
+              <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto bg-violet p-4 text-center text-on-violet" role="dialog" aria-label="Lesson complete">
+                <div className="animate-enter">
+                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent text-on-accent">
+                    <Check size={28} weight="bold" />
                   </span>
-                  <p className="eyebrow mt-4 text-lucid">{celebration.courseCompleted ? "Course complete" : "Lesson complete"}</p>
-                  <p className="mt-2 font-display text-3xl italic sm:text-5xl">{celebration.courseCompleted ? "You integrated it all." : "Another star, lit."}</p>
-                  {celebration.xpAwarded ? <p className="mt-2 font-mono text-lg font-semibold text-ember">+{celebration.xpAwarded} XP</p> : null}
-                  <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+                  <p className="mt-5 text-sm text-on-violet-muted">{celebration.courseCompleted ? "Course complete" : "Lesson complete"}</p>
+                  <p className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">{celebration.courseCompleted ? "You finished the whole line." : "Station reached."}</p>
+                  {celebration.xpAwarded ? <p className="tabular mt-2 font-medium text-on-violet-muted">+{celebration.xpAwarded} XP</p> : null}
+                  <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">
                     {celebration.certificateId ? (
-                      <Link href={`/certificates/${celebration.certificateId}`} className={buttonClasses({ variant: "lucid" })}>
+                      <Link href={`/certificates/${celebration.certificateId}`} className={buttonClasses()}>
                         View certificate
                       </Link>
                     ) : props.nextHref ? (
-                      <Link href={props.nextHref} className={buttonClasses({ variant: "lucid" })}>
-                        Next lesson <SkipForward size={16} />
+                      <Link href={props.nextHref} className={buttonClasses()}>
+                        Next lesson <SkipForward size={16} weight="fill" />
                       </Link>
                     ) : null}
-                    <button type="button" onClick={() => setCelebration(null)} className={buttonClasses({ variant: "subtle" })}>
+                    <button type="button" onClick={() => setCelebration(null)} className="inline-flex h-11 items-center justify-center rounded-[10px] px-5 text-sm font-medium text-on-violet ring-1 ring-on-violet/30 hover:ring-on-violet/60">
                       Stay here
                     </button>
                   </div>
@@ -315,8 +302,8 @@ export function LessonPlayer(props: LessonPlayerProps) {
             ) : null}
           </div>
 
-          {/* ── Controls ─────────────────────────────────── */}
-          <div className={cn("relative z-10 bg-gradient-to-t from-night via-night/95 to-night/80 px-4 pb-3 pt-3 sm:px-5", fullscreen && "absolute inset-x-0 bottom-0")}>
+          {/* Controls */}
+          <div className={cn("relative z-10 border-t border-line bg-bg px-4 pb-3 pt-3 sm:px-5", fullscreen && "absolute inset-x-0 bottom-0")}>
             <div ref={trackRef} className="relative h-6" onPointerMove={(e) => setHover(timeAt(e.clientX))} onPointerLeave={() => setHover(null)}>
               <div
                 className="absolute inset-0 flex cursor-pointer items-center"
@@ -333,11 +320,11 @@ export function LessonPlayer(props: LessonPlayerProps) {
                   if (e.key === "ArrowLeft") pb.seek(pb.time - 5);
                 }}
               >
-                <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-white/15">
-                  <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-iris via-ember to-lucid" style={{ width: pct(pb.time) }} />
+                <div className="relative h-0.5 w-full bg-line-strong">
+                  <div className="absolute inset-y-0 left-0 bg-accent" style={{ width: pct(pb.time) }} />
                 </div>
                 {lesson.chapters.slice(1).map((c) => (
-                  <span key={c.atSeconds} className="absolute h-1.5 w-0.5 bg-night" style={{ left: pct(c.atSeconds) }} aria-hidden />
+                  <span key={c.atSeconds} className="absolute h-2 w-px bg-subtle" style={{ left: pct(c.atSeconds) }} aria-hidden />
                 ))}
               </div>
               {lesson.interactions.map((i) => (
@@ -348,45 +335,44 @@ export function LessonPlayer(props: LessonPlayerProps) {
                   title={`${interactionMeta[i.type].label} · ${formatDuration(i.atSeconds)}`}
                   aria-label={`${interactionMeta[i.type].label} at ${formatDuration(i.atSeconds)}${answers.has(i.id) ? " (answered)" : ""}`}
                   className={cn(
-                    "absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-night transition hover:scale-150",
-                    markerColor[i.type],
-                    !answers.has(i.id) && "ring-2 ring-white/40",
+                    "absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-transform hover:scale-125",
+                    answers.has(i.id) ? "border-accent bg-accent" : "border-fg bg-bg",
                   )}
                   style={{ left: pct(i.atSeconds) }}
                 />
               ))}
               {hover !== null ? (
-                <span className="pointer-events-none absolute -top-7 -translate-x-1/2 rounded-md bg-paper px-1.5 py-0.5 font-mono text-[0.65rem] text-ink" style={{ left: pct(hover) }}>
+                <span className="tabular pointer-events-none absolute -top-7 -translate-x-1/2 rounded-md bg-fg px-1.5 py-0.5 text-[0.7rem] text-bg" style={{ left: pct(hover) }}>
                   {formatDuration(hover)}
                 </span>
               ) : null}
             </div>
 
             <div className="mt-2 flex items-center gap-2 sm:gap-3">
-              <button type="button" onClick={pb.toggle} aria-label={pb.playing ? "Pause" : "Play"} className="flex h-10 w-10 items-center justify-center rounded-full bg-paper text-ink transition hover:bg-lucid">
-                {pb.playing ? <Pause size={18} className="fill-ink" /> : <Play size={18} className="ml-0.5 fill-ink" />}
+              <button type="button" onClick={pb.toggle} aria-label={pb.playing ? "Pause" : "Play"} className="flex h-9 w-9 items-center justify-center rounded-lg text-fg hover:bg-fg/10">
+                {pb.playing ? <Pause size={20} weight="fill" /> : <Play size={20} weight="fill" />}
               </button>
               {source.kind === "hls" ? (
-                <button type="button" onClick={pb.toggleMute} aria-label={pb.muted ? "Unmute" : "Mute"} className="flex h-9 w-9 items-center justify-center rounded-full text-paper hover:bg-white/10">
+                <button type="button" onClick={pb.toggleMute} aria-label={pb.muted ? "Unmute" : "Mute"} className="flex h-9 w-9 items-center justify-center rounded-lg text-fg hover:bg-fg/10">
                   {pb.muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
                 </button>
               ) : null}
-              <span className="font-mono text-xs text-paper/80" aria-live="off">
+              <span className="tabular text-xs text-muted" aria-live="off">
                 {formatDuration(pb.time)} / {formatDuration(pb.duration)}
               </span>
-              <span className="hidden truncate text-sm text-mist md:inline">{chapter ? `· ${chapter.title}` : ""}</span>
-              <div className="ml-auto flex items-center gap-1 sm:gap-2">
+              <span className="hidden truncate text-sm text-subtle md:inline">{chapter ? chapter.title : ""}</span>
+              <div className="ml-auto flex items-center gap-1">
                 {upcoming ? (
-                  <button type="button" onClick={() => openInteraction(upcoming)} className="hidden items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-paper hover:border-lucid sm:inline-flex" data-testid="jump-next">
-                    <FastForward size={14} /> Next moment
+                  <button type="button" onClick={() => openInteraction(upcoming)} className="hidden h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted hover:bg-fg/10 hover:text-fg sm:inline-flex" data-testid="jump-next">
+                    <FastForward size={14} /> Next checkpoint
                   </button>
                 ) : null}
                 <div className="relative">
-                  <button type="button" onClick={() => setShowRates((v) => !v)} aria-label="Playback speed" aria-expanded={showRates} className="rounded-full px-2.5 py-1.5 font-mono text-xs font-semibold text-paper hover:bg-white/10">
+                  <button type="button" onClick={() => setShowRates((v) => !v)} aria-label="Playback speed" aria-expanded={showRates} className="tabular h-8 rounded-lg px-2.5 text-xs font-medium text-muted hover:bg-fg/10 hover:text-fg">
                     {pb.rate}×
                   </button>
                   {showRates ? (
-                    <div className="absolute bottom-10 right-0 z-30 flex flex-col rounded-2xl border border-white/10 bg-night-2 p-1">
+                    <div className="absolute bottom-10 right-0 z-30 flex flex-col rounded-xl border border-line bg-raised p-1">
                       {PLAYBACK_RATES.map((r) => (
                         <button
                           key={r}
@@ -395,7 +381,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
                             pb.setRate(r);
                             setShowRates(false);
                           }}
-                          className={cn("rounded-xl px-4 py-1.5 text-left font-mono text-sm", r === pb.rate ? "bg-lucid text-ink" : "text-paper hover:bg-white/10")}
+                          className={cn("tabular rounded-lg px-4 py-1.5 text-left text-sm", r === pb.rate ? "bg-fg text-bg" : "text-fg hover:bg-fg/10")}
                         >
                           {r}×
                         </button>
@@ -403,7 +389,7 @@ export function LessonPlayer(props: LessonPlayerProps) {
                     </div>
                   ) : null}
                 </div>
-                <button type="button" onClick={toggleFullscreen} aria-label={fullscreen ? "Exit fullscreen" : "Fullscreen"} className="flex h-9 w-9 items-center justify-center rounded-full text-paper hover:bg-white/10">
+                <button type="button" onClick={toggleFullscreen} aria-label={fullscreen ? "Exit fullscreen" : "Fullscreen"} className="flex h-9 w-9 items-center justify-center rounded-lg text-fg hover:bg-fg/10">
                   {fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
                 </button>
               </div>
@@ -411,55 +397,55 @@ export function LessonPlayer(props: LessonPlayerProps) {
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-mist">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
           <p>
             {completed ? (
-              <span className="inline-flex items-center gap-1.5 font-semibold text-lucid">
-                <Check size={16} /> Lesson complete
+              <span className="inline-flex items-center gap-1.5 font-medium text-fg">
+                <Check size={16} weight="bold" className="text-accent-ink" /> Lesson complete
               </span>
             ) : requiredLeft.length ? (
-              `Watch to the end and complete ${requiredLeft.length} required moment${requiredLeft.length > 1 ? "s" : ""} to finish.`
+              `Watch to the end and answer ${requiredLeft.length} required checkpoint${requiredLeft.length > 1 ? "s" : ""} to finish.`
             ) : (
               "Watch to the end to complete this lesson."
             )}
           </p>
-          <p className="hidden font-mono text-xs sm:block">Space play · ←/→ seek · N note · F fullscreen</p>
+          <p className="hidden text-xs text-subtle sm:block">Space to play, arrows to seek, N for a note, F for fullscreen</p>
         </div>
       </div>
 
-      {/* ── Side panel ──────────────────────────────────── */}
-      <aside className="flex max-h-[28rem] flex-col 2xl:max-h-[42rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-night-2">
-        <div role="tablist" className="grid grid-cols-3 border-b border-white/10 p-1.5">
+      {/* Side panel */}
+      <aside className="flex max-h-[28rem] flex-col overflow-hidden rounded-2xl border border-line bg-raised 2xl:max-h-[42rem]">
+        <div role="tablist" className="grid grid-cols-3 gap-1 border-b border-line p-1.5">
           {(
             [
-              ["moments", `Moments ${answeredCount}/${lesson.interactions.length}`],
+              ["moments", `Checkpoints ${answeredCount}/${lesson.interactions.length}`],
               ["chapters", "Chapters"],
               ["notes", `Notes${notes.length ? ` ${notes.length}` : ""}`],
             ] as const
           ).map(([id, label]) => (
-            <button key={id} type="button" role="tab" aria-selected={panel === id} onClick={() => setPanel(id)} className={cn("rounded-xl px-2 py-2 text-xs font-semibold transition sm:text-sm", panel === id ? "bg-white/10 text-paper" : "text-mist hover:text-paper")}>
+            <button key={id} type="button" role="tab" aria-selected={panel === id} onClick={() => setPanel(id)} className={cn("tabular rounded-lg px-2 py-2 text-xs transition-colors sm:text-sm", panel === id ? "bg-fg/[0.07] font-medium text-fg" : "text-muted hover:text-fg")}>
               {label}
             </button>
           ))}
         </div>
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className="flex-1 overflow-y-auto p-2">
           {panel === "moments" ? (
-            <ol className="space-y-1.5">
+            <ol>
               {lesson.interactions.map((i) => {
                 const meta = interactionMeta[i.type];
                 const done = answers.has(i.id);
                 return (
                   <li key={i.id}>
-                    <button type="button" onClick={() => openInteraction(i)} className="flex w-full items-start gap-3 rounded-2xl p-3 text-left transition hover:bg-white/5">
-                      <span className={cn("mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-ink text-ink", done ? "bg-lucid" : meta.color, !done && "opacity-80")}>
-                        {done ? <Check size={14} /> : <meta.icon size={14} />}
+                    <button type="button" onClick={() => openInteraction(i)} className="flex w-full items-start gap-3 rounded-xl p-3 text-left transition-colors hover:bg-fg/[0.04]">
+                      <span className={cn("mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2", done ? "border-accent bg-accent text-on-accent" : "border-line-strong text-muted")}>
+                        {done ? <Check size={12} weight="bold" /> : <meta.icon size={12} />}
                       </span>
                       <span className="min-w-0">
-                        <span className="flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-wider text-mist">
-                          {formatDuration(i.atSeconds)} · {meta.label}
-                          {i.required ? <span className="text-ember">· required</span> : null}
+                        <span className="tabular block text-xs text-subtle">
+                          {formatDuration(i.atSeconds)}, {meta.label}
+                          {i.required ? <span className="text-accent-ink">, required</span> : null}
                         </span>
-                        <span className="mt-0.5 line-clamp-2 block text-sm text-paper">{i.prompt}</span>
+                        <span className="mt-0.5 line-clamp-2 block text-sm">{i.prompt}</span>
                       </span>
                     </button>
                   </li>
@@ -468,21 +454,21 @@ export function LessonPlayer(props: LessonPlayerProps) {
             </ol>
           ) : null}
           {panel === "chapters" ? (
-            <ol className="space-y-1">
+            <ol>
               {lesson.chapters.map((c) => (
                 <li key={c.atSeconds}>
-                  <button type="button" onClick={() => pb.seek(c.atSeconds)} className={cn("flex w-full items-center justify-between gap-3 rounded-2xl p-3 text-left transition hover:bg-white/5", chapter?.atSeconds === c.atSeconds && "bg-lucid/10 text-lucid")}>
-                    <span className="font-medium">{c.title}</span>
-                    <span className="font-mono text-xs text-mist">{formatDuration(c.atSeconds)}</span>
+                  <button type="button" onClick={() => pb.seek(c.atSeconds)} className={cn("flex w-full items-center justify-between gap-3 rounded-xl p-3 text-left text-sm transition-colors hover:bg-fg/[0.04]", chapter?.atSeconds === c.atSeconds && "bg-fg/[0.05] font-medium")}>
+                    <span>{c.title}</span>
+                    <span className="tabular text-xs text-subtle">{formatDuration(c.atSeconds)}</span>
                   </button>
                 </li>
               ))}
             </ol>
           ) : null}
           {panel === "notes" ? (
-            <div>
-              <div className="rounded-2xl border border-white/10 bg-night p-3">
-                <label htmlFor="note-input" className="font-mono text-[0.68rem] uppercase tracking-wider text-mist">
+            <div className="p-1">
+              <div className="rounded-xl border border-line bg-bg p-3 focus-within:border-fg">
+                <label htmlFor="note-input" className="tabular text-xs text-subtle">
                   Note at {formatDuration(pb.time)}
                 </label>
                 <textarea
@@ -496,28 +482,28 @@ export function LessonPlayer(props: LessonPlayerProps) {
                   rows={3}
                   maxLength={2000}
                   placeholder="What just clicked?"
-                  className="mt-1 w-full resize-none bg-transparent text-paper placeholder:text-mist/50 focus:outline-none"
+                  className="mt-1 w-full resize-none bg-transparent text-sm placeholder:text-subtle focus:outline-none focus-visible:outline-none"
                 />
                 <div className="flex justify-end">
-                  <button type="button" onClick={addNote} disabled={notePending || !noteText.trim()} className="rounded-full bg-lucid px-4 py-1.5 text-sm font-semibold text-ink disabled:opacity-40">
-                    {notePending ? "Saving…" : "Save note"}
+                  <button type="button" onClick={addNote} disabled={notePending || !noteText.trim()} className="h-8 rounded-lg bg-fg px-3 text-sm font-medium text-bg disabled:opacity-40">
+                    {notePending ? "Saving" : "Save note"}
                   </button>
                 </div>
               </div>
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-2">
                 {notes.map((n) => (
-                  <li key={n.id} className="group flex gap-3 rounded-2xl p-2 hover:bg-white/5">
-                    <button type="button" onClick={() => pb.seek(n.atSeconds)} className="h-fit shrink-0 rounded-full bg-white/10 px-2 py-0.5 font-mono text-xs text-lucid hover:bg-lucid hover:text-ink">
+                  <li key={n.id} className="group flex gap-3 rounded-xl p-2.5 hover:bg-fg/[0.04]">
+                    <button type="button" onClick={() => pb.seek(n.atSeconds)} className="tabular h-fit shrink-0 rounded-md bg-fg/[0.07] px-1.5 py-0.5 text-xs font-medium hover:bg-accent hover:text-on-accent">
                       {formatDuration(n.atSeconds)}
                     </button>
                     <p className="min-w-0 flex-1 whitespace-pre-wrap text-sm">{n.body}</p>
-                    <button type="button" onClick={() => removeNote(n.id)} aria-label="Delete note" className="text-xs text-mist opacity-0 transition hover:text-ember group-hover:opacity-100 focus:opacity-100">
+                    <button type="button" onClick={() => removeNote(n.id)} aria-label="Delete note" className="text-xs text-subtle opacity-0 transition-opacity hover:text-danger focus:opacity-100 group-hover:opacity-100">
                       Delete
                     </button>
                   </li>
                 ))}
               </ul>
-              {!notes.length ? <p className="mt-4 text-center text-sm text-mist">No notes yet. Press N anytime.</p> : null}
+              {!notes.length ? <p className="mt-4 text-center text-sm text-subtle">No notes yet. Press N any time.</p> : null}
             </div>
           ) : null}
         </div>
