@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.theme-night, .theme-night *));
+
+@theme {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-paper: #f4efe6;
+  --color-paper-2: #ebe4d6;
+  --color-paper-3: #ded5c3;
+  --color-ink: #15122b;
+  --color-ink-2: #3b3657;
+  --color-ink-3: #6c6788;
+  --color-night: #0f0c22;
+  --color-night-2: #17132f;
+  --color-night-3: #221d42;
+  --color-night-4: #2f2958;
+  --color-mist: #b9b4d6;
+  --color-ember: #ff5a36;
+  --color-ember-2: #ff7a5c;
+  --color-lucid: #c8f547;
+  --color-lucid-2: #dbff7a;
+  --color-iris: #8b7cff;
+  --color-iris-2: #b1a6ff;
+  --color-tide: #3dd6c4;
+  --color-blush: #ffb4c8;
+  --color-sun: #ffcf4a;
+
+  --radius-blob: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  --shadow-hard: 4px 4px 0 0 var(--color-ink);
+  --shadow-hard-lg: 8px 8px 0 0 var(--color-ink);
+  --shadow-glow: 0 0 0 1px rgb(139 124 255 / 0.25), 0 20px 60px -20px rgb(139 124 255 / 0.55);
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-spin-slow: spin 28s linear infinite;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  --animate-rise: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-twinkle: twinkle 3.2s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(2deg); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper font-sans text-ink;
+  }
+  .theme-night body,
+  body.theme-night {
+    @apply bg-night text-paper;
+  }
+  ::selection {
+    background: var(--color-lucid);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-iris);
+    outline-offset: 3px;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    letter-spacing: -0.02em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Subtle film grain for tactile, paper-like surfaces */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .dotgrid {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .display-italic {
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
