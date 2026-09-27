@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-# Validates migrations, seed and RLS policies against a throwaway Postgres database.
-# Usage: PGHOST=... PGPORT=... PGUSER=postgres supabase/tests/run.sh
+# Runs the RLS & business-rule assertions against the local Supabase database (npm run stack:up).
+# Everything happens inside a transaction that is rolled back.
+# Usage: supabase/tests/run.sh   (override the target with DB_URL=postgres://...)
 set -euo pipefail
-DB="pintevact_test_$$"
-DIR="$(cd "$(dirname "$0")/.." && pwd)"
-createdb "$DB"
-trap 'dropdb --if-exists "$DB"' EXIT
-psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$DIR/tests/auth-stub.sql"
-for f in "$DIR"/migrations/*.sql; do psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$f"; done
-psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$DIR/seed.sql"
-psql -q -v ON_ERROR_STOP=1 -d "$DB" -f "$DIR/tests/rls.sql"
+DIR="$(cd "$(dirname "$0")" && pwd)"
+DB_URL="${DB_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}"
+psql "$DB_URL" -q -v ON_ERROR_STOP=1 -f "$DIR/rls.sql"

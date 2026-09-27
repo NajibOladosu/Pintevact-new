@@ -1,8 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { signUp } from "./helpers";
+import { signInAsNewUser } from "./helpers";
 
-const publicPages = ["/", "/courses", "/courses/emotional-alchemy", "/pricing", "/discover", "/about", "/contact", "/journal", "/login", "/signup"];
+const publicPages = ["/", "/courses", "/courses/emotional-alchemy", "/pricing", "/discover", "/about", "/contact", "/journal", "/signin", "/signup", "/forgot-password"];
 
 async function seriousViolations(page: import("@playwright/test").Page) {
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).disableRules(["color-contrast"]).analyze();
@@ -20,7 +20,7 @@ test.describe("accessibility", () => {
   }
 
   test("no serious axe violations in the app", async ({ page }) => {
-    await signUp(page);
+    await signInAsNewUser(page);
     for (const path of ["/dashboard", "/learn", "/learn/meet-your-mind/the-elephant-and-the-rider", "/reflections", "/achievements", "/account"]) {
       await page.goto(path);
       expect(await seriousViolations(page), path).toEqual([]);

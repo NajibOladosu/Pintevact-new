@@ -1,7 +1,6 @@
 import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("server-only", () => ({}));
 
 import { getPlaybackSource, signBunnyUrl } from "@/lib/bunny";
 
@@ -33,13 +32,13 @@ describe("signBunnyUrl", () => {
 describe("getPlaybackSource", () => {
   afterEach(() => vi.unstubAllEnvs());
 
-  it("simulates when a lesson has no video", () => {
-    expect(getPlaybackSource(null)).toEqual({ kind: "simulated", reason: "no-video" });
+  it("reports a lesson without a video as unavailable", () => {
+    expect(getPlaybackSource(null)).toEqual({ kind: "unavailable", reason: "no-video" });
   });
 
-  it("simulates when Bunny is not configured", () => {
+  it("reports streaming as unavailable when Bunny is not configured", () => {
     vi.stubEnv("BUNNY_STREAM_CDN_HOSTNAME", "");
-    expect(getPlaybackSource("vid")).toEqual({ kind: "simulated", reason: "not-configured" });
+    expect(getPlaybackSource("vid")).toEqual({ kind: "unavailable", reason: "not-configured" });
   });
 
   it("returns signed HLS + poster when configured", () => {
@@ -52,5 +51,11 @@ describe("getPlaybackSource", () => {
     expect(src.src).toContain("https://vz-9.b-cdn.net/bcdn_token=");
     expect(src.src).toContain("&expires=1700000060/vid/playlist.m3u8");
     expect(src.poster).toContain("/vid/thumbnail.jpg?token=");
+  });
+
+  it("accepts a full origin for self-hosted HLS", () => {
+    vi.stubEnv("BUNNY_STREAM_CDN_HOSTNAME", "http://127.0.0.1:4010/");
+    vi.stubEnv("BUNNY_STREAM_TOKEN_KEY", "");
+    expect(getPlaybackSource("vid")).toEqual({ kind: "hls", src: "http://127.0.0.1:4010/vid/playlist.m3u8", poster: "http://127.0.0.1:4010/vid/thumbnail.jpg" });
   });
 });

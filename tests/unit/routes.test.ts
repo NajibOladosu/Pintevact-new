@@ -9,10 +9,10 @@ describe("route guards", () => {
     expect(isProtectedPath("/courses")).toBe(false);
   });
   it("redirects guests to login with next param", () => {
-    expect(routeDecision("/learn/a", "?t=1", false)).toEqual({ redirect: "/login?next=%2Flearn%2Fa%3Ft%3D1" });
+    expect(routeDecision("/learn/a", "?t=1", false)).toEqual({ redirect: "/signin?next=%2Flearn%2Fa%3Ft%3D1" });
   });
   it("redirects signed-in users away from auth pages", () => {
-    expect(routeDecision("/login", "", true)).toEqual({ redirect: "/dashboard" });
+    expect(routeDecision("/signin", "", true)).toEqual({ redirect: "/dashboard" });
     expect(routeDecision("/reset-password", "", true)).toBeNull();
   });
   it("lets everyone see public pages", () => {

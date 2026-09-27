@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@react-email/render";
 
-vi.mock("server-only", () => ({}));
 
 import ConfirmSignupEmail from "@/emails/confirm-signup";
 import MagicLinkEmail from "@/emails/magic-link";
@@ -65,10 +64,13 @@ describe("email templates", () => {
     expect(text).not.toContain("<");
   });
 
-  it("skips delivery gracefully without an API key", async () => {
+  it("refuses to pretend delivery when no transport is configured", async () => {
     vi.stubEnv("RESEND_API_KEY", "");
+    vi.stubEnv("SMTP_URL", "");
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const res = await sendEmail({ to: "a@b.c", subject: "Hi", react: <WelcomeEmail /> });
-    expect(res).toEqual({ ok: true, id: null, skipped: true });
+    expect(res).toEqual({ ok: false, error: "Email delivery is not configured" });
+    error.mockRestore();
     vi.unstubAllEnvs();
   });
 });

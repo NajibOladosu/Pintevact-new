@@ -1,7 +1,8 @@
--- RLS & business-rule assertions. Runs after migrations + seed.
+-- Row-level security & business-rule assertions against the real local Supabase database
+-- (after `supabase db reset` / `npm run stack:up`). Everything runs in one transaction that is
+-- rolled back, so the database is left untouched.
 \set ON_ERROR_STOP on
-grant usage on schema public to anon, authenticated;
-grant select, insert, update, delete on all tables in schema public to anon, authenticated;
+begin;
 
 insert into auth.users (id, email, raw_user_meta_data) values
   ('11111111-1111-4111-8111-111111111111', 'ada@example.com', '{"full_name":"Ada Learner"}'),
@@ -9,7 +10,7 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('33333333-3333-4333-8333-333333333333', 'admin@example.com', '{}');
 
 do $$ begin
-  assert (select count(*) from public.profiles) = 3, 'profiles auto-created';
+  assert (select count(*) from public.profiles where id in ('11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333')) = 3, 'profiles auto-created';
   assert (select full_name from public.profiles where email = 'ada@example.com') = 'Ada Learner', 'full_name copied';
 end $$;
 
@@ -69,7 +70,7 @@ end $$;
 -- Admin sees everything and has access to paid courses
 select set_config('request.jwt.claim.sub', '33333333-3333-4333-8333-333333333333', false);
 do $$ begin
-  assert (select count(*) from public.profiles) = 3, 'admin reads all profiles';
+  assert (select count(*) from public.profiles) >= 3, 'admin reads all profiles';
   assert public.has_course_access(auth.uid(), (select id from public.courses where price_cents > 0 limit 1)), 'admin has access';
 end $$;
 
@@ -84,7 +85,7 @@ end $$;
 reset role;
 
 do $$ begin
-  assert (select body from public.notes limit 1) = 'hello', 'Bo could not modify Ada''s note';
+  assert (select body from public.notes where user_id = '11111111-1111-4111-8111-111111111111') = 'hello', 'Bo could not modify Ada''s note';
   -- subscriptions grant access
   insert into public.subscriptions (id, user_id, status, current_period_end)
     values ('sub_123', '22222222-2222-4222-8222-222222222222', 'active', now() + interval '1 month');
@@ -97,3 +98,4 @@ do $$ begin
 end $$;
 
 select 'ALL RLS ASSERTIONS PASSED' as result;
+rollback;
