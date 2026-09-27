@@ -7,7 +7,6 @@ import { Flash } from "@/components/app/flash";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { requireViewer } from "@/lib/auth/session";
 import { getLearnerSnapshot } from "@/lib/learner";
-import { isDemoMode } from "@/lib/env";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const viewer = await requireViewer();
@@ -29,7 +28,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-on-frame/10">
             <div className="h-full rounded-full bg-accent" style={{ width: `${snap.level.percent}%` }} />
           </div>
-          {isDemoMode() ? <p className="mt-4 text-[0.72rem] leading-relaxed text-on-frame-muted">Demo mode. Data resets when the server restarts.</p> : null}
         </div>
       </aside>
       <div className="lg:pl-[17.5rem]">

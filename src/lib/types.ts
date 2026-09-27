@@ -164,4 +164,4 @@ export type Reflection = {
 
 export type PlaybackSource =
   | { kind: "hls"; src: string; poster: string | null }
-  | { kind: "simulated"; reason: "no-video" | "not-configured" };
+  | { kind: "unavailable"; reason: "no-video" | "not-configured" };

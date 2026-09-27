@@ -144,17 +144,22 @@ function check<T>(res: { data: T; error: any }): T {
   return res.data;
 }
 
-export function createSupabaseStore(): Store {
+export type SupabaseStoreClients = {
+  /** Client carrying the learner's session (RLS applies). Defaults to the request's auth cookies. */
+  user?: SupabaseClient;
+  /** Service-role client for trusted writes. Defaults to SUPABASE_SERVICE_ROLE_KEY. */
+  admin?: SupabaseClient;
+};
+
+export function createSupabaseStore(clients: SupabaseStoreClients = {}): Store {
   if (!isSupabaseConfigured()) {
-    throw new Error("Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY (or PINTEVACT_DEMO_MODE=true for a local demo).");
+    throw new Error("Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
   }
-  let userClient: Promise<SupabaseClient> | null = null;
+  let userClient: Promise<SupabaseClient> | null = clients.user ? Promise.resolve(clients.user) : null;
   const db = () => (userClient ??= createClient());
-  const admin = () => createAdminClient();
+  const admin = () => clients.admin ?? createAdminClient();
 
   return {
-    kind: "supabase",
-
     async listCourses(opts) {
       const client = opts?.includeUnpublished ? admin() : await db();
       let q = client.from("courses").select(COURSE_SELECT).order("position");
@@ -327,27 +332,6 @@ export function createSupabaseStore(): Store {
         courseSlug: r.course_slug,
         learnerName: r.learner_name,
       };
-    },
-
-    async recordPurchase(userId, courseId, amountCents, currency, ref) {
-      check(
-        await admin()
-          .from("purchases")
-          .upsert({ user_id: userId, course_id: courseId, amount_cents: amountCents, currency, stripe_checkout_session_id: ref, status: "paid" }, { onConflict: "stripe_checkout_session_id" }),
-      );
-    },
-    async upsertSubscription(userId, sub) {
-      check(
-        await admin().from("subscriptions").upsert({
-          id: sub.id,
-          user_id: userId,
-          status: sub.status,
-          price_id: sub.priceId,
-          interval: sub.interval,
-          current_period_end: sub.currentPeriodEnd,
-          cancel_at_period_end: sub.cancelAtPeriodEnd,
-        }),
-      );
     },
 
     async saveContactMessage(m) {

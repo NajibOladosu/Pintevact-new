@@ -1,4 +1,4 @@
-import { env, isDemoMode } from "@/lib/env";
+import { env } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { catalog } from "@/content/catalog";
 import { flattenLessons } from "@/lib/course";
@@ -14,7 +14,6 @@ export const maxDuration = 300;
 export async function GET(request: Request) {
   const secret = env.cronSecret();
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) return new Response("Unauthorized", { status: 401 });
-  if (isDemoMode()) return Response.json({ skipped: "demo mode" });
 
   const db = createAdminClient();
   const since = new Date(Date.now() - 30 * 86_400_000).toISOString();

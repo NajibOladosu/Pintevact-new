@@ -6,7 +6,7 @@ import { getStripe } from "@/lib/stripe";
 /** Opens the Stripe customer portal (manage membership, invoices, payment methods). */
 export async function POST(request: NextRequest) {
   const viewer = await getViewer();
-  if (!viewer) return NextResponse.redirect(new URL("/login?next=/account/billing", request.url), { status: 303 });
+  if (!viewer) return NextResponse.redirect(new URL("/signin?next=/account/billing", request.url), { status: 303 });
   const customer = viewer.profile.stripeCustomerId;
   if (!isStripeConfigured() || !customer) {
     return NextResponse.redirect(new URL("/account/billing?portal=unavailable", request.url), { status: 303 });

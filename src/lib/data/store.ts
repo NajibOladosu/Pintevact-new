@@ -49,9 +49,8 @@ export type AdminStats = {
 
 export type CertificateView = { certificate: Certificate; courseTitle: string; courseSlug: string; learnerName: string };
 
-/** Everything the app needs from persistence. Implemented by Supabase and an in-memory demo store. */
+/** Everything the app needs from persistence, implemented on Supabase. */
 export interface Store {
-  readonly kind: "supabase" | "demo";
 
   // Catalog
   listCourses(opts?: { includeUnpublished?: boolean }): Promise<Course[]>;
@@ -87,10 +86,6 @@ export interface Store {
   issueCertificate(userId: string, courseId: string): Promise<{ certificate: Certificate; created: boolean }>;
   listCertificates(userId: string): Promise<Certificate[]>;
   getCertificate(id: string): Promise<CertificateView | null>;
-
-  // Demo-only commerce shortcuts (real payments flow through Stripe webhooks)
-  recordPurchase(userId: string, courseId: string, amountCents: number, currency: string, ref: string): Promise<void>;
-  upsertSubscription(userId: string, sub: Subscription): Promise<void>;
 
   // Marketing
   saveContactMessage(m: { name: string; email: string; topic: string; message: string }): Promise<void>;

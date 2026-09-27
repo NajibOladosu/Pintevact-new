@@ -29,9 +29,8 @@ export type Playback = {
 };
 
 /**
- * Unified playback controller. Streams Bunny HLS through hls.js (or native HLS on Safari),
- * or runs a simulated timeline when a lesson has no video yet, so interactive checkpoints
- * work identically in both cases.
+ * Playback controller for Bunny HLS streams, through hls.js (or native HLS on Safari).
+ * When a lesson has no video yet the controls are inert.
  */
 export function usePlayback({
   videoRef,
@@ -42,6 +41,7 @@ export function usePlayback({
 }: {
   videoRef: React.RefObject<HTMLVideoElement | null>;
   source: PlaybackSource;
+  /** Lesson length from the catalog, used until the stream reports its own duration. */
   fallbackDuration: number;
   initialTime?: number;
   callbacks?: PlaybackCallbacks;
@@ -59,51 +59,6 @@ export function usePlayback({
   useEffect(() => {
     cb.current = callbacks;
   });
-
-  // ── Simulated clock ─────────────────────────────────────────────
-  const simTime = useRef(initialTime);
-  const reported = useRef(initialTime);
-  const simRate = useRef(1);
-  const raf = useRef<number | null>(null);
-  const last = useRef<number | null>(null);
-  const running = useRef(false);
-
-  const stopLoop = useCallback(() => {
-    running.current = false;
-    if (raf.current !== null) cancelAnimationFrame(raf.current);
-    raf.current = null;
-    last.current = null;
-  }, []);
-
-  const frame = useRef<(now: number) => void>(() => {});
-  useEffect(() => {
-    frame.current = (now: number) => {
-      if (last.current !== null) {
-        const dt = ((now - last.current) / 1000) * simRate.current;
-        simTime.current = Math.min(fallbackDuration, simTime.current + dt);
-        const finished = simTime.current >= fallbackDuration;
-        if (simTime.current - reported.current >= 0.2 || finished) {
-          const prev = reported.current;
-          reported.current = simTime.current;
-          setTime(simTime.current);
-          cb.current?.onTick?.(prev, simTime.current, true);
-        }
-        if (finished) {
-          setPlaying(false);
-          setEnded(true);
-          stopLoop();
-          cb.current?.onEnded?.();
-          return;
-        }
-        // A callback (e.g. a checkpoint) may have paused playback.
-        if (!running.current) return;
-      }
-      last.current = now;
-      raf.current = requestAnimationFrame((t) => frame.current(t));
-    };
-  }, [fallbackDuration, stopLoop]);
-
-  useEffect(() => stopLoop, [stopLoop]);
 
   // ── HLS attach ──────────────────────────────────────────────────
   useEffect(() => {
@@ -192,56 +147,29 @@ export function usePlayback({
 
   // ── Controls ────────────────────────────────────────────────────
   const play = useCallback(() => {
-    if (source.kind === "hls") {
-      videoRef.current?.play().catch(() => setError("Tap play to start the video."));
-      return;
-    }
-    if (simTime.current >= fallbackDuration) {
-      simTime.current = 0;
-      reported.current = 0;
-    }
-    setPlaying(true);
-    setEnded(false);
-    stopLoop();
-    running.current = true;
-    raf.current = requestAnimationFrame((t) => frame.current(t));
-  }, [source.kind, fallbackDuration, stopLoop, videoRef]);
+    videoRef.current?.play().catch(() => setError("Tap play to start the video."));
+  }, [videoRef]);
 
   const pause = useCallback(() => {
-    if (source.kind === "hls") {
-      videoRef.current?.pause();
-      return;
-    }
-    const wasPlaying = running.current;
-    setPlaying(false);
-    stopLoop();
-    if (wasPlaying) cb.current?.onPause?.();
-  }, [source.kind, stopLoop, videoRef]);
+    videoRef.current?.pause();
+  }, [videoRef]);
 
   const seek = useCallback(
     (t: number) => {
-      const max = (source.kind === "hls" ? duration : fallbackDuration) - 0.1;
-      const target = Math.max(0, Math.min(t, max));
-      if (source.kind === "hls") {
-        if (videoRef.current) videoRef.current.currentTime = target;
-      } else {
-        simTime.current = target;
-        reported.current = target;
-        last.current = null;
-      }
+      const target = Math.max(0, Math.min(t, duration - 0.1));
+      if (videoRef.current) videoRef.current.currentTime = target;
       setTime(target);
       setEnded(false);
     },
-    [source.kind, duration, fallbackDuration, videoRef],
+    [duration, videoRef],
   );
 
   const setRate = useCallback(
     (r: number) => {
       setRateState(r);
-      if (source.kind === "hls" && videoRef.current) videoRef.current.playbackRate = r;
-      simRate.current = r;
+      if (videoRef.current) videoRef.current.playbackRate = r;
     },
-    [source.kind, videoRef],
+    [videoRef],
   );
 
   const toggleMute = useCallback(() => {

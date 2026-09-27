@@ -1,6 +1,6 @@
 /**
  * Deterministic UUID (v4-shaped) derived from a string key.
- * Used so the static catalog, the SQL seed and the demo store all agree on IDs
+ * Used so the static catalog, and the SQL seed agree on IDs
  * without relying on Node's crypto (works on server, client and edge).
  */
 export function stableUuid(key: string): string {

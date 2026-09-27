@@ -4,7 +4,7 @@ import { getViewer } from "@/lib/data";
 
 export async function requireViewer(next?: string) {
   const viewer = await getViewer();
-  if (!viewer) redirect(next ? `/login?next=${encodeURIComponent(next)}` : "/login");
+  if (!viewer) redirect(next ? `/signin?next=${encodeURIComponent(next)}` : "/signin");
   return viewer;
 }
 

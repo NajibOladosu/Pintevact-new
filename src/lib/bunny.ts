@@ -50,15 +50,21 @@ export function signBunnyUrl(
 
 export type { PlaybackSource };
 
+/** The pull-zone host, e.g. "vz-abc.b-cdn.net". A full origin ("http://127.0.0.1:4010") is accepted for local HLS fixtures. */
+export function cdnOrigin(hostname: string) {
+  const trimmed = hostname.trim().replace(/\/$/, "");
+  return /^https?:\/\//.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 /** Resolve a signed, time-limited stream URL for a lesson video. */
 export function getPlaybackSource(videoId: string | null, now = Date.now()): PlaybackSource {
-  if (!videoId) return { kind: "simulated", reason: "no-video" };
-  if (!isBunnyConfigured()) return { kind: "simulated", reason: "not-configured" };
+  if (!videoId) return { kind: "unavailable", reason: "no-video" };
+  if (!isBunnyConfigured()) return { kind: "unavailable", reason: "not-configured" };
 
-  const host = env.bunnyCdnHostname();
+  const origin = cdnOrigin(env.bunnyCdnHostname());
   const key = env.bunnyTokenKey();
-  const playlist = `https://${host}/${videoId}/playlist.m3u8`;
-  const thumbnail = `https://${host}/${videoId}/thumbnail.jpg`;
+  const playlist = `${origin}/${videoId}/playlist.m3u8`;
+  const thumbnail = `${origin}/${videoId}/thumbnail.jpg`;
   if (!key) return { kind: "hls", src: playlist, poster: thumbnail };
 
   const expires = Math.floor(now / 1000) + env.bunnyTokenTtl();

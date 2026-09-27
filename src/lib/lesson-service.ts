@@ -1,24 +1,29 @@
 import "server-only";
-import { getCourses, getStore } from "@/lib/data";
+import { getStore } from "@/lib/data";
 import { canWatchLesson } from "@/lib/access";
 import { courseProgress, flattenLessons, isLessonComplete } from "@/lib/course";
 import { scoreResponse, XP_RULES } from "@/lib/gamification";
 import { notify } from "@/lib/notifications";
 import type { Course, Lesson } from "@/lib/types";
-import type { Viewer } from "@/lib/data/store";
+import type { Store, Viewer } from "@/lib/data/store";
 
-export async function resolveLesson(lessonId: string): Promise<{ course: Course; lesson: Lesson } | null> {
-  for (const course of await getCourses()) {
+/*
+ * Every function takes the Store it should use. Route handlers rely on the per-request default;
+ * integration tests pass a store bound to a real signed-in Supabase client.
+ */
+
+export async function resolveLesson(lessonId: string, store: Store = getStore()): Promise<{ course: Course; lesson: Lesson } | null> {
+  for (const course of await store.listCourses()) {
     const lesson = flattenLessons(course).find((l) => l.id === lessonId);
     if (lesson) return { course, lesson };
   }
   return null;
 }
 
-async function authorize(viewer: Viewer, lessonId: string) {
-  const found = await resolveLesson(lessonId);
+async function authorize(viewer: Viewer, lessonId: string, store: Store) {
+  const found = await resolveLesson(lessonId, store);
   if (!found) throw new Error("Lesson not found");
-  const access = await getStore().getAccess(viewer.id);
+  const access = await store.getAccess(viewer.id);
   if (!canWatchLesson(found.course, found.lesson, access)) throw new Error("You don't have access to this lesson");
   return found;
 }
@@ -32,9 +37,8 @@ export type ProgressResult = {
 };
 
 /** Persist playback progress; completes the lesson (and course) when the rules are satisfied. */
-export async function recordProgress(viewer: Viewer, input: { lessonId: string; position: number; watched: number }): Promise<ProgressResult> {
-  const { course, lesson } = await authorize(viewer, input.lessonId);
-  const store = getStore();
+export async function recordProgress(viewer: Viewer, input: { lessonId: string; position: number; watched: number }, store: Store = getStore()): Promise<ProgressResult> {
+  const { course, lesson } = await authorize(viewer, input.lessonId, store);
   const watched = Math.min(input.watched, lesson.durationSeconds);
   const position = Math.min(input.position, lesson.durationSeconds);
 
@@ -82,19 +86,19 @@ export type ResponseResult = {
 export async function recordResponse(
   viewer: Viewer,
   input: { interactionId: string; optionId?: string; text?: string; value?: number; acknowledged?: boolean },
+  store: Store = getStore(),
 ): Promise<ResponseResult> {
-  const found = (await getCourses())
+  const found = (await store.listCourses())
     .flatMap((c) => flattenLessons(c).map((l) => ({ c, l })))
     .find(({ l }) => l.interactions.some((i) => i.id === input.interactionId));
   if (!found) return { ok: false, error: "Unknown interaction", isCorrect: null, xpAwarded: 0 };
-  await authorize(viewer, found.l.id);
+  await authorize(viewer, found.l.id, store);
   const interaction = found.l.interactions.find((i) => i.id === input.interactionId)!;
 
   const response = { optionId: input.optionId, text: input.text?.trim(), value: input.value, acknowledged: input.acknowledged };
   const score = scoreResponse(interaction, response);
   if (!score.valid) return { ok: false, error: interaction.type === "reflection" ? "Write at least a few words." : "Please choose an answer.", isCorrect: null, xpAwarded: 0 };
 
-  const store = getStore();
   const clean = Object.fromEntries(Object.entries(response).filter(([, v]) => v !== undefined && v !== ""));
   await store.saveResponse(viewer.id, { interactionId: interaction.id, lessonId: found.l.id, courseId: found.c.id, response: clean, isCorrect: score.isCorrect });
   const xpAwarded = (await store.awardXp(viewer.id, score.xp, "interaction", interaction.id)) ? score.xp : 0;
@@ -102,6 +106,6 @@ export async function recordResponse(
   return { ok: true, isCorrect: score.isCorrect, xpAwarded, pollResults };
 }
 
-export async function authorizeLessonForNotes(viewer: Viewer, lessonId: string) {
-  return authorize(viewer, lessonId);
+export async function authorizeLessonForNotes(viewer: Viewer, lessonId: string, store: Store = getStore()) {
+  return authorize(viewer, lessonId, store);
 }

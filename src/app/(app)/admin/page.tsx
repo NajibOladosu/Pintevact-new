@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AdminNav } from "@/components/app/admin-nav";
 import { requireAdmin } from "@/lib/auth/session";
 import { getStore } from "@/lib/data";
-import { isBunnyConfigured, isDemoMode, isResendConfigured, isStripeConfigured, isSupabaseConfigured } from "@/lib/env";
+import { isBunnyConfigured, isEmailConfigured, isResendConfigured, isStripeConfigured, isSupabaseConfigured } from "@/lib/env";
 import { cn, formatDate, formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Admin" };
@@ -13,9 +13,9 @@ export default async function AdminPage() {
   const store = getStore();
   const [stats, users] = await Promise.all([store.adminStats(), store.adminListUsers()]);
   const integrations = [
-    { name: "Supabase", ok: isSupabaseConfigured(), note: isDemoMode() ? "Demo mode, in-memory data" : "Database and auth" },
+    { name: "Supabase", ok: isSupabaseConfigured(), note: "Database and auth" },
     { name: "Stripe", ok: isStripeConfigured(), note: "Payments and memberships" },
-    { name: "Resend", ok: isResendConfigured(), note: "Transactional email" },
+    { name: "Email", ok: isEmailConfigured(), note: isResendConfigured() ? "Resend" : "SMTP" },
     { name: "Bunny Stream", ok: isBunnyConfigured(), note: "Video streaming" },
   ];
   const figures = [

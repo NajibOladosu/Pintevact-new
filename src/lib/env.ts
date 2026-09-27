@@ -1,6 +1,6 @@
 /**
- * Central environment access. Integrations degrade gracefully when their
- * variables are missing so the site runs locally before keys are provided.
+ * Central environment access. Supabase is required; Stripe, Resend and Bunny
+ * report whether they are configured so the admin health panel can show it.
  */
 
 export const env = {
@@ -10,9 +10,13 @@ export const env = {
   supabaseServiceRoleKey: () => process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
   supabaseAuthHookSecret: () => process.env.SUPABASE_AUTH_HOOK_SECRET ?? "",
   resendApiKey: () => process.env.RESEND_API_KEY ?? "",
+  /** Optional SMTP delivery, e.g. smtp://127.0.0.1:54325 for the local Mailpit inbox. Resend's API wins when both are set. */
+  smtpUrl: () => process.env.SMTP_URL ?? "",
   emailFrom: () => process.env.EMAIL_FROM ?? "Pintevact <hello@pintevact.com>",
   contactInbox: () => process.env.CONTACT_INBOX ?? "team@pintevact.com",
   stripeSecretKey: () => process.env.STRIPE_SECRET_KEY ?? "",
+  /** Optional API origin override, e.g. http://localhost:12111 for Stripe's official stripe-mock server in tests. */
+  stripeApiBase: () => process.env.STRIPE_API_BASE ?? "",
   stripeWebhookSecret: () => process.env.STRIPE_WEBHOOK_SECRET ?? "",
   stripePriceMonthly: () => process.env.STRIPE_PRICE_MEMBERSHIP_MONTHLY ?? "",
   stripePriceYearly: () => process.env.STRIPE_PRICE_MEMBERSHIP_YEARLY ?? "",
@@ -28,24 +32,16 @@ export function isSupabaseConfigured() {
   return Boolean(env.supabaseUrl() && env.supabaseAnonKey());
 }
 
-/**
- * Demo mode runs the whole product on an in-memory store. It is enabled
- * explicitly with PINTEVACT_DEMO_MODE=true, or automatically outside
- * production when Supabase has not been configured yet.
- */
-export function isDemoMode() {
-  const flag = process.env.PINTEVACT_DEMO_MODE;
-  if (flag === "true") return true;
-  if (flag === "false") return false;
-  return !isSupabaseConfigured() && process.env.NODE_ENV !== "production";
-}
-
 export function isStripeConfigured() {
   return Boolean(env.stripeSecretKey());
 }
 
 export function isResendConfigured() {
   return Boolean(env.resendApiKey());
+}
+
+export function isEmailConfigured() {
+  return Boolean(env.resendApiKey() || env.smtpUrl());
 }
 
 export function isBunnyConfigured() {

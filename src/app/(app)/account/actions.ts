@@ -1,12 +1,10 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getStore, getViewer } from "@/lib/data";
-import { env, isDemoMode, isStripeConfigured } from "@/lib/env";
-import { DEMO_SESSION_COOKIE } from "@/lib/auth/routes";
+import { env, isStripeConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe";
@@ -36,9 +34,8 @@ export async function changeEmail(_: FormState, formData: FormData): Promise<For
   const parsed = emailSchema.safeParse(formData.get("email"));
   if (!parsed.success) return { errors: { email: parsed.error.issues[0].message } };
   if (parsed.data === viewer.email) return { errors: { email: "That's already your email." } };
-  if (isDemoMode()) return { ok: true, message: `Demo mode: in production we'd send a confirmation link to ${parsed.data}.` };
   const supabase = await createClient();
-  const { error } = await supabase.auth.updateUser({ email: parsed.data }, { emailRedirectTo: `${env.siteUrl()}/account?email=updated` });
+  const { error } = await supabase.auth.updateUser({ email: parsed.data }, { emailRedirectTo: `${env.siteUrl()}/auth/callback?next=${encodeURIComponent("/account?email=updated")}` });
   if (error) return { message: error.message };
   return { ok: true, message: `Check ${parsed.data} (and your current inbox) to confirm the change.` };
 }
@@ -51,7 +48,6 @@ export async function changePassword(_: FormState, formData: FormData): Promise<
   const viewer = await viewerOrThrow();
   const parsed = passwordChangeSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { errors: fieldErrors(parsed.error) };
-  if (isDemoMode()) return { ok: true, message: "Password updated (demo mode)." };
   const supabase = await createClient();
   const { error: authError } = await supabase.auth.signInWithPassword({ email: viewer.email, password: parsed.data.current });
   if (authError) return { errors: { current: "Current password is incorrect." } };
@@ -63,11 +59,6 @@ export async function changePassword(_: FormState, formData: FormData): Promise<
 export async function deleteAccount(_: FormState, formData: FormData): Promise<FormState> {
   const viewer = await viewerOrThrow();
   if (formData.get("confirm") !== "DELETE") return { errors: { confirm: 'Type "DELETE" to confirm.' } };
-
-  if (isDemoMode()) {
-    (await cookies()).delete(DEMO_SESSION_COOKIE);
-    redirect("/?deleted=1");
-  }
 
   // Cancel any live membership so the learner is never billed again.
   const access = await getStore().getAccess(viewer.id);

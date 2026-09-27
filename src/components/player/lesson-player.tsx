@@ -14,7 +14,6 @@ import type { ProgressResult } from "@/lib/lesson-service";
 import { InteractionCard, type SubmitPayload } from "./interaction-card";
 import { usePlayback, type Playback } from "./use-playback";
 import { accumulateWatched, crossedInteraction, currentChapter, nextInteraction, PLAYBACK_RATES } from "./player-utils";
-import { SimulatedStage } from "./simulated-stage";
 
 export type LessonPlayerProps = {
   lesson: { id: string; title: string; durationSeconds: number; chapters: Chapter[]; takeaways: string[]; interactions: Interaction[] };
@@ -248,10 +247,18 @@ export function LessonPlayer(props: LessonPlayerProps) {
             {source.kind === "hls" ? (
               <video ref={videoRef} className="absolute inset-0 h-full w-full bg-black" poster={source.poster ?? undefined} playsInline preload="metadata" onClick={() => !active && pb.toggle()} />
             ) : (
-              <SimulatedStage title={lesson.title} courseTitle={props.courseTitle} chapter={chapter?.title ?? null} takeaways={lesson.takeaways} time={pb.time} playing={pb.playing} reason={source.reason} onClick={() => !active && pb.toggle()} />
+              <div className="absolute inset-0 overflow-hidden bg-frame text-on-frame" data-testid="video-unavailable">
+                <div aria-hidden className="absolute inset-0 bg-[url(/art/papercut.webp)] bg-cover bg-center opacity-60" />
+                <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgb(3_3_9/0.2)_0%,rgb(3_3_9/0.85)_100%)]" />
+                <div className="absolute inset-x-5 bottom-6 sm:inset-x-8 sm:bottom-10">
+                  <p className="eyebrow text-on-frame-muted">{source.reason === "not-configured" ? "Streaming is not set up" : "Video in production"}</p>
+                  <p className="mt-3 max-w-3xl text-2xl font-semibold leading-tight tracking-[-0.035em] sm:text-4xl">{lesson.title}</p>
+                  <p className="mt-3 max-w-xl text-sm text-on-frame-muted">This lesson&apos;s video isn&apos;t published yet. Its checkpoints and takeaways are below.</p>
+                </div>
+              </div>
             )}
 
-            {!pb.playing && !active && !celebration ? (
+            {source.kind === "hls" && !pb.playing && !active && !celebration ? (
               <button
                 type="button"
                 onClick={pb.ended ? () => { pb.seek(0); pb.play(); } : pb.play}
