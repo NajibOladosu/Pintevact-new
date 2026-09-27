@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { env, isBunnyConfigured } from "@/lib/env";
+import type { PlaybackSource } from "@/lib/types";
 
 /**
  * Bunny CDN token authentication (SHA-256, v2).
@@ -47,9 +48,7 @@ export function signBunnyUrl(
   return `${parsed.protocol}//${parsed.host}${parsed.pathname}?token=${token}${parameterDataUrl}&expires=${expires}`;
 }
 
-export type PlaybackSource =
-  | { kind: "hls"; src: string; poster: string | null }
-  | { kind: "simulated"; reason: "no-video" | "not-configured" };
+export type { PlaybackSource };
 
 /** Resolve a signed, time-limited stream URL for a lesson video. */
 export function getPlaybackSource(videoId: string | null, now = Date.now()): PlaybackSource {

@@ -161,3 +161,7 @@ export type Reflection = {
   courseSlug: string;
   createdAt: string;
 };
+
+export type PlaybackSource =
+  | { kind: "hls"; src: string; poster: string | null }
+  | { kind: "simulated"; reason: "no-video" | "not-configured" };
