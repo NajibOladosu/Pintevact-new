@@ -15,6 +15,7 @@ The look follows **pintevact.com**. The system is documented in [`DESIGN.md`](DE
 - **Type:** Outfit throughout, with big tight headlines. The header wordmark reads "Pintevact"; a giant PINTEVACT closes the footer.
 - **Header:** a notched centre nav and a Sign in / Sign up pill. On phones this becomes a MENU pill.
 - **Auth:** a split frame where the papercut artwork slides across when you switch between sign in and sign up.
+- **Motion:** the papercut art drifts and follows the pointer, frames open as you scroll, CTAs are magnetic, cards tilt, and correct answers spark. Reduced motion keeps everything still (see DESIGN.md → Motion).
 - **Themes:** light and dark follow the OS setting. You can switch from the floating settings button (bottom left) or from the app header.
 - **Icons:** Phosphor, re-exported from `src/components/icons.ts`. Artwork lives in `public/art/`.
 
@@ -24,8 +25,8 @@ The look follows **pintevact.com**. The system is documented in [`DESIGN.md`](DE
 
 | Area | Routes |
 | --- | --- |
-| **Marketing** | `/` home with a live interactive demo player · `/courses` filterable catalog · `/courses/[slug]` course detail · `/pricing` · `/discover` 2-minute mind quiz · `/journal` + articles · `/about` · `/contact` · `/terms` · `/privacy` · 404 |
-| **Auth** | `/login` (password or magic link) · `/signup` · `/forgot-password` · `/reset-password` · `/verify-email` · `/auth/confirm` · `/auth/callback` (OAuth) · `/auth/signout` |
+| **Marketing** | `/` home with a playable checkpoint card · `/courses` filterable catalog · `/courses/[slug]` course detail · `/pricing` · `/discover` 2-minute mind quiz · `/journal` + articles · `/about` · `/contact` · `/terms` · `/privacy` · 404 |
+| **Auth** | `/signin` + `/signup` (one page; password, magic link or Google) · `/forgot-password` · `/reset-password` · `/verify-email` · `/auth/confirm` · `/auth/callback` (OAuth) · `/auth/signout` |
 | **Learner app** | `/dashboard` (XP, streak, constellation, heatmap, badges) · `/learn` library · `/learn/[course]` · `/learn/[course]/[lesson]` interactive player · `/reflections` (vault + notes) · `/achievements` · `/account` · `/account/billing` · `/certificates/[id]` (public, printable) |
 | **Admin** | `/admin` stats & integration health · `/admin/courses` + editor (pricing, publishing, Bunny video per lesson) · `/admin/users` |
 | **APIs** | `/api/stripe/checkout` · `/api/stripe/portal` · `/api/stripe/webhook` · `/api/hooks/send-email` (Supabase auth email hook) · `/api/cron/engagement` |
@@ -37,7 +38,7 @@ The look follows **pintevact.com**. The system is documented in [`DESIGN.md`](DE
 - Timeline with chapter ticks and colour-coded checkpoint markers, a "Next moment" jump, playback speed, fullscreen, and keyboard shortcuts (Space, ←/→, J/L, N for a note, F, M).
 - Timestamped notes you can click to seek.
 - Progress is saved continuously. A lesson completes at 90% watched plus all required checkpoints. Finishing a course issues a certificate, awards XP and sends an email.
-- Lessons without a video yet (or with Bunny not configured) play on a **simulated stage**, so all interactions still work.
+- Lessons without a published video show a "video in production" state; their checkpoints and takeaways stay readable.
 
 ### Gamification
 
@@ -47,18 +48,21 @@ XP for every interaction and lesson; nine awareness levels from *Sleepwalker* to
 
 ## Quick start
 
+Pintevact always runs on real services. For local development, run them on your machine with Docker:
+
 ```bash
 npm install
+npm run stack:up    # local Supabase (Postgres, Auth, PostgREST, Mailpit) + Stripe's stripe-mock
+cp .env.example .env.local
+```
+
+Fill `.env.local` from `npx supabase status` (API URL, anon key and service-role key), then set `SMTP_URL=smtp://127.0.0.1:54325` so emails land in the local inbox at http://127.0.0.1:54324. Then:
+
+```bash
 npm run dev
 ```
 
-With no environment variables, the app runs in **demo mode**: a complete in-memory backend with no external services.
-
-- Any email and password signs you in.
-- `demo@pintevact.com` gives you a pre-filled learner with progress, XP and a reflection.
-- Any email starting with `admin@` is an admin.
-- Checkout is simulated: purchases and memberships unlock instantly.
-- Data resets when the server restarts.
+Sign up at http://localhost:3000/signup, confirm from the Mailpit inbox, and make yourself an admin with `update public.profiles set role = 'admin' where email = '…';` (psql `postgresql://postgres:postgres@127.0.0.1:54322/postgres`). Use real Stripe test-mode keys and `stripe listen` to try payments end to end. `npm run stack:down` stops everything.
 
 ---
 
@@ -79,13 +83,13 @@ Copy `.env.example` to `.env.local` and fill it in. Every variable is documented
    ```sql
    update public.profiles set role = 'admin' where email = 'you@example.com';
    ```
-5. Optional Google sign-in: enable the Google provider in Supabase and set `NEXT_PUBLIC_AUTH_GOOGLE=true`.
+5. Google sign-in: enable the Google provider in Supabase (Authentication → Providers → Google) with your OAuth client, and add `https://<project>.supabase.co/auth/v1/callback` as an authorised redirect URI in Google Cloud. The "Continue with Google" / "Sign up with Google" buttons are always shown; new Google users get an account on their first sign-in.
 
 The schema includes row-level security on every table. Learners only see their own progress, notes and reflections; XP, purchases, subscriptions and certificates can only be written server-side. Tables: `profiles`, `courses`, `modules`, `lessons`, `lesson_interactions`, `enrollments`, `lesson_progress`, `interaction_responses`, `notes`, `xp_events`, `certificates`, `purchases`, `subscriptions`, `stripe_events`, `contact_messages`, `newsletter_subscribers`.
 
 ### 2. Resend
 
-Verify your sending domain, then set `RESEND_API_KEY`, `EMAIL_FROM` and `CONTACT_INBOX`. Preview every template locally:
+Verify your sending domain, then set `RESEND_API_KEY`, `EMAIL_FROM` and `CONTACT_INBOX`. (Any SMTP server works too: leave `RESEND_API_KEY` empty and set `SMTP_URL`.) Preview every template locally:
 
 ```bash
 npm run email:dev   # http://localhost:3001
@@ -119,7 +123,7 @@ For local testing: `stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 1. Create a Stream library and upload your videos.
 2. Set `BUNNY_STREAM_LIBRARY_ID` and `BUNNY_STREAM_API_KEY` so the admin lesson editor can autocomplete videos from your library.
-3. Set `BUNNY_STREAM_CDN_HOSTNAME` to the library's pull-zone host (for example `vz-xxxx.b-cdn.net`).
+3. Set `BUNNY_STREAM_CDN_HOSTNAME` to the library's pull-zone host (for example `vz-xxxx.b-cdn.net`). A full origin such as `http://127.0.0.1:4010` is also accepted, which is how the tests serve local HLS fixtures.
 4. Enable **Token Authentication** on that pull zone and set `BUNNY_STREAM_TOKEN_KEY`. The app signs a directory token (`token_path=/{videoId}/`), so the playlist and every segment are authorised, and it expires after `BUNNY_STREAM_TOKEN_TTL` seconds.
 5. In **Admin → Courses → (course)**, paste or pick each lesson's video GUID and its duration. Place interaction timestamps inside the real video length.
 
@@ -145,19 +149,52 @@ Then run the seed against your database. Use the admin panel for day-to-day chan
 
 ## Testing
 
+Nothing is mocked in the app, and the integration and e2e suites run against real services on your machine (Docker required):
+
 ```bash
-npm run lint         # ESLint (Next.js + TypeScript rules, React Compiler checks)
-npm run typecheck    # tsc --noEmit
-npm test             # Vitest: 160+ unit tests
-npm run db:test      # migrations + seed + RLS assertions on a throwaway Postgres (needs PG* env vars)
-npm run test:e2e     # Playwright: production build in demo mode, desktop + mobile, with axe accessibility checks
+npm run stack:up          # Supabase via the Supabase CLI + stripe/stripe-mock
+npm run lint              # ESLint (Next.js + TypeScript rules, React Compiler checks)
+npm run typecheck         # tsc --noEmit
+npm test                  # unit: pure logic, rendering, validation (Vitest, jsdom)
+npm run db:test           # RLS & business rules on the real database, in a rolled-back transaction
+npm run test:integration  # Vitest against Supabase, Mailpit and signed Stripe/auth-hook requests
+npm run test:e2e          # Playwright on a production build, desktop + mobile, with axe checks
+npm run test:all          # unit + integration + e2e
 ```
 
-- **Unit tests** cover catalog integrity, access rules, gamification, the lesson service (scoring, XP idempotency, completion, certificates), the demo store, Bunny URL signing, route guards, validation, every email template, the Supabase auth hook (including signature verification), the Stripe webhook handler and route, and checkout parameters.
-- **Database tests** (`supabase/tests/`) run the real migration and seed against Postgres 16 with a stub `auth` schema. They assert profile creation, blocking of role escalation, per-user isolation, paid-enrolment rejection, the no-self-awarded-XP rule, subscription-based access and email sync.
-- **End-to-end tests** cover the public site, the hero demo, catalog filters, the quiz, contact and newsletter forms, signup/login/logout and open-redirect protection, a full interactive lesson driven by a fake clock, notes, locked vs preview lessons, course purchases and memberships, profile editing, account deletion, and admin editing and access control.
+- **Unit tests** cover catalog integrity, access rules, gamification, player timing, Bunny URL signing, route guards, validation, every email template, the auth-hook email mapping and checkout parameters.
+- **Database tests** (`supabase/tests/rls.sql`) assert:
+  - profile creation;
+  - blocked role escalation;
+  - per-user isolation;
+  - rejection of paid enrolments;
+  - that learners can't award themselves XP;
+  - subscription-based access;
+  - email sync.
+- **Integration tests** (`tests/integration/`) use real signed-in Supabase sessions, so row-level security applies exactly as it does in the app. They cover:
+  - the lesson service: scoring, XP idempotency, completion, certificates;
+  - the data store, including admin operations;
+  - the Stripe webhook, with events signed like Stripe signs them;
+  - the Supabase Send Email hook, with real signatures;
+  - SMTP delivery;
+  - the engagement cron.
 
-GitHub Actions (`.github/workflows/ci.yml`) runs all of the above.
+  Every email is read back from the Mailpit inbox.
+- **End-to-end tests** (`tests/e2e/`) drive the real flows:
+  - sign-up with the confirmation link from the inbox;
+  - sign-in and sign-up as one page, with no reload between them and the header lined up with the home page;
+  - magic link and password reset from the inbox;
+  - the Google OAuth hand-off to Google's consent screen;
+  - protected routes and blocked open redirects;
+  - a full lesson on a **real HLS stream**: VP9 fixtures in `tests/fixtures/video`, served like the Bunny CDN, pausing at each checkpoint and completing;
+  - notes and the vault;
+  - locked lessons;
+  - Stripe Checkout (created on stripe-mock), then a signed webhook that unlocks the course or membership and sends the receipt;
+  - account deletion and admin editing;
+  - the public site and quiz;
+  - axe accessibility checks.
+
+GitHub Actions (`.github/workflows/ci.yml`) starts the same stack and runs everything.
 
 ---
 
@@ -176,7 +213,7 @@ src/
   content/           catalog, journal, mind quiz
   emails/            React Email templates
   lib/
-    data/            Store interface + Supabase and in-memory demo implementations
+    data/            Store interface + Supabase implementation
     billing/         checkout params, webhook handler, Supabase commerce repo
     supabase/        server/browser/admin clients + session proxy
     ...              access rules, gamification, lesson service, Bunny signing, env
@@ -184,12 +221,15 @@ src/
 supabase/
   migrations/        schema, RLS, functions
   seed.sql           generated catalog seed
-  tests/             Postgres RLS test harness
+  tests/             RLS assertions (run against the local database)
 tests/
-  unit/              Vitest
-  e2e/               Playwright
+  unit/              Vitest, pure logic
+  integration/       Vitest against the local stack
+  e2e/               Playwright against the local stack
+  fixtures/video/    HLS fixtures for the player
+  support/           local stack settings, Supabase and Mailpit helpers, video server
 ```
 
 ## Deploying
 
-Deploy to Vercel (or any Node host), set the environment variables from `.env.example`, and point the Supabase hook and Stripe webhook at your domain. Demo mode never switches on in production unless you set `PINTEVACT_DEMO_MODE=true` explicitly.
+Deploy to Vercel (or any Node host), set the environment variables from `.env.example`, and point the Supabase hook and Stripe webhook at your domain. The app requires Supabase and refuses to send email without Resend or SMTP configured.

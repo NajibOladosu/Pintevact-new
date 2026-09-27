@@ -14,6 +14,8 @@ colors:
   signal: "#ee4217"
   signal-hover: "#da2300"
   signal-ink: "#c8340c"
+  hero-cream: "#fbe6d6"
+  hero-peach: "#f7a684"
   on-signal: "#faf8f4"
   violet: "#371a6a"
   on-violet: "#f5f1ea"
@@ -99,11 +101,26 @@ Outfit for everything, set tight:
 
 ## Motion
 
-- Content enters with a short rise and a blur-in (`animate-enter`).
-- The auth art slides with `cubic-bezier(0.76,0,0.24,1)`.
-- The switch pill glides.
-- Checkpoint cards flip in 3D to their violet back.
-- All motion respects `prefers-reduced-motion`.
+One authored moment, quiet everywhere else (`src/components/motion/*`, CSS in `globals.css`):
+
+- **Focal:** the papercut breathes. The hero art (`HeroArt`) drifts on a 24s loop and shifts a few pixels against the pointer. The headline lines rise out of a mask, and the gradient on "mind." (cream `#fbe6d6` → peach `#f7a684` → signal) sweeps once. On auth, switching modes slides the art across the frame with `cubic-bezier(0.76,0,0.24,1)`, plus a brief "breathe" and a sheen.
+- **Continuity:**
+  - `data-reveal="frame"` opens rounded frames with a clip-path.
+  - `data-reveal="rise"` lifts and sharpens blocks.
+  - `data-reveal="list"` staggers children (capped at about 330ms).
+  - A pill glides between links in the header notch and in the app's rail.
+  - FAQ answers expand to their real height (`interpolate-size`).
+- **Feedback:**
+  - `data-magnetic` CTAs lean toward the pointer, and `.arrow-nudge` arrows move up and to the right.
+  - `data-tilt` cards tilt, and their art drifts and zooms.
+  - `data-spotlight` dark and orange frames get a soft pointer light.
+  - XP counts up (`CountUp`).
+  - Correct answers and lesson completion fire `Sparks`.
+  - The lesson marquee pauses on hover.
+- **Rules:**
+  - Content is visible by default; reveals only apply after `MotionRoot` runs.
+  - Pointer effects exist only on fine pointers.
+  - Under `prefers-reduced-motion` everything is static: no drift, no marquee, no masks, no sparks.
 
 ## Do's and Don'ts
 
@@ -115,7 +132,7 @@ Outfit for everything, set tight:
 - Reuse the papercut art for imagery.
 
 **Don't:**
-- Add gradient text other than the single hero word.
+- Add gradient text other than the single hero word (pinned by the pintevact.com reference).
 - Add glow effects or neon.
 - Add stock illustrations.
 - Add more than one accent colour per block.
