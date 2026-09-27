@@ -26,7 +26,7 @@ async function startDemoSession(email: string, name: string | null) {
 function friendlyAuthError(message: string) {
   const m = message.toLowerCase();
   if (m.includes("invalid login")) return "That email and password don't match. Try again or reset your password.";
-  if (m.includes("email not confirmed")) return "Please confirm your email first — check your inbox for the link.";
+  if (m.includes("email not confirmed")) return "Please confirm your email first, check your inbox for the link.";
   if (m.includes("already registered") || m.includes("already been registered")) return "An account with this email already exists. Try signing in.";
   if (m.includes("rate limit") || m.includes("too many")) return "Too many attempts. Take a breath and try again in a minute.";
   if (m.includes("same_password") || m.includes("different from the old")) return "Your new password must be different from the old one.";
@@ -88,7 +88,7 @@ export async function signUp(_: FormState, formData: FormData): Promise<FormStat
   });
   if (error) return { message: friendlyAuthError(error.message), values: { email, fullName } };
   if (data.session) {
-    // Email confirmation disabled in Supabase — the user is signed in immediately.
+    // Email confirmation disabled in Supabase, the user is signed in immediately.
     await notify.welcome({ email, name: fullName });
     redirect(next);
   }

@@ -2,7 +2,7 @@ import { stableUuid } from "@/lib/ids";
 import type { Chapter, Course, CourseTheme, Instructor, Interaction, Lesson, Module } from "@/lib/types";
 
 /* ------------------------------------------------------------------ */
-/*  Authoring helpers — compact definitions, expanded into full types  */
+/*  Authoring helpers, compact definitions, expanded into full types  */
 /* ------------------------------------------------------------------ */
 
 type Opt = [label: string, correct?: boolean, feedback?: string];
@@ -156,7 +156,7 @@ const theo: Instructor = {
 const noor: Instructor = {
   name: "Noor Haddad, MA",
   title: "Relationship & Attachment Researcher",
-  bio: "Noor studies how early bonds shape adult love, friendship and work — and how people rewrite those patterns.",
+  bio: "Noor studies how early bonds shape adult love, friendship and work, and how people rewrite those patterns.",
 };
 const kenji: Instructor = {
   name: "Kenji Moreau",
@@ -174,7 +174,7 @@ const courseDefs: CourseDef[] = [
     title: "Meet Your Mind",
     subtitle: "A free, interactive tour of the machinery behind every thought you have.",
     description:
-      "Before you can use psychology to your advantage, you need a working map of your own mind. In this free starter course you'll meet your two thinking systems, learn why your brain lies to you (kindly), and complete your first self-portrait — all through videos that pause, ask, and listen.",
+      "Before you can use psychology to your advantage, you need a working map of your own mind. In this free starter course you'll meet your two thinking systems, learn why your brain lies to you (kindly), and complete your first self-portrait, all through videos that pause, ask, and listen.",
     category: "Foundations",
     level: "Beginner",
     priceCents: 0,
@@ -194,7 +194,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "the-elephant-and-the-rider",
             title: "The Elephant and the Rider",
-            summary: "Meet the fast, emotional you and the slow, deliberate you — and learn who's really driving.",
+            summary: "Meet the fast, emotional you and the slow, deliberate you, and learn who's really driving.",
             minutes: 7,
             preview: true,
             takeaways: [
@@ -209,8 +209,8 @@ const courseDefs: CourseDef[] = [
                 at: 180,
                 type: "quiz",
                 prompt: "A bat and a ball cost $1.10. The bat costs $1.00 more than the ball. How much is the ball?",
-                options: [["10 cents", false, "That's System 1 talking — fast, confident, wrong."], ["5 cents", true, "Your rider stepped in. $0.05 + $1.05 = $1.10."], ["1 cent"], ["15 cents"]],
-                explanation: "Over 50% of students at elite universities answer 10 cents. The intuitive answer arrives first and feels right — that's System 1.",
+                options: [["10 cents", false, "That's System 1 talking, fast, confident, wrong."], ["5 cents", true, "Your rider stepped in. $0.05 + $1.05 = $1.10."], ["1 cent"], ["15 cents"]],
+                explanation: "Over 50% of students at elite universities answer 10 cents. The intuitive answer arrives first and feels right, that's System 1.",
               },
               { at: 300, type: "reflection", prompt: "Describe a recent moment where your elephant overpowered your rider. What happened just before?" },
             ],
@@ -218,7 +218,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "your-brain-is-a-prediction-machine",
             title: "Your Brain Is a Prediction Machine",
-            summary: "You don't see the world as it is — you see what your brain expects. Here's how to use that.",
+            summary: "You don't see the world as it is, you see what your brain expects. Here's how to use that.",
             minutes: 8,
             takeaways: [
               "Perception is a controlled hallucination: the brain predicts, then checks.",
@@ -227,13 +227,13 @@ const courseDefs: CourseDef[] = [
             ],
             exercise: "Pick one recurring situation you dread. Write your prediction for it, then after it happens, grade how accurate it was.",
             interactions: [
-              { at: 60, type: "insight", prompt: "Mind fact", body: "Your brain uses about 20% of your energy while being only 2% of your body weight. Predicting is cheaper than perceiving — so it predicts constantly." },
+              { at: 60, type: "insight", prompt: "Mind fact", body: "Your brain uses about 20% of your energy while being only 2% of your body weight. Predicting is cheaper than perceiving, so it predicts constantly." },
               {
                 at: 220,
                 type: "quiz",
                 prompt: "Why does the same wine taste better when people are told it's expensive?",
                 options: [["Expensive wine is always better"], ["Expectation changes how the brain processes the taste", true], ["People lie to seem sophisticated"], ["Price changes the chemistry of wine"]],
-                explanation: "fMRI studies show higher activity in pleasure-related regions when people believe the wine costs more — expectation shapes experience itself.",
+                explanation: "fMRI studies show higher activity in pleasure-related regions when people believe the wine costs more, expectation shapes experience itself.",
               },
               { at: 380, type: "scale", prompt: "How often do your predictions about social situations turn out worse than reality?", minLabel: "Never", maxLabel: "Almost always" },
             ],
@@ -246,7 +246,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "the-shortcuts-that-run-your-day",
             title: "The Shortcuts That Run Your Day",
-            summary: "Anchoring, availability and the spotlight effect — three biases you can start catching today.",
+            summary: "Anchoring, availability and the spotlight effect, three biases you can start catching today.",
             minutes: 9,
             takeaways: [
               "Anchoring: the first number you hear bends every estimate after it.",
@@ -269,14 +269,14 @@ const courseDefs: CourseDef[] = [
           {
             slug: "drawing-your-inner-map",
             title: "Drawing Your Inner Map",
-            summary: "Values, energizers and drainers — sketch the first version of who you are right now.",
+            summary: "Values, energizers and drainers, sketch the first version of who you are right now.",
             minutes: 8,
             takeaways: [
-              "Values are directions, not destinations — you never 'finish' them.",
+              "Values are directions, not destinations, you never 'finish' them.",
               "Energy audits reveal your values faster than introspection alone.",
               "Your self-portrait is a draft. Pintevact is where you revise it.",
             ],
-            exercise: "List five activities from last week. Mark each + (energizing) or – (draining). What do the pluses have in common?",
+            exercise: "List five activities from last week. Mark each + (energizing) or - (draining). What do the pluses have in common?",
             interactions: [
               { at: 90, type: "scale", prompt: "How clearly could you name your top three values today?", minLabel: "No idea", maxLabel: "Crystal clear" },
               { at: 260, type: "reflection", prompt: "Name one activity that makes you lose track of time. What value might it be honoring?", required: true },
@@ -290,7 +290,7 @@ const courseDefs: CourseDef[] = [
   {
     slug: "emotional-alchemy",
     title: "Emotional Alchemy",
-    subtitle: "Turn anxiety, anger and overwhelm into information — and then into action.",
+    subtitle: "Turn anxiety, anger and overwhelm into information, and then into action.",
     description:
       "Emotions aren't problems to fix; they're data to decode. Drawing on CBT, ACT and affect-labelling research, Emotional Alchemy teaches you to name what you feel with precision, defuse spiralling thoughts, and respond instead of react. Every lesson pauses to have you practice on your own real feelings.",
     category: "Emotions",
@@ -343,7 +343,7 @@ const courseDefs: CourseDef[] = [
               "Interoceptive awareness is trainable in as little as a few weeks.",
               "A 60-second body scan is a regulation tool you can use anywhere.",
             ],
-            exercise: "Set three random alarms. When each rings, locate where in your body you feel something and rate its intensity 1–10.",
+            exercise: "Set three random alarms. When each rings, locate where in your body you feel something and rate its intensity 1-10.",
             interactions: [
               { at: 100, type: "scale", prompt: "How well can you usually feel your own heartbeat without touching your pulse?", minLabel: "Not at all", maxLabel: "Very clearly" },
               { at: 300, type: "insight", prompt: "Try it now", body: "Close your eyes for 15 seconds. Notice your jaw, shoulders and stomach. Tension in any of them is information, not a verdict." },
@@ -352,7 +352,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "What is interoception?",
                 options: [["Reading other people's emotions"], ["Sensing the internal state of your body", true], ["A type of meditation"], ["Suppressing physical sensations"]],
-                explanation: "Interoception is the perception of internal bodily signals — heartbeat, breath, hunger, tension.",
+                explanation: "Interoception is the perception of internal bodily signals, heartbeat, breath, hunger, tension.",
               },
             ],
           },
@@ -378,7 +378,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "Try not to think of a white bear. According to Wegner's research, what happens?",
                 options: [["You easily avoid it"], ["You think of it more", true], ["You think of a black bear"], ["The thought fades immediately"]],
-                explanation: "Thought suppression triggers a monitoring process that keeps checking for the forbidden thought — bringing it back.",
+                explanation: "Thought suppression triggers a monitoring process that keeps checking for the forbidden thought, bringing it back.",
               },
               { at: 330, type: "reflection", prompt: "Write one sticky thought, then rewrite it starting with 'I notice I'm having the thought that…'. What changed?" },
               { at: 520, type: "scale", prompt: "After defusion, how much does that thought grip you now?", minLabel: "Barely", maxLabel: "Still intensely" },
@@ -391,7 +391,7 @@ const courseDefs: CourseDef[] = [
             minutes: 10,
             takeaways: [
               "Reappraisal changes the meaning, not the facts.",
-              "Useful reframes are believable — forced positivity backfires.",
+              "Useful reframes are believable, forced positivity backfires.",
               "Anxiety reappraised as excitement improves performance.",
             ],
             exercise: "Before your next nervous moment, say out loud 'I am excited'. Notice what changes.",
@@ -402,7 +402,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "In Alison Wood Brooks' study, people who said 'I am excited' before singing karaoke…",
                 options: [["Performed worse"], ["Performed better than those who said 'I am calm'", true], ["Refused to sing"], ["Performed the same"]],
-                explanation: "Anxiety and excitement are both high-arousal states — relabelling is easier than calming down.",
+                explanation: "Anxiety and excitement are both high-arousal states, relabelling is easier than calming down.",
               },
               { at: 480, type: "reflection", prompt: "Take a current worry. What's a reframe that is both TRUE and more useful?" },
             ],
@@ -415,7 +415,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "the-physiological-sigh",
             title: "The Physiological Sigh",
-            summary: "The fastest known real-time stress reset — and why it works.",
+            summary: "The fastest known real-time stress reset, and why it works.",
             minutes: 6,
             takeaways: [
               "Double inhale + long exhale offloads CO₂ and slows heart rate.",
@@ -435,7 +435,7 @@ const courseDefs: CourseDef[] = [
             summary: "Match the right tool to the right feeling, and pre-commit before the storm hits.",
             minutes: 9,
             takeaways: [
-              "Different emotions need different tools — no single fix works for all.",
+              "Different emotions need different tools, no single fix works for all.",
               "If-then plans make regulation automatic under stress.",
               "Your kit should live somewhere you'll see it when flooded.",
             ],
@@ -459,9 +459,9 @@ const courseDefs: CourseDef[] = [
   {
     slug: "the-persuasion-lab",
     title: "The Persuasion Lab",
-    subtitle: "The ethical science of influence — how to be heard, trusted and followed.",
+    subtitle: "The ethical science of influence, how to be heard, trusted and followed.",
     description:
-      "Influence isn't manipulation when it helps people make choices they'll thank you for. In The Persuasion Lab you'll run live experiments on yourself and others using the principles of reciprocity, social proof, framing and narrative — and learn to spot when they're being used on you.",
+      "Influence isn't manipulation when it helps people make choices they'll thank you for. In The Persuasion Lab you'll run live experiments on yourself and others using the principles of reciprocity, social proof, framing and narrative, and learn to spot when they're being used on you.",
     category: "Influence",
     level: "Intermediate",
     priceCents: 9900,
@@ -481,7 +481,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "reciprocity-and-the-gift-effect",
             title: "Reciprocity & the Gift Effect",
-            summary: "Why a mint with the bill raises tips — and how to give first without keeping score.",
+            summary: "Why a mint with the bill raises tips, and how to give first without keeping score.",
             minutes: 9,
             preview: true,
             takeaways: [
@@ -496,7 +496,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "In the restaurant mint study, which gesture increased tips the most?",
                 options: [["One mint with the bill"], ["Two mints with the bill"], ["One mint, then the server returns with a second 'just for you'", true], ["No mints but a smile"]],
-                explanation: "Tips rose ~23% when the server returned with an extra mint — personalised and unexpected beats bigger.",
+                explanation: "Tips rose ~23% when the server returned with an extra mint, personalised and unexpected beats bigger.",
               },
               { at: 320, type: "poll", prompt: "When someone does you a favour, you feel…", options: ["Grateful", "Indebted", "Suspicious", "It depends on who"] },
               { at: 470, type: "reflection", prompt: "Who could you give something unexpected and personal to this week?" },
@@ -510,7 +510,7 @@ const courseDefs: CourseDef[] = [
             takeaways: [
               "Uncertainty + similarity = maximum social-proof power.",
               "Highlighting how many people do the wrong thing can backfire.",
-              "Pluralistic ignorance keeps groups silent — someone has to move first.",
+              "Pluralistic ignorance keeps groups silent, someone has to move first.",
             ],
             exercise: "Notice three decisions today you made because 'everyone does it'. Would you make them alone?",
             interactions: [
@@ -520,7 +520,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "Which hotel towel sign got the most guests to reuse towels?",
                 options: [["'Help save the environment'"], ["'Most guests reuse their towels'"], ["'Most guests who stayed in THIS room reuse their towels'", true], ["'Towel reuse saves us money'"]],
-                explanation: "The more similar the reference group, the stronger the norm — even a shared room number counts.",
+                explanation: "The more similar the reference group, the stronger the norm, even a shared room number counts.",
               },
               { at: 500, type: "insight", prompt: "Watch for the reverse", body: "'Thousands of people are still not saving for retirement!' normalises the bad behaviour. Show the norm you want." },
             ],
@@ -533,7 +533,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "the-frame-is-the-message",
             title: "The Frame Is the Message",
-            summary: "Gain vs loss, 90% vs 10% — how identical facts produce opposite decisions.",
+            summary: "Gain vs loss, 90% vs 10%, how identical facts produce opposite decisions.",
             minutes: 10,
             takeaways: [
               "Losses loom roughly twice as large as equivalent gains.",
@@ -542,7 +542,7 @@ const courseDefs: CourseDef[] = [
             ],
             exercise: "Rewrite one request you need to make this week in both a gain and a loss frame. Which feels more honest and more persuasive?",
             interactions: [
-              { at: 90, type: "poll", prompt: "Which surgery would you choose?", options: ["90% survival rate", "10% mortality rate", "They're identical — no preference"] },
+              { at: 90, type: "poll", prompt: "Which surgery would you choose?", options: ["90% survival rate", "10% mortality rate", "They're identical, no preference"] },
               {
                 at: 280,
                 type: "quiz",
@@ -584,7 +584,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "spotting-manipulation",
             title: "Spotting Manipulation",
-            summary: "False scarcity, foot-in-the-door and guilt trips — and scripts to calmly decline.",
+            summary: "False scarcity, foot-in-the-door and guilt trips, and scripts to calmly decline.",
             minutes: 9,
             takeaways: [
               "Manufactured urgency is the most common manipulation tactic.",
@@ -621,7 +621,7 @@ const courseDefs: CourseDef[] = [
     glyph: "▲",
     instructor: theo,
     outcomes: [
-      "Map the cue–routine–reward loops behind your current habits",
+      "Map the cue-routine-reward loops behind your current habits",
       "Use friction and defaults to make change effortless",
       "Build identity-based habits that survive bad weeks",
     ],
@@ -632,7 +632,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "the-habit-loop",
             title: "The Habit Loop",
-            summary: "Cue, routine, reward — and the craving that powers the whole engine.",
+            summary: "Cue, routine, reward, and the craving that powers the whole engine.",
             minutes: 8,
             preview: true,
             takeaways: [
@@ -648,7 +648,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "On average, how long did it take participants to form a new habit in Lally's UCL study?",
                 options: [["21 days"], ["66 days", true], ["7 days"], ["1 year"]],
-                explanation: "The average was 66 days, with a huge range (18–254). The 21-day myth comes from a 1960s plastic surgery book.",
+                explanation: "The average was 66 days, with a huge range (18-254). The 21-day myth comes from a 1960s plastic surgery book.",
               },
               { at: 400, type: "reflection", prompt: "Pick one habit to change. What are its cue, routine and reward?", required: true },
             ],
@@ -714,7 +714,7 @@ const courseDefs: CourseDef[] = [
               "Self-compassion predicts faster recovery than self-criticism.",
               "Plan for failure before it happens.",
             ],
-            exercise: "Write your 'bad week' minimum version of your key habit — the smallest action that still counts.",
+            exercise: "Write your 'bad week' minimum version of your key habit, the smallest action that still counts.",
             interactions: [
               { at: 140, type: "scale", prompt: "When you slip up, how harsh is your inner voice?", minLabel: "Kind", maxLabel: "Brutal" },
               { at: 320, type: "insight", prompt: "Self-compassion isn't soft", body: "In studies by Breines & Chen, self-compassionate participants studied longer after failing a test than self-critical ones." },
@@ -730,7 +730,7 @@ const courseDefs: CourseDef[] = [
     title: "Attachment & You",
     subtitle: "Understand the invisible blueprint behind how you love, trust and connect.",
     description:
-      "Why do some people text back instantly while you spiral? Why do you pull away when things get close? Attachment & You explores the science of attachment styles, helps you identify your own patterns, and gives you practical ways to build more secure relationships — romantic, platonic and professional.",
+      "Why do some people text back instantly while you spiral? Why do you pull away when things get close? Attachment & You explores the science of attachment styles, helps you identify your own patterns, and gives you practical ways to build more secure relationships, romantic, platonic and professional.",
     category: "Relationships",
     level: "Intermediate",
     priceCents: 8900,
@@ -749,13 +749,13 @@ const courseDefs: CourseDef[] = [
           {
             slug: "the-four-styles",
             title: "The Four Styles",
-            summary: "Secure, anxious, avoidant and fearful-avoidant — a map, not a label.",
+            summary: "Secure, anxious, avoidant and fearful-avoidant, a map, not a label.",
             minutes: 11,
             preview: true,
             takeaways: [
               "Attachment styles are tendencies on two dimensions: anxiety and avoidance.",
               "About half of adults are broadly secure.",
-              "Styles can shift over time — 'earned security' is real.",
+              "Styles can shift over time, 'earned security' is real.",
             ],
             exercise: "Think of your last three close relationships. Where did you sit on anxiety (fear of abandonment) and avoidance (discomfort with closeness)?",
             interactions: [
@@ -795,7 +795,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "protest-behaviours-and-deactivating-strategies",
             title: "Protest Behaviours & Deactivating Strategies",
-            summary: "The moves we make when attachment alarms ring — and better alternatives.",
+            summary: "The moves we make when attachment alarms ring, and better alternatives.",
             minutes: 10,
             takeaways: [
               "Protest behaviours (over-texting, jealousy games) seek reconnection clumsily.",
@@ -840,7 +840,7 @@ const courseDefs: CourseDef[] = [
     title: "Deep Focus Mind",
     subtitle: "Reclaim your attention in a world engineered to steal it.",
     description:
-      "Attention is the currency of a meaningful life. Deep Focus Mind combines attention science, flow research and practical protocols to help you do your best work in fewer hours — and actually enjoy it. Each lesson includes a live focus experiment you run on yourself.",
+      "Attention is the currency of a meaningful life. Deep Focus Mind combines attention science, flow research and practical protocols to help you do your best work in fewer hours, and actually enjoy it. Each lesson includes a live focus experiment you run on yourself.",
     category: "Focus",
     level: "Intermediate",
     priceCents: 6900,
@@ -875,7 +875,7 @@ const courseDefs: CourseDef[] = [
                 type: "quiz",
                 prompt: "What is 'attention residue'?",
                 options: [["Fatigue after long focus"], ["Thoughts about a previous task lingering after switching", true], ["Notifications you missed"], ["Visual clutter"]],
-                explanation: "Sophie Leroy found people who switched before finishing a task performed worse on the next one — part of their mind stayed behind.",
+                explanation: "Sophie Leroy found people who switched before finishing a task performed worse on the next one, part of their mind stayed behind.",
               },
               { at: 400, type: "reflection", prompt: "What's your most expensive task switch in a typical day?" },
             ],
@@ -883,7 +883,7 @@ const courseDefs: CourseDef[] = [
           {
             slug: "your-distraction-fingerprint",
             title: "Your Distraction Fingerprint",
-            summary: "Internal vs external triggers — find the itch behind the scroll.",
+            summary: "Internal vs external triggers, find the itch behind the scroll.",
             minutes: 9,
             takeaways: [
               "Most distraction starts with an internal trigger: boredom, anxiety, uncertainty.",
@@ -893,7 +893,7 @@ const courseDefs: CourseDef[] = [
             exercise: "Keep a distraction log for one day: time, what you reached for, and the feeling right before.",
             interactions: [
               { at: 110, type: "poll", prompt: "What usually happens right before you get distracted?", options: ["Boredom", "The task feels hard", "Anxiety", "A notification"] },
-              { at: 300, type: "insight", prompt: "The 10-minute rule", body: "When you feel the urge to check, say 'I can — in 10 minutes.' The urge usually peaks and passes like a wave." },
+              { at: 300, type: "insight", prompt: "The 10-minute rule", body: "When you feel the urge to check, say 'I can, in 10 minutes.' The urge usually peaks and passes like a wave." },
               { at: 450, type: "reflection", prompt: "What feeling are you most often trying to escape when you get distracted?", required: true },
             ],
           },
@@ -939,7 +939,7 @@ const courseDefs: CourseDef[] = [
             interactions: [
               { at: 140, type: "poll", prompt: "When do you do your best thinking?", options: ["Early morning", "Late morning", "Afternoon", "Night"] },
               { at: 330, type: "reflection", prompt: "Write your three-step deep work start ritual." },
-              { at: 470, type: "insight", prompt: "Shutdown phrase", body: "Cal Newport ends each day by saying 'Shutdown complete.' It sounds silly. It works — it gives your mind permission to let go." },
+              { at: 470, type: "insight", prompt: "Shutdown phrase", body: "Cal Newport ends each day by saying 'Shutdown complete.' It sounds silly. It works, it gives your mind permission to let go." },
             ],
           },
         ],
@@ -949,9 +949,9 @@ const courseDefs: CourseDef[] = [
   {
     slug: "shadow-work",
     title: "Shadow Work & Self-Sabotage",
-    subtitle: "Meet the parts of you that hold you back — and turn them into allies.",
+    subtitle: "Meet the parts of you that hold you back, and turn them into allies.",
     description:
-      "Procrastination, perfectionism, impostor feelings: they're not flaws, they're protectors with outdated instructions. Blending Jungian shadow work with modern research on self-sabotage and the inner critic, this course helps you understand why you get in your own way — and how to stop.",
+      "Procrastination, perfectionism, impostor feelings: they're not flaws, they're protectors with outdated instructions. Blending Jungian shadow work with modern research on self-sabotage and the inner critic, this course helps you understand why you get in your own way, and how to stop.",
     category: "Self-Knowledge",
     level: "Advanced",
     priceCents: 8900,
@@ -997,7 +997,7 @@ const courseDefs: CourseDef[] = [
             summary: "The admiration you feel for others points at gifts you haven't claimed.",
             minutes: 8,
             takeaways: [
-              "We disown positive traits too — boldness, creativity, ambition.",
+              "We disown positive traits too, boldness, creativity, ambition.",
               "Intense admiration is a clue to your golden shadow.",
               "Claiming it starts with small, visible experiments.",
             ],
@@ -1045,7 +1045,7 @@ const courseDefs: CourseDef[] = [
               "Distanced self-talk (using your name) improves performance under stress.",
               "Coaches are specific and forward-looking; critics are global and backward-looking.",
             ],
-            exercise: "Write your critic's favourite line. Now write what a great coach would say instead — using your own name.",
+            exercise: "Write your critic's favourite line. Now write what a great coach would say instead, using your own name.",
             interactions: [
               { at: 120, type: "poll", prompt: "What does your inner critic sound like?", options: ["A parent", "A teacher", "Myself, but meaner", "Society in general"] },
               {

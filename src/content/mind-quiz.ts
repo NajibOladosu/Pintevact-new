@@ -5,7 +5,7 @@ export type QuizQuestion = { id: string; prompt: string; answers: { label: strin
 export const archetypes: Record<Archetype, { name: string; tagline: string; description: string; strengths: string[]; blindSpot: string; courseSlug: string; theme: "ember" | "iris" | "lucid" | "tide" | "blush" | "sun" }> = {
   seeker: {
     name: "The Seeker",
-    tagline: "You want to know why — about everything, especially yourself.",
+    tagline: "You want to know why, about everything, especially yourself.",
     description: "Curious and reflective, you process life by understanding it. You're drawn to patterns, meaning and the hidden machinery behind behaviour.",
     strengths: ["Deep self-reflection", "Pattern recognition", "Open to change"],
     blindSpot: "Analysis can become a hiding place. Insight without action turns into rumination.",
@@ -15,7 +15,7 @@ export const archetypes: Record<Archetype, { name: string; tagline: string; desc
   feeler: {
     name: "The Feeler",
     tagline: "You experience the world in high definition.",
-    description: "Emotionally perceptive and empathic, you pick up on subtle shifts in mood — yours and everyone else's. Feelings are your first language.",
+    description: "Emotionally perceptive and empathic, you pick up on subtle shifts in mood, yours and everyone else's. Feelings are your first language.",
     strengths: ["Empathy", "Emotional awareness", "Authenticity"],
     blindSpot: "Big feelings can steer the ship before you've checked the map.",
     courseSlug: "emotional-alchemy",
@@ -23,7 +23,7 @@ export const archetypes: Record<Archetype, { name: string; tagline: string; desc
   },
   strategist: {
     name: "The Strategist",
-    tagline: "You want results — and a system to get them.",
+    tagline: "You want results, and a system to get them.",
     description: "Driven and practical, you love turning insight into leverage. You'd rather run an experiment than read another think-piece.",
     strengths: ["Follow-through", "Systems thinking", "Bias to action"],
     blindSpot: "Optimising everything can crowd out rest, play and the people around you.",

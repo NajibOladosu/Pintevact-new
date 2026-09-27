@@ -26,7 +26,7 @@ export async function submitContact(_: FormState, formData: FormData): Promise<F
   try {
     await getStore().saveContactMessage(message);
     await notify.contact(message);
-    return { ok: true, message: `Thanks, ${message.name}! We'll reply to ${message.email} within 1–2 working days.` };
+    return { ok: true, message: `Thanks, ${message.name}! We'll reply to ${message.email} within 1-2 working days.` };
   } catch (e) {
     console.error(e);
     return { ok: false, message: "We couldn't send your message. Please email us directly.", values: raw };
