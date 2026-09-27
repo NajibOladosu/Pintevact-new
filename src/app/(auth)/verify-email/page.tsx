@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MailCheck } from "@/components/icons";
 import { ResendConfirmationForm } from "@/components/auth/simple-forms";
-import { AuthSwapLine, swapLinkClass } from "@/components/auth/auth-frame";
+import { AuthSwapLine, swapLinkClass, AuthSingle } from "@/components/auth/auth-frame";
 
 export const metadata: Metadata = { title: "Check your email" };
 
 export default async function VerifyEmailPage({ searchParams }: { searchParams: Promise<{ email?: string }> }) {
   const { email } = await searchParams;
   return (
-    <div>
+    <AuthSingle>
       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-on-accent">
         <MailCheck size={24} />
       </span>
@@ -25,6 +25,6 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
           Sign up again
         </Link>
       </AuthSwapLine>
-    </div>
+    </AuthSingle>
   );
 }

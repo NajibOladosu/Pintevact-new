@@ -24,7 +24,7 @@ export function PurchasePanel({ course, state, firstLessonHref }: { course: Cour
             <Link href={`/signup?next=${encodeURIComponent(free ? learnHref : `/courses/${course.slug}`)}`} className={buttonClasses({ size: "lg", className: "rounded-[0.9rem]" })}>
               {free ? "Start free" : `Get ${course.title}`}
             </Link>
-            <Link href={`/login?next=${encodeURIComponent(`/courses/${course.slug}`)}`} className="py-2 text-center text-sm text-muted underline-offset-4 hover:text-fg hover:underline">
+            <Link href={`/signin?next=${encodeURIComponent(`/courses/${course.slug}`)}`} className="py-2 text-center text-sm text-muted underline-offset-4 hover:text-fg hover:underline">
               Already a member? Sign in
             </Link>
           </>

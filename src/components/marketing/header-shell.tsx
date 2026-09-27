@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/brand/logo";
+import { AccountPillLinks, accountPillFrame } from "@/components/brand/account-pill";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./mobile-menu";
 
@@ -59,22 +60,15 @@ export function HeaderShell({ items, signedIn }: { items: NavItem[]; signedIn: b
           })}
         </nav>
 
-        <div className="relative z-10 hidden items-center gap-1 rounded-full bg-raised p-1 shadow-pill ring-1 ring-line lg:flex">
-          {signedIn ? (
-            <Link href="/dashboard" className="inline-flex h-11 items-center rounded-full bg-violet px-5 text-[0.9375rem] font-semibold text-on-violet transition-colors hover:bg-[#46248a]">
+        {signedIn ? (
+          <div className={cn(accountPillFrame, "hidden grid-cols-1 lg:grid")}>
+            <Link href="/dashboard" className="inline-flex items-center justify-center rounded-full bg-violet text-[0.9375rem] font-semibold text-on-violet transition-colors hover:bg-[#46248a]">
               Dashboard
             </Link>
-          ) : (
-            <>
-              <Link href="/login" className="inline-flex h-11 items-center rounded-full px-5 text-[0.9375rem] text-muted transition-colors hover:bg-fg/5 hover:text-fg">
-                Sign in
-              </Link>
-              <Link href="/signup" className="inline-flex h-11 items-center rounded-full bg-violet px-5 text-[0.9375rem] font-semibold text-on-violet transition-colors hover:bg-[#46248a]">
-                Sign up
-              </Link>
-            </>
-          )}
-        </div>
+          </div>
+        ) : (
+          <AccountPillLinks className="hidden lg:grid" />
+        )}
 
         <MobileMenu items={items} signedIn={signedIn} overlay={overlay} />
       </div>

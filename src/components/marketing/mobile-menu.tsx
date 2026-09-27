@@ -63,7 +63,7 @@ export function MobileMenu({ items, signedIn, overlay }: { items: { href: string
                 <Link href="/signup" className={buttonClasses({ variant: "primary", size: "lg" })}>
                   Sign up free <ArrowUpRight size={16} />
                 </Link>
-                <Link href="/login" className={buttonClasses({ variant: "outline", size: "lg" })}>
+                <Link href="/signin" className={buttonClasses({ variant: "outline", size: "lg" })}>
                   Sign in
                 </Link>
               </>

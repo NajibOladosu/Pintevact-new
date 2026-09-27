@@ -21,5 +21,5 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL(next, request.url));
     }
   }
-  return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent("That link is invalid or has expired. Please request a new one.")}`, request.url));
+  return NextResponse.redirect(new URL(`/signin?error=${encodeURIComponent("That link is invalid or has expired. Please request a new one.")}`, request.url));
 }

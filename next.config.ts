@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.b-cdn.net" },
     ],
   },
+  async redirects() {
+    return [{ source: "/login", destination: "/signin", permanent: true }];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
