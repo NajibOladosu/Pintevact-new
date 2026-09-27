@@ -29,7 +29,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={t.id}
             role="status"
             className={cn(
-              "pointer-events-auto animate-enter rounded-xl border px-4 py-3 shadow-[0_8px_24px_-12px_rgb(17_16_28/0.35)]",
+              "pointer-events-auto animate-enter rounded-[1.1rem] border px-4 py-3 shadow-card",
               t.tone === "xp" ? "border-transparent bg-violet text-on-violet" : t.tone === "error" ? "border-danger/40 bg-raised text-fg" : "border-line bg-raised text-fg",
             )}
           >

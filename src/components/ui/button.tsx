@@ -3,19 +3,23 @@ import { cn } from "@/lib/utils";
 import type { ButtonHTMLAttributes } from "react";
 
 const variants = {
-  primary: "bg-accent text-on-accent hover:bg-accent-hover",
-  secondary: "bg-fg text-bg hover:bg-fg/85",
-  outline: "border border-line-strong text-fg hover:border-fg hover:bg-fg/[0.03]",
-  ghost: "text-muted hover:bg-fg/5 hover:text-fg",
-  violet: "bg-violet text-on-violet hover:bg-violet/90",
-  danger: "border border-danger/60 text-danger hover:bg-danger hover:text-bg",
+  /** Signal orange pill: the main call to action. */
+  primary: "rounded-full bg-accent text-on-accent hover:bg-accent-hover",
+  /** Near-black block button, as used on cards and forms. */
+  secondary: "rounded-[0.9rem] bg-fg text-bg hover:bg-fg/85",
+  /** Paper-white button for dark and orange surfaces. */
+  light: "rounded-[0.9rem] bg-raised text-fg hover:bg-bg",
+  outline: "rounded-full border border-line-strong text-fg hover:border-fg",
+  ghost: "rounded-full text-muted hover:bg-fg/5 hover:text-fg",
+  violet: "rounded-full bg-violet text-on-violet hover:bg-[#46248a]",
+  danger: "rounded-full border border-danger/60 text-danger hover:bg-danger hover:text-bg",
 } as const;
 
 const sizes = {
-  sm: "h-9 px-3.5 text-sm",
-  md: "h-11 px-5 text-[0.95rem]",
-  lg: "h-12 px-6 text-base",
-  icon: "h-10 w-10 p-0",
+  sm: "h-10 px-4 text-[0.8125rem]",
+  md: "h-12 px-6 text-sm",
+  lg: "h-[3.25rem] px-7 text-[0.9375rem]",
+  icon: "h-11 w-11 p-0",
 } as const;
 
 export type ButtonVariant = keyof typeof variants;
@@ -29,7 +33,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function buttonClasses({ variant = "primary", size = "md", className }: { variant?: ButtonVariant; size?: keyof typeof sizes; className?: string } = {}) {
   return cn(
-    "inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[10px] font-medium transition-[background-color,border-color,color,transform] duration-150 active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex select-none items-center justify-center gap-2.5 whitespace-nowrap font-semibold tracking-[0.005em] transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-50",
     variants[variant],
     sizes[size],
     className,

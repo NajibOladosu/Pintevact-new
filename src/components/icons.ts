@@ -5,6 +5,13 @@
 export {
   ArrowLeft,
   ArrowRight,
+  ArrowUpRight,
+  CaretDown,
+  CaretLeft,
+  Faders,
+  ShareFat,
+  MapPin,
+  CalendarBlank,
   Medal as Award,
   ChartBar as BarChart3,
   BookOpen,

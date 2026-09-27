@@ -3,54 +3,69 @@
 /* Dark mode is class-driven: an inline script sets .dark from the stored choice or the OS setting. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Palette taken from pintevact.com: warm paper, a lighter panel, near-black ink,
+ * signal orange, one deep violet and a near-black "frame" for dark sections.
+ */
 :root {
-  --bg: #f8f2ea;
-  --raised: #fffbf6;
-  --sunken: #efe7db;
-  --fg: #11101c;
-  --muted: #4d4859;
-  --subtle: #6a6475;
-  --line: rgb(17 16 28 / 0.12);
-  --line-strong: rgb(17 16 28 / 0.24);
-  --accent: #ee4216;
-  --accent-hover: #d93a10;
-  --accent-ink: #b5300c;
-  --on-accent: #11101c;
-  --violet: #361a6a;
-  --violet-soft: rgb(54 26 106 / 0.07);
-  --on-violet: #f8f2ea;
-  --on-violet-muted: #cbbfe0;
-  --danger: #b5300c;
-  --focus: #361a6a;
+  --bg: #f9f3e9;
+  --raised: #fefcf8;
+  --sunken: #f1e8da;
+  --fg: #0d0d19;
+  --muted: #595969;
+  --subtle: #6f6e7e;
+  --line: rgb(17 16 26 / 0.12);
+  --line-strong: rgb(17 16 26 / 0.22);
+  --accent: #ee4217;
+  --accent-hover: #da2300;
+  --accent-ink: #c8340c;
+  --on-accent: #faf8f4;
+  --violet: #371a6a;
+  --violet-soft: rgb(55 26 106 / 0.07);
+  --on-violet: #f5f1ea;
+  --on-violet-muted: rgb(245 241 234 / 0.7);
+  --frame: #030309;
+  --on-frame: #f5f1ea;
+  --on-frame-muted: rgb(245 241 234 / 0.68);
+  --line-on-frame: rgb(245 241 234 / 0.16);
+  --danger: #c02f47;
+  --focus: #ee4217;
+  --shadow-frame: 0 clamp(1.4rem, 3vw, 3rem) clamp(3rem, 7vw, 7rem) rgb(3 2 12 / 0.18);
+  --shadow-card: 0 1.2rem 2.4rem rgb(3 2 12 / 0.12);
+  --shadow-pill: 0 8px 22px rgb(60 60 90 / 0.1);
   color-scheme: light;
 }
 
 .dark {
-  --bg: #11101c;
-  --raised: #1a1828;
-  --sunken: #0b0a13;
-  --fg: #f8f2ea;
-  --muted: #bcb4c7;
-  --subtle: #928a9f;
-  --line: rgb(248 242 234 / 0.11);
-  --line-strong: rgb(248 242 234 / 0.22);
-  --accent: #ee4216;
+  --bg: #10101c;
+  --raised: #181727;
+  --sunken: #0b0b14;
+  --fg: #efebe2;
+  --muted: #a3a3b1;
+  --subtle: #8b8a9b;
+  --line: rgb(245 241 234 / 0.12);
+  --line-strong: rgb(245 241 234 / 0.22);
+  --accent: #ee4217;
   --accent-hover: #ff5a2e;
-  --accent-ink: #ff7249;
-  --on-accent: #11101c;
-  --violet: #361a6a;
+  --accent-ink: #ff7a4f;
+  --on-accent: #faf8f4;
+  --violet: #371a6a;
   --violet-soft: rgb(150 120 220 / 0.12);
-  --on-violet: #f8f2ea;
-  --on-violet-muted: #cbbfe0;
-  --danger: #ff7249;
-  --focus: #b9a4ff;
+  --on-violet: #f5f1ea;
+  --on-violet-muted: rgb(245 241 234 / 0.7);
+  --frame: #030207;
+  --danger: #f28ba0;
+  --focus: #ff7a4f;
+  --shadow-frame: 0 clamp(1.4rem, 3vw, 3rem) clamp(3rem, 7vw, 7rem) rgb(0 0 0 / 0.45);
+  --shadow-card: 0 1.2rem 2.4rem rgb(0 0 0 / 0.35);
+  --shadow-pill: 0 8px 22px rgb(0 0 0 / 0.3);
   color-scheme: dark;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-wordmark: "Outfit Variable", var(--font-geist-sans), sans-serif;
+  --font-sans: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: "Outfit Variable", ui-sans-serif, sans-serif;
 
   --color-bg: var(--bg);
   --color-raised: var(--raised);
@@ -68,10 +83,23 @@
   --color-violet-soft: var(--violet-soft);
   --color-on-violet: var(--on-violet);
   --color-on-violet-muted: var(--on-violet-muted);
+  --color-frame: var(--frame);
+  --color-on-frame: var(--on-frame);
+  --color-on-frame-muted: var(--on-frame-muted);
+  --color-line-on-frame: var(--line-on-frame);
   --color-danger: var(--danger);
 
+  --radius-field: 0.85rem;
+  --radius-card: 1.5rem;
+  --radius-frame: 2.4rem;
+
+  --shadow-frame: var(--shadow-frame);
+  --shadow-card: var(--shadow-card);
+  --shadow-pill: var(--shadow-pill);
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-enter: enter 0.5s var(--ease-out-expo) both;
+  --ease-soft: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --animate-enter: enter 0.6s var(--ease-soft) both;
   --animate-flip: flip 0.6s var(--ease-out-expo) both;
 
   @keyframes flip {
@@ -87,10 +115,12 @@
   @keyframes enter {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      filter: blur(0.3rem);
+      transform: translateY(0.9rem);
     }
     to {
       opacity: 1;
+      filter: none;
       transform: none;
     }
   }
@@ -105,7 +135,8 @@
   }
   body {
     @apply bg-bg font-sans text-fg;
-    font-feature-settings: "ss01", "cv11";
+    font-size: 0.9375rem;
+    line-height: 1.58;
   }
   ::selection {
     background: var(--accent);
@@ -125,7 +156,7 @@
   h3,
   h4 {
     text-wrap: balance;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.035em;
     font-weight: 600;
   }
   a {
@@ -151,8 +182,79 @@
   .wordmark {
     font-family: var(--font-wordmark);
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: -0.02em;
+  }
+  /* Small uppercase label that opens most sections. */
+  .eyebrow {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
+  }
+  /* Headline scale: tight, heavy, slightly negative tracking. */
+  .display {
+    font-size: clamp(3rem, 8.5vw, 8.5rem);
+    font-weight: 600;
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+  }
+  .h-section {
+    font-size: clamp(2.4rem, 5vw, 4.6rem);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+  }
+  .h-sub {
+    font-size: clamp(1.5rem, 2.15vw, 2.4rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+  /* A rounded section surface that sits inside the page with a soft shadow. */
+  .frame {
+    border-radius: var(--radius-frame);
+    box-shadow: var(--shadow-frame);
+  }
+  .shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 90rem;
+    padding-inline: clamp(1.25rem, 4.5vw, 5rem);
+  }
+  /*
+   * The centre tab of the header: a panel that hangs from the top edge with
+   * concave shoulders on either side.
+   */
+  .notch {
+    position: relative;
+    background: var(--notch-bg, var(--raised));
+    border-bottom-left-radius: 3rem;
+    border-bottom-right-radius: 3rem;
+  }
+  .notch::before,
+  .notch::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 3rem;
+    height: 3rem;
+    pointer-events: none;
+  }
+  .notch::before {
+    right: calc(100% - 1px);
+    background: radial-gradient(circle at 0 100%, transparent 3rem, var(--notch-bg, var(--raised)) calc(3rem + 0.5px));
+  }
+  .notch::after {
+    left: calc(100% - 1px);
+    background: radial-gradient(circle at 100% 100%, transparent 3rem, var(--notch-bg, var(--raised)) calc(3rem + 0.5px));
+  }
+  .text-gradient-signal {
+    background: linear-gradient(100deg, #fbe6d6 0%, #f7a684 38%, var(--accent) 88%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .scrollbar-none {
     scrollbar-width: none;
