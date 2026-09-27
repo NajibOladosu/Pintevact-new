@@ -18,3 +18,4 @@ npm-debug.log*
 .vercel
 .react-email
 *.tmp.mjs
+/tests/e2e/.auth
