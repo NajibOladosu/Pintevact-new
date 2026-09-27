@@ -19,3 +19,7 @@ npm-debug.log*
 .react-email
 *.tmp.mjs
 /tests/e2e/.auth
+
+# impeccable review captures
+/.impeccable/review
+/.impeccable/live
