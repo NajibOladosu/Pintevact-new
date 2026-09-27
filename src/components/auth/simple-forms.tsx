@@ -24,7 +24,7 @@ export function ForgotPasswordForm() {
         <FieldError id="email-error" message={state.errors?.email} />
       </div>
       <Button type="submit" size="lg" loading={pending} className="w-full rounded-[0.9rem]">
-        Send reset link <ArrowUpRight size={15} aria-hidden />
+        Send reset link <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
       </Button>
     </form>
   );
@@ -46,7 +46,7 @@ export function ResetPasswordForm() {
         <FieldError id="confirm-error" message={state.errors?.confirm} />
       </div>
       <Button type="submit" size="lg" loading={pending} className="w-full rounded-[0.9rem]">
-        Save new password <ArrowUpRight size={15} aria-hidden />
+        Save new password <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
       </Button>
     </form>
   );

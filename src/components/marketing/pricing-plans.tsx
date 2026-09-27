@@ -13,7 +13,7 @@ export function PricingPlans({ signedIn, isMember, minCoursePrice }: { signedIn:
   const perMonth = interval === "year" ? Math.round(plan.amountCents / 12) : plan.amountCents;
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div data-reveal="list" className="grid gap-4 md:grid-cols-2">
       <div className="flex flex-col rounded-[2rem] bg-raised p-8 ring-1 ring-line sm:p-10">
         <h2 className="eyebrow text-muted">One course</h2>
         <p className="mt-3 text-sm text-muted">For when you know exactly what you want to work on.</p>
@@ -30,7 +30,7 @@ export function PricingPlans({ signedIn, isMember, minCoursePrice }: { signedIn:
           ))}
         </ul>
         <Link href="/courses" className="mt-9 flex h-[3.25rem] items-center justify-between rounded-[0.9rem] bg-fg px-5 text-[0.8125rem] font-semibold text-bg transition-colors hover:bg-fg/85">
-          Browse courses <ArrowUpRight size={15} aria-hidden />
+          Browse courses <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
         </Link>
       </div>
 

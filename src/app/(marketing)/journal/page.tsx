@@ -29,7 +29,7 @@ export default function JournalPage() {
           <CourseArt index={3} className="m-2 min-h-64 rounded-[2rem]" />
         </Link>
 
-        <ul className="mt-10 border-t border-line">
+        <ul data-reveal="list" className="mt-10 border-t border-line">
           {rest.map((p, i) => (
             <li key={p.slug}>
               <Link href={`/journal/${p.slug}`} className="group grid grid-cols-[2.5rem_1fr] gap-x-4 border-b border-line py-8 sm:grid-cols-[3.5rem_1fr_auto] sm:items-baseline sm:gap-x-8">

@@ -9,7 +9,7 @@ export function LessonLine({ lesson }: { lesson: Lesson }) {
     { key: "end", at: lesson.durationSeconds, icon: null, label: "Complete", text: "Earn 50 XP and keep what you noticed." },
   ];
   return (
-    <ol className="border-t border-line">
+    <ol data-reveal="list" className="border-t border-line">
       {stops.map((s, i) => (
         <li key={s.key} className="grid grid-cols-[2.5rem_1fr] items-baseline gap-x-4 gap-y-1 border-b border-line py-6 sm:grid-cols-[3.5rem_1fr_auto] sm:gap-x-6">
           <span className="text-lg font-semibold text-accent-ink tabular">{String(i + 1).padStart(2, "0")}</span>

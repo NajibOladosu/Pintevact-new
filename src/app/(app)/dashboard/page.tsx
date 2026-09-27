@@ -5,6 +5,8 @@ import { buttonClasses } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { LineBullet, StationLine } from "@/components/brand/station-line";
 import { badgeIcon } from "@/components/app/badge-icon";
+import { HeroArt } from "@/components/motion/hero-art";
+import { CountUp } from "@/components/motion/count-up";
 import { requireViewer } from "@/lib/auth/session";
 import { getLearnerSnapshot } from "@/lib/learner";
 import { courseCode, courseStations, summarizeCourse } from "@/lib/course";
@@ -49,15 +51,15 @@ export default async function DashboardPage() {
           {greeting()}, {firstName}.
         </h1>
         <p className="tabular mt-3 text-muted">
-          {snap.level.name}, level {snap.level.level}. {snap.stats.totalXp.toLocaleString()} XP
+          {snap.level.name}, level {snap.level.level}. <CountUp value={snap.stats.totalXp} /> XP
           {snap.level.next ? `, ${snap.level.xpForNext} to ${snap.level.next.name}` : ""}. {snap.streak}-day streak.
         </p>
       </header>
 
       {/* The next card */}
       {cont && cont.resume ? (
-        <section className="relative isolate mt-8 overflow-hidden rounded-[2rem] bg-frame p-7 text-on-frame shadow-frame sm:p-10">
-          <div aria-hidden className="absolute inset-0 -z-10 bg-[url(/art/papercut.webp)] bg-cover bg-[position:85%_40%]" />
+        <section className="relative isolate mt-8 animate-enter overflow-hidden rounded-[2rem] bg-frame p-7 text-on-frame shadow-frame sm:p-10">
+          <HeroArt position="85% 40%" strength={14} />
           <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(3_3_9/0.85)_0%,rgb(3_3_9/0.55)_55%,rgb(3_3_9/0.2)_100%)]" />
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
@@ -67,8 +69,8 @@ export default async function DashboardPage() {
                 {cont.course.title}, {formatMinutes(cont.resume.durationSeconds)}, {cont.resume.interactions.length} checkpoints
               </p>
             </div>
-            <Link href={`/learn/${cont.course.slug}/${cont.resume.slug}`} className={buttonClasses({ size: "lg", className: "self-start md:self-auto" })}>
-              {cont.progress.completed === 0 ? "Begin lesson" : "Resume lesson"} <ArrowUpRight size={16} aria-hidden />
+            <Link href={`/learn/${cont.course.slug}/${cont.resume.slug}`} data-magnetic className={buttonClasses({ size: "lg", className: "self-start md:self-auto" })}>
+              {cont.progress.completed === 0 ? "Begin lesson" : "Resume lesson"} <ArrowUpRight size={16} aria-hidden className="arrow-nudge" />
             </Link>
           </div>
           <StationLine className="mt-10 [--bg:var(--frame)] [--line-strong:rgb(245_241_234/0.3)]" stations={courseStations(cont.course, done, cont.resume.id, (s) => `/learn/${cont.course.slug}/${s}`)} />
@@ -82,12 +84,12 @@ export default async function DashboardPage() {
           <h2 className="mt-4 text-[clamp(1.9rem,3.4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.045em]">Start with Meet Your Mind.</h2>
           <p className="mt-2 max-w-[50ch] text-on-violet-muted">Four short lessons, about half an hour. No card needed.</p>
           <Link href="/learn/meet-your-mind" className={buttonClasses({ size: "lg", className: "mt-7" })}>
-            Start free course <ArrowUpRight size={16} aria-hidden />
+            Start free course <ArrowUpRight size={16} aria-hidden className="arrow-nudge" />
           </Link>
         </section>
       )}
 
-      <div className="mt-3 grid gap-3 lg:grid-cols-[1.5fr_1fr]">
+      <div data-reveal="list" className="mt-3 grid gap-3 lg:grid-cols-[1.5fr_1fr]">
         {/* Lines */}
         <section className="self-start rounded-[2rem] bg-raised p-6 ring-1 ring-line sm:p-8">
           <div className="flex items-baseline justify-between">

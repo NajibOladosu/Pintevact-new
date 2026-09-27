@@ -28,7 +28,7 @@ export function CourseRow({ course, href, completed, nextId, className, headingL
       </div>
       <div className="flex items-center gap-3 text-sm md:justify-end">
         <span className="tabular font-medium">{formatPrice(course.priceCents, course.currency)}</span>
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-fg text-bg transition-colors group-hover:bg-accent group-hover:text-on-accent"><ArrowUpRight size={15} aria-hidden /></span>
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-fg text-bg transition-colors group-hover:bg-accent group-hover:text-on-accent"><ArrowUpRight size={15} aria-hidden className="arrow-nudge" /></span>
       </div>
     </Link>
   );

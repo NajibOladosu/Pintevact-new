@@ -35,7 +35,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-24 overflow-hidden border-t border-line sm:mt-32">
       <div className="shell">
-        <p aria-hidden className="wordmark select-none whitespace-nowrap pb-6 pt-16 text-[15.2vw] font-bold uppercase leading-[0.8] tracking-[-0.045em] sm:pt-24 2xl:text-[13.4rem]">
+        <p aria-hidden data-reveal="rise" className="wordmark select-none whitespace-nowrap pb-6 pt-16 text-[15.2vw] font-bold uppercase leading-[0.8] tracking-[-0.045em] sm:pt-24 2xl:text-[13.4rem]">
           Pintevact
         </p>
         <div className="grid grid-cols-1 gap-12 pb-14 pt-10 lg:grid-cols-[1.1fr_1.6fr] lg:gap-20">

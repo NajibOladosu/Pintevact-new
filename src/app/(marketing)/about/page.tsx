@@ -36,7 +36,7 @@ export default async function AboutPage() {
               <p>Pintevact lessons stop and ask a question about your own life. Your answers become a private record you can look back on, and progress is measured by what you understand, not minutes watched.</p>
             </div>
           </div>
-          <figure className="relative overflow-hidden rounded-[2rem] shadow-frame">
+          <figure data-reveal="frame" className="relative overflow-hidden rounded-[2rem] shadow-frame">
             <Image src="/art/papercut.webp" alt="Layers of cut paper in orange, violet and cream" width={1536} height={1024} className="aspect-[4/5] w-full object-cover object-[80%_50%]" />
             <figcaption className="absolute inset-x-4 bottom-4 rounded-full bg-raised/85 px-5 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-fg backdrop-blur">Make a little space for yourself.</figcaption>
           </figure>
@@ -46,7 +46,7 @@ export default async function AboutPage() {
       <section className="shell mt-24 sm:mt-32">
         <span className="eyebrow text-muted">How learning happens here</span>
         <h2 className="h-section mt-6">A little at a time.</h2>
-        <ol className="mt-10 grid gap-3 md:grid-cols-3">
+        <ol data-reveal="list" className="mt-10 grid gap-3 md:grid-cols-3">
           {steps.map((s, i) => (
             <li key={s.title} className="rounded-[1.6rem] bg-raised p-7 ring-1 ring-line sm:p-8">
               <span className="text-xs font-semibold text-accent-ink tabular">{String(i + 1).padStart(2, "0")}</span>
@@ -79,7 +79,7 @@ export default async function AboutPage() {
       <section className="shell mt-24 sm:mt-32">
         <span className="eyebrow text-muted">Who teaches</span>
         <h2 className="h-section mt-6">Your guides.</h2>
-        <ul className="mt-10 grid gap-3 sm:grid-cols-2">
+        <ul data-reveal="list" className="mt-10 grid gap-3 sm:grid-cols-2">
           {instructors.map((i) => (
             <li key={i.name} className="flex gap-5 rounded-[1.6rem] bg-raised p-7 ring-1 ring-line">
               <Avatar name={i.name} size={52} />

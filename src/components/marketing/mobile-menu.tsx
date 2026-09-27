@@ -41,7 +41,7 @@ export function MobileMenu({ items, signedIn, overlay }: { items: { href: string
       </button>
       {open ? (
         <div className="fixed inset-0 z-40 flex animate-enter flex-col overflow-y-auto bg-bg px-5 pb-10 pt-28">
-          <nav aria-label="Mobile" className="flex flex-col">
+          <nav aria-label="Mobile" className="auth-stagger flex flex-col">
             {items.map((item, i) => (
               <Link key={item.href} href={item.href} className="flex items-baseline gap-4 border-b border-line py-4 text-[2rem] font-semibold tracking-[-0.04em]">
                 <span className="text-xs font-semibold tracking-normal text-accent-ink">{String(i + 1).padStart(2, "0")}</span>

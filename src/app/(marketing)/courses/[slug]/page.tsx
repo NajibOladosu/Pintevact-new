@@ -62,14 +62,14 @@ export default async function CourseDetailPage({ params }: Props) {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={state === "owned" ? `/learn/${course.slug}` : previewHref} className={buttonClasses({ size: "lg" })}>
-                {state === "owned" ? "Continue learning" : "Watch the free preview"} <ArrowUpRight size={15} aria-hidden />
+                {state === "owned" ? "Continue learning" : "Watch the free preview"} <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
               </Link>
               <Link href="#curriculum" className={buttonClasses({ variant: "outline", size: "lg" })}>
                 See the lessons
               </Link>
             </div>
           </div>
-          <CourseArt index={index} className="aspect-[4/3] rounded-[2rem] shadow-frame">
+          <CourseArt index={index} className="aspect-[4/3] animate-enter rounded-[2rem] shadow-frame [animation-delay:150ms]">
             <span aria-hidden className="absolute bottom-3 right-6 text-[clamp(4rem,8vw,7rem)] font-bold leading-none tracking-[-0.06em] text-white">
               {String(index + 1).padStart(2, "0")}
             </span>
@@ -92,7 +92,7 @@ export default async function CourseDetailPage({ params }: Props) {
             <h2 className="h-section mt-6 max-w-[13ch]">Useful in the lesson. Even better in life.</h2>
             <p className="mt-6 max-w-[60ch] leading-relaxed text-muted">{course.description}</p>
           </div>
-          <ul className="self-end border-t border-line">
+          <ul data-reveal="list" className="self-end border-t border-line">
             {course.outcomes.map((o) => (
               <li key={o} className="flex items-start gap-4 border-b border-line py-5">
                 <Check size={17} className="mt-0.5 shrink-0 text-accent-ink" aria-hidden />
@@ -154,12 +154,12 @@ export default async function CourseDetailPage({ params }: Props) {
 
       {/* Closing */}
       <section className="shell mt-24 sm:mt-32">
-        <div className="rounded-[2.4rem] bg-frame px-8 py-14 text-on-frame shadow-frame sm:px-16 sm:py-20">
+        <div data-reveal="frame" data-spotlight className="rounded-[2.4rem] bg-frame px-8 py-14 text-on-frame shadow-frame sm:px-16 sm:py-20">
           <span className="eyebrow text-on-frame-muted">Ready when you are</span>
           <h2 className="h-section mt-6">Try the first step.</h2>
           <p className="mt-5 max-w-[48ch] leading-relaxed text-on-frame-muted">The preview lesson is free. Watch, answer, and see if this is for you.</p>
           <Link href={previewHref} className={buttonClasses({ variant: "light", className: "mt-8" })}>
-            Watch and take part <ArrowUpRight size={15} aria-hidden />
+            Watch and take part <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
           </Link>
         </div>
       </section>

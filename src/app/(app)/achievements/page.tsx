@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CountUp } from "@/components/motion/count-up";
 import { Flame } from "@/components/icons";
 import { StationLine } from "@/components/brand/station-line";
 import { Progress } from "@/components/ui/progress";
@@ -38,7 +39,7 @@ export default async function AchievementsPage() {
           <div className="tabular flex gap-8 text-sm">
             <div>
               <p className="text-subtle">Experience</p>
-              <p className="mt-0.5 text-lg font-medium">{snap.stats.totalXp.toLocaleString()} XP</p>
+              <p className="mt-0.5 text-lg font-medium"><CountUp value={snap.stats.totalXp} /> XP</p>
             </div>
             <div>
               <p className="text-subtle">Streak</p>

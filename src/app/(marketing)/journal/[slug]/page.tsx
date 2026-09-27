@@ -61,7 +61,7 @@ export default async function JournalPostPage({ params }: Props) {
         <p className="h-sub mt-5">Practise ideas like this, not just read them.</p>
         <p className="mt-3 text-on-frame-muted">Our courses stop the video and ask how an idea shows up in your life.</p>
         <Link href="/courses" className={buttonClasses({ variant: "light", className: "mt-7" })}>
-          See courses <ArrowUpRight size={15} aria-hidden />
+          See courses <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
         </Link>
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">

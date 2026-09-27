@@ -3,6 +3,7 @@ import "@fontsource-variable/outfit";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/toast";
 import { themeInitScript } from "@/components/theme-toggle";
+import { MotionRoot } from "@/components/motion/motion-root";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <ToastProvider>{children}</ToastProvider>
+        <MotionRoot />
       </body>
     </html>
   );

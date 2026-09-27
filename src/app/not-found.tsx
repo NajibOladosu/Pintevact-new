@@ -16,7 +16,7 @@ export default function NotFound() {
           <p className="mt-6 max-w-[42ch] text-lg text-on-frame-muted">The page may have moved, or the link was mistyped.</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link href="/" className={buttonClasses({ size: "lg" })}>
-              Back home <ArrowUpRight size={15} aria-hidden />
+              Back home <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
             </Link>
             <Link href="/courses" className={buttonClasses({ variant: "light", size: "lg", className: "rounded-full" })}>
               Browse courses

@@ -68,7 +68,7 @@ export function CourseBrowser({ courses }: { courses: Course[] }) {
         {filtered.length} {filtered.length === 1 ? "course" : "courses"}
       </p>
       {filtered.length ? (
-        <div className="mt-5 rounded-[2.4rem] bg-frame p-2.5 shadow-frame sm:p-3">
+        <div data-reveal="frame" className="mt-5 rounded-[2.4rem] bg-frame p-2.5 shadow-frame sm:p-3">
           <ul className="grid gap-3 rounded-[2rem] bg-raised p-3 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((c) => (
               <li key={c.id}>

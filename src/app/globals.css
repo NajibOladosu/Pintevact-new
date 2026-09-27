@@ -321,3 +321,229 @@
   .auth-stagger > :nth-child(6) { animation-delay: 300ms; }
   .auth-stagger > :nth-child(n + 7) { animation-delay: 360ms; }
 }
+
+/* ── Motion ─────────────────────────────────────────────────────────────
+ * Everything is visible by default. Once MotionRoot runs (html.motion-ready),
+ * [data-reveal] blocks wait for the viewport. Pointer effects read CSS vars
+ * set by MotionRoot and only exist on fine pointers without reduced motion.
+ */
+
+/* Frames open: a rounded clip widens from a slightly smaller, softer card. */
+html.motion-ready [data-reveal="frame"]:not([data-shown]) {
+  clip-path: inset(6% 4% 6% 4% round 2.4rem);
+  transform: translateY(2.5rem) scale(0.98);
+  filter: saturate(0.6);
+}
+html.motion-ready [data-reveal="frame"] {
+  transition:
+    clip-path 1s var(--ease-out-expo),
+    transform 1s var(--ease-out-expo),
+    filter 1s var(--ease-out-expo);
+}
+
+/* Blocks rise and sharpen. */
+html.motion-ready [data-reveal="rise"]:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(1.6rem);
+  filter: blur(0.35rem);
+}
+html.motion-ready [data-reveal="rise"] {
+  transition:
+    opacity 0.8s var(--ease-soft),
+    transform 0.8s var(--ease-out-expo),
+    filter 0.8s var(--ease-soft);
+}
+
+/* Lists: children follow one another (capped). */
+html.motion-ready [data-reveal="list"]:not([data-shown]) > * {
+  opacity: 0;
+  transform: translateY(1.2rem);
+}
+html.motion-ready [data-reveal="list"] > * {
+  transition:
+    opacity 0.6s var(--ease-soft),
+    transform 0.7s var(--ease-out-expo);
+}
+html.motion-ready [data-reveal="list"] > :nth-child(2) { transition-delay: 70ms; }
+html.motion-ready [data-reveal="list"] > :nth-child(3) { transition-delay: 140ms; }
+html.motion-ready [data-reveal="list"] > :nth-child(4) { transition-delay: 210ms; }
+html.motion-ready [data-reveal="list"] > :nth-child(5) { transition-delay: 280ms; }
+html.motion-ready [data-reveal="list"] > :nth-child(n + 6) { transition-delay: 330ms; }
+
+/* Magnetic controls lean toward the pointer; their arrow nudges on hover. */
+[data-magnetic] {
+  translate: var(--mag-x, 0) var(--mag-y, 0);
+  transition:
+    translate 0.45s var(--ease-out-expo),
+    background-color 0.2s,
+    color 0.2s,
+    scale 0.2s;
+}
+.arrow-nudge {
+  transition: transform 0.35s var(--ease-out-expo);
+}
+:where(a, button):hover > .arrow-nudge,
+:where(a, button):focus-visible > .arrow-nudge {
+  transform: translate(2px, -2px);
+}
+
+/* Cards tilt toward the pointer; their artwork drifts the other way. */
+[data-tilt] {
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition:
+    transform 0.6s var(--ease-out-expo),
+    box-shadow 0.4s var(--ease-soft);
+  transform-style: preserve-3d;
+}
+[data-tilt][data-pointer="in"] {
+  transition-duration: 0.12s, 0.4s;
+  box-shadow: var(--shadow-card);
+}
+[data-tilt] .tilt-art {
+  transition: transform 0.9s var(--ease-out-expo);
+}
+[data-tilt]:hover .tilt-art {
+  transform: scale(1.06) translate(calc(var(--tilt-y, 0deg) * -1.2px), calc(var(--tilt-x, 0deg) * 1.2px));
+}
+
+/* A soft light that follows the pointer inside dark frames. */
+[data-spotlight] {
+  position: relative;
+  isolation: isolate;
+}
+[data-spotlight]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(34rem circle at var(--mx, 50%) var(--my, 50%), rgb(238 66 23 / 0.18), rgb(55 26 106 / 0.14) 40%, transparent 70%);
+  transition: opacity 0.5s var(--ease-soft);
+}
+[data-spotlight][data-pointer="in"]::before {
+  opacity: 1;
+}
+
+/* Hero: the papercut breathes, lines rise out of a mask, the last word's colour sweeps once. */
+@keyframes art-drift {
+  0%, 100% { transform: scale(1.06) translate3d(0, 0, 0); }
+  50% { transform: scale(1.1) translate3d(-1.2%, -1%, 0); }
+}
+@keyframes line-up {
+  from { transform: translateY(105%); }
+  to { transform: none; }
+}
+@keyframes sweep {
+  from { background-position: 100% 50%; }
+  to { background-position: 0% 50%; }
+}
+@keyframes ring-pulse {
+  from { box-shadow: 0 0 0 0 rgb(238 66 23 / 0.55); }
+  to { box-shadow: 0 0 0 1.4rem rgb(238 66 23 / 0); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes pop-in {
+  0% { opacity: 0; transform: scale(0.6) rotate(-8deg); }
+  60% { opacity: 1; transform: scale(1.08) rotate(2deg); }
+  100% { transform: none; }
+}
+@keyframes spark {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0.2); }
+}
+
+@layer components {
+  .hero-art {
+    animation: art-drift 24s ease-in-out infinite;
+    translate: var(--par-x, 0) var(--par-y, 0);
+    transition: translate 1.2s var(--ease-out-expo);
+  }
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    margin-bottom: -0.06em;
+  }
+  .mask-line > span {
+    display: block;
+    animation: line-up 1.1s var(--ease-out-expo) both;
+  }
+  .mask-line:nth-child(2) > span {
+    animation-delay: 0.12s;
+  }
+  .text-sweep {
+    background-size: 220% 100%;
+    animation: sweep 2.2s 0.5s var(--ease-soft) both;
+  }
+  .ring-pulse {
+    animation: ring-pulse 0.9s var(--ease-soft) 2;
+  }
+  .marquee-track {
+    animation: marquee 38s linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .pop-in {
+    animation: pop-in 0.6s var(--ease-out-expo) both;
+  }
+  .spark {
+    animation: spark 0.9s var(--ease-out-expo) both;
+  }
+  /* Accordion answers open with their real height (supported browsers). */
+  .faq-item {
+    interpolate-size: allow-keywords;
+  }
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+    transition:
+      block-size 0.45s var(--ease-out-expo),
+      opacity 0.35s var(--ease-soft),
+      content-visibility 0.45s allow-discrete;
+  }
+  .faq-item[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion-ready [data-reveal]:not([data-shown]),
+  html.motion-ready [data-reveal="list"]:not([data-shown]) > * {
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+  .hero-art,
+  .marquee-track {
+    animation: none !important;
+  }
+  .mask-line > span {
+    animation: none !important;
+  }
+}
+
+@layer components {
+  /* An underline that draws in from the left on hover. */
+  .link-draw {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+    background-image: linear-gradient(currentColor, currentColor), linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4));
+    background-size: 0% 1px, 100% 1px;
+    background-position: 0 100%, 0 100%;
+    transition: background-size 0.5s var(--ease-out-expo);
+  }
+  .link-draw:hover,
+  .link-draw:focus-visible {
+    background-size: 100% 1px, 100% 1px;
+  }
+}
+@keyframes grow-x {
+  from { transform: scaleX(0); }
+  to { transform: none; }
+}

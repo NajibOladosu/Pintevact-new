@@ -35,7 +35,7 @@ export default async function PricingPage() {
               <span className="text-sm text-on-accent/85">Four lessons, plus a free preview lesson from every other course. No card needed.</span>
             </span>
             <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold">
-              {viewer ? "Go to the free course" : "Start free"} <ArrowUpRight size={15} aria-hidden />
+              {viewer ? "Go to the free course" : "Start free"} <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
             </span>
           </Link>
           <PricingPlans signedIn={Boolean(viewer)} isMember={access ? hasActiveSubscription(access) : false} minCoursePrice={Number.isFinite(minCoursePrice) ? minCoursePrice : 0} />

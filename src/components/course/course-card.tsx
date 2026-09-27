@@ -9,10 +9,8 @@ const artPosition = ["100% 30%", "0% 60%", "55% 20%", "80% 90%", "20% 10%", "40%
 
 export function CourseArt({ index, className, children }: { index: number; className?: string; children?: React.ReactNode }) {
   return (
-    <div
-      className={cn("relative overflow-hidden bg-frame bg-[url(/art/papercut-sm.webp)] [background-size:260%_auto]", className)}
-      style={{ backgroundPosition: artPosition[index % artPosition.length] }}
-    >
+    <div className={cn("relative overflow-hidden bg-frame", className)}>
+      <div aria-hidden className="tilt-art absolute inset-0 bg-[url(/art/papercut-sm.webp)] [background-size:260%_auto]" style={{ backgroundPosition: artPosition[index % artPosition.length] }} />
       <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgb(3_3_9/0)_40%,rgb(3_3_9/0.55)_100%)]" />
       {children}
     </div>
@@ -25,13 +23,13 @@ export function CourseCard({ course, index, tone = "light", href, className, hea
   const H = headingLevel;
   const signal = tone === "signal";
   return (
-    <article className={cn("group relative flex flex-col overflow-hidden rounded-[1.6rem] ring-1", signal ? "bg-accent text-on-accent ring-accent" : "bg-raised text-fg ring-line", className)}>
+    <article data-tilt className={cn("group relative flex flex-col overflow-hidden rounded-[1.6rem] ring-1", signal ? "bg-accent text-on-accent ring-accent" : "bg-raised text-fg ring-line", className)}>
       <CourseArt index={index} className="m-2 mb-0 h-44 rounded-[1.2rem]">
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
           <span className="rounded-full bg-raised/90 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-fg backdrop-blur">{course.category}</span>
           <span className="rounded-full bg-raised/90 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-fg backdrop-blur">{course.level}</span>
         </div>
-        <span aria-hidden className="absolute bottom-1 right-3 text-[3.4rem] font-bold leading-none tracking-[-0.06em] text-white">
+        <span aria-hidden className="absolute bottom-1 right-3 text-[3.4rem] font-bold leading-none tracking-[-0.06em] text-white transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1">
           {String(index + 1).padStart(2, "0")}
         </span>
       </CourseArt>
@@ -54,7 +52,7 @@ export function CourseCard({ course, index, tone = "light", href, className, hea
             signal ? "bg-raised text-accent-ink hover:bg-bg" : "bg-fg text-bg hover:bg-fg/85",
           )}
         >
-          View course <ArrowUpRight size={15} aria-hidden />
+          View course <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
           <span className="sr-only">: {course.title}</span>
         </Link>
       </div>

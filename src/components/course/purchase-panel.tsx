@@ -17,7 +17,7 @@ export function PurchasePanel({ course, state, firstLessonHref }: { course: Cour
       <div className="mt-6 grid gap-2.5">
         {state === "owned" ? (
           <Link href={learnHref} className={buttonClasses({ size: "lg", className: "rounded-[0.9rem]" })}>
-            Continue learning <ArrowUpRight size={15} aria-hidden />
+            Continue learning <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
           </Link>
         ) : state === "guest" ? (
           <>

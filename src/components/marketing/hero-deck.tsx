@@ -6,6 +6,7 @@ import { useReducedMotion } from "motion/react";
 import { ArrowRight, ArrowUpRight, Check, X } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Sparks } from "@/components/motion/sparks";
 
 type DeckCard =
   | { kind: "Checkpoint"; prompt: string; options: { label: string; correct?: boolean }[]; back: string }
@@ -70,7 +71,7 @@ export function HeroDeck() {
                 <span className="eyebrow text-muted">Try a {card.kind.toLowerCase()}</span>
                 <p className="mt-2 text-[0.8125rem] text-muted">From The Elephant and the Rider</p>
               </div>
-              <span aria-hidden className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent">
+              <span aria-hidden className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent", index === 0 && "ring-pulse [animation-delay:1.4s]")}>
                 <ArrowUpRight size={18} />
               </span>
             </div>
@@ -79,7 +80,7 @@ export function HeroDeck() {
               <div className="mt-5">
                 <div className="rounded-[0.85rem] border border-dashed border-line-strong px-4 py-5 text-sm text-muted">Your answer stays private to you.</div>
                 <button type="button" onClick={() => answer(0)} className="mt-3 flex h-12 w-full items-center justify-between rounded-[0.9rem] bg-fg px-5 text-[0.8125rem] font-semibold text-bg transition-colors hover:bg-fg/85">
-                  See what happens to it <ArrowUpRight size={15} aria-hidden />
+                  See what happens to it <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
                 </button>
               </div>
             ) : (
@@ -117,8 +118,11 @@ export function HeroDeck() {
             aria-live="polite"
           >
             {verdict ? (
-              <p className="inline-flex items-center gap-2 text-sm font-semibold">
-                {verdict === "right" ? <Check size={16} weight="bold" /> : <X size={16} weight="bold" />}
+              <p className="relative inline-flex items-center gap-2 text-sm font-semibold">
+                <span className={cn("relative flex h-7 w-7 items-center justify-center rounded-full", flipped && "pop-in [animation-delay:350ms]", verdict === "right" ? "bg-accent text-on-accent" : "bg-on-violet/15")}>
+                  {verdict === "right" ? <Check size={14} weight="bold" /> : <X size={14} weight="bold" />}
+                  {verdict === "right" && flipped ? <Sparks className="[&>span]:[animation-delay:420ms]" radius={70} /> : null}
+                </span>
                 {verdict === "right" ? "Right. Your slow system stepped in." : "Not quite, and that's the point."}
               </p>
             ) : (

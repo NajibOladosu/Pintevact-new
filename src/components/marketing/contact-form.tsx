@@ -71,7 +71,7 @@ export function ContactForm({ defaultTopic }: { defaultTopic?: string }) {
       </div>
       <p className="pt-2 text-xs text-muted">We use these details only to reply to your message.</p>
       <Button type="submit" variant="secondary" size="lg" loading={pending} className="w-full justify-between">
-        Send message <ArrowUpRight size={15} aria-hidden />
+        Send message <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
       </Button>
     </form>
   );

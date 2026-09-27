@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/logo";
 import { AccountPillLinks, accountPillFrame } from "@/components/brand/account-pill";
 import { cn } from "@/lib/utils";
@@ -26,6 +26,17 @@ export function HeaderShell({ items, signedIn }: { items: NavItem[]; signedIn: b
 
   const overlay = overlayPaths.has(pathname) && !scrolled;
 
+  // A soft pill glides to whichever link the pointer (or focus) is on.
+  const navRef = useRef<HTMLElement>(null);
+  const [glide, setGlide] = useState<{ x: number; w: number; on: boolean }>({ x: 0, w: 0, on: false });
+  const moveGlide = (el: HTMLElement) => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const n = nav.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    setGlide({ x: r.left - n.left, w: r.width, on: true });
+  };
+
   return (
     <header
       data-scrolled={scrolled}
@@ -39,12 +50,19 @@ export function HeaderShell({ items, signedIn }: { items: NavItem[]; signedIn: b
 
         {/* Centre tab: hangs from the top edge at rest, flattens into the bar on scroll. */}
         <nav
+          ref={navRef}
           aria-label="Main"
+          onPointerLeave={() => setGlide((g) => ({ ...g, on: false }))}
           className={cn(
             "absolute left-1/2 top-0 hidden -translate-x-1/2 items-center gap-1 px-7 transition-[height,box-shadow,background-color] duration-300 lg:flex",
             scrolled ? "h-[4.5rem] [--notch-bg:transparent]" : cn("notch h-[4.6rem]", overlay ? "[--notch-bg:var(--bg)]" : "shadow-[0_18px_30px_-22px_rgb(3_2_12/0.35)]"),
           )}
         >
+          <span
+            aria-hidden
+            className={cn("pointer-events-none absolute top-1/2 h-10 rounded-full bg-fg/[0.06] transition-[transform,width,opacity] duration-500 ease-[var(--ease-out-expo)]", glide.on ? "opacity-100" : "opacity-0")}
+            style={{ width: glide.w, transform: `translate(${glide.x}px, -50%)`, left: 0 }}
+          />
           {items.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
@@ -52,9 +70,13 @@ export function HeaderShell({ items, signedIn }: { items: NavItem[]; signedIn: b
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={cn("rounded-full px-4 py-2 text-[0.9375rem] transition-colors", active ? "font-semibold text-fg" : "text-muted hover:text-fg")}
+                onPointerEnter={(e) => moveGlide(e.currentTarget)}
+                onFocus={(e) => moveGlide(e.currentTarget)}
+                onBlur={() => setGlide((g) => ({ ...g, on: false }))}
+                className={cn("relative rounded-full px-4 py-2 text-[0.9375rem] transition-colors", active ? "font-semibold text-fg" : "text-muted hover:text-fg")}
               >
                 {item.label}
+                {active ? <span aria-hidden className="absolute inset-x-4 -bottom-0.5 h-0.5 origin-left animate-[grow-x_0.6s_var(--ease-out-expo)_both] rounded-full bg-accent" /> : null}
               </Link>
             );
           })}

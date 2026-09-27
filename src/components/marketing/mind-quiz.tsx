@@ -48,7 +48,7 @@ export function MindQuiz({ courseTitles }: { courseTitles: Record<string, string
             <p className="mt-4 text-[1.9rem] font-semibold leading-tight tracking-[-0.04em]">{courseTitles[a.courseSlug] ?? "Explore courses"}</p>
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href={`/courses/${a.courseSlug}`} className={buttonClasses({})}>
-                See the course <ArrowUpRight size={15} aria-hidden />
+                See the course <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
               </Link>
               <Link href="/signup?next=/learn/meet-your-mind" className={buttonClasses({ variant: "outline" })}>
                 Start free

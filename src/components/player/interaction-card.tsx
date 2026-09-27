@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { ArrowRight, Check, Lock, X } from "@/components/icons";
 import { interactionMeta } from "@/components/course/interaction-icon";
 import { Button } from "@/components/ui/button";
+import { Sparks } from "@/components/motion/sparks";
 import { cn } from "@/lib/utils";
 import type { Interaction, InteractionResponse } from "@/lib/types";
 import type { ResponseResult } from "@/lib/lesson-service";
@@ -169,7 +170,10 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
       {/* Feedback on the back */}
       {answered && interaction.type === "quiz" ? (
         <div className="mt-5 space-y-1.5" role="status">
-          <p className="font-semibold">{result?.isCorrect ? "Spot on." : "Not quite, and that's the point."}</p>
+          <p className="relative inline-block font-semibold">
+            {result?.isCorrect ? "Spot on." : "Not quite, and that's the point."}
+            {result?.isCorrect ? <Sparks radius={80} /> : null}
+          </p>
           {chosen?.feedback ? <p className="text-on-violet-muted">{chosen.feedback}</p> : null}
           {interaction.explanation ? <p className="text-on-violet-muted">{interaction.explanation}</p> : null}
         </div>
@@ -187,7 +191,7 @@ export function InteractionCard({ interaction, previous, onSubmit, onContinue, o
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         {answered ? (
-          <span className="tabular text-sm font-medium" role="status">
+          <span className={cn("tabular text-sm font-medium", result?.xpAwarded && "pop-in inline-block rounded-full bg-accent px-3 py-1 text-on-accent")} role="status">
             {result?.xpAwarded ? `+${result.xpAwarded} XP` : "Saved"}
           </span>
         ) : (
