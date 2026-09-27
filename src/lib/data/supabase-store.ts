@@ -1,6 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type {
   Certificate,
@@ -144,6 +145,9 @@ function check<T>(res: { data: T; error: any }): T {
 }
 
 export function createSupabaseStore(): Store {
+  if (!isSupabaseConfigured()) {
+    throw new Error("Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY (or PINTEVACT_DEMO_MODE=true for a local demo).");
+  }
   let userClient: Promise<SupabaseClient> | null = null;
   const db = () => (userClient ??= createClient());
   const admin = () => createAdminClient();

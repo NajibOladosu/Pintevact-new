@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { env, isDemoMode } from "@/lib/env";
+import { env, isDemoMode, isSupabaseConfigured } from "@/lib/env";
 import { DEMO_SESSION_COOKIE, routeDecision } from "@/lib/auth/routes";
 
 /** Refreshes the Supabase session cookie and applies optimistic route guards. */
@@ -11,6 +11,9 @@ export async function updateSession(request: NextRequest) {
     const decision = routeDecision(pathname, search, Boolean(request.cookies.get(DEMO_SESSION_COOKIE)?.value));
     return decision ? NextResponse.redirect(new URL(decision.redirect, request.url)) : NextResponse.next({ request });
   }
+
+  // Misconfigured deployment: let the page render its own configuration error.
+  if (!isSupabaseConfigured()) return NextResponse.next({ request });
 
   let response = NextResponse.next({ request });
   const supabase = createServerClient(env.supabaseUrl(), env.supabaseAnonKey(), {
