@@ -28,21 +28,21 @@ test.describe("interactive learning", () => {
     await expect(card.getByText(/learners have answered/)).toBeVisible();
     await expect(card.getByText("+10 XP")).toBeVisible();
     await card.getByRole("button", { name: /Continue/ }).click();
-    await speedUp();
+
+    // Earning XP refreshes the page data; the stream must keep playing at the same speed.
+    await expect.poll(() => video.evaluate((v: HTMLVideoElement) => v.playbackRate)).toBe(6);
 
     // 3:00 required quiz
     await expect(card).toContainText("A bat and a ball cost", { timeout: 60_000 });
     await card.getByRole("button", { name: /^B/ }).click();
     await expect(card.getByText("Spot on.")).toBeVisible();
     await card.getByRole("button", { name: /Continue/ }).click();
-    await speedUp();
 
     // 5:00 reflection
     await expect(card).toContainText("Describe a recent moment", { timeout: 60_000 });
     await card.getByRole("textbox").fill("I bought shoes I didn't need after a stressful call.");
     await card.getByRole("button", { name: "Save reflection" }).click();
     await card.getByRole("button", { name: /Continue/ }).click();
-    await speedUp();
 
     // The stream ends and the lesson completes.
     const done = page.getByRole("dialog", { name: "Lesson complete" });
@@ -64,7 +64,9 @@ test.describe("interactive learning", () => {
     await page.getByRole("tab", { name: /Notes/ }).click();
     await page.getByLabel(/Note at/).fill("Predictions shape perception");
     await page.getByRole("button", { name: "Save note" }).click();
-    await expect(page.getByRole("tabpanel").getByText("Predictions shape perception").or(page.locator("aside").getByText("Predictions shape perception"))).toBeVisible();
+    // The draft clears only once the server has stored the note.
+    await expect(page.getByLabel(/Note at/)).toHaveValue("");
+    await expect(page.getByRole("status").filter({ hasText: "Note saved" })).toBeVisible();
     await page.goto("/reflections");
     await page.getByRole("tab", { name: /notes/i }).click();
     await expect(page.getByText("Predictions shape perception")).toBeVisible();
