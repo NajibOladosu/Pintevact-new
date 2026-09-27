@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { next, error } = await searchParams;
   return (
     <>
-      <AuthHeading eyebrow="Your next lesson" title="Welcome back." lead="Your answers, your reflections, your next station. All right where you left them." />
+      <AuthHeading eyebrow="Your next lesson" title="Welcome back." lead="Your answers, your reflections, your next lesson. All right where you left them." />
       <GoogleButton next={next} />
       <LoginForm next={next} error={error} />
       <AuthSwapLine>

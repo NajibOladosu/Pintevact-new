@@ -35,7 +35,7 @@ export default async function HomePage() {
           <div className="mx-auto grid min-h-[min(100svh-1rem,62rem)] max-w-[90rem] items-end gap-10 px-[clamp(1.25rem,4.5vw,5rem)] pb-8 pt-32 sm:pb-12 lg:grid-cols-[1fr_minmax(0,27rem)] lg:gap-16 lg:pb-16 lg:pt-40">
             <div className="animate-enter lg:pb-6">
               <h1 className="text-[clamp(3.4rem,9vw,8.4rem)] leading-[0.92] tracking-[-0.055em]">
-                <span className="block font-light">Know your</span>
+                <span className="block font-light">Know your</span>{" "}
                 <span className="block font-light">
                   own <span className="text-gradient-signal font-bold">mind.</span>
                 </span>

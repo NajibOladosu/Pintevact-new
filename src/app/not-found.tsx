@@ -12,7 +12,7 @@ export default function NotFound() {
         <Logo className="text-on-frame" />
         <div className="my-auto py-16">
           <span className="eyebrow text-on-frame-muted">Error 404</span>
-          <h1 className="mt-6 max-w-[14ch] text-[clamp(2.8rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em]">This station doesn&apos;t exist.</h1>
+          <h1 className="mt-6 max-w-[14ch] text-[clamp(2.8rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em]">This page doesn&apos;t exist.</h1>
           <p className="mt-6 max-w-[42ch] text-lg text-on-frame-muted">The page may have moved, or the link was mistyped.</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link href="/" className={buttonClasses({ size: "lg" })}>
