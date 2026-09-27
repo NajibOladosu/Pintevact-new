@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "@/components/icons";
+import { ArrowLeft, ArrowUpRight } from "@/components/icons";
 import { findPost, journal } from "@/content/journal";
 import { buttonClasses } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
@@ -22,31 +22,31 @@ export default async function JournalPostPage({ params }: Props) {
   if (!post) notFound();
   const others = journal.filter((p) => p.slug !== post.slug).slice(0, 2);
   return (
-    <article className="mx-auto max-w-[44rem] px-5 pb-24 pt-10 sm:px-8 md:pt-14">
-      <Link href="/journal" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">
-        <ArrowLeft size={14} /> Journal
+    <article className="mx-auto max-w-[46rem] px-5 pt-6 sm:px-8 sm:pt-10">
+      <Link href="/journal" className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[0.8125rem] font-medium text-muted ring-1 ring-line transition-colors hover:text-fg hover:ring-line-strong">
+        <ArrowLeft size={13} /> Journal
       </Link>
-      <p className="mt-10 text-sm text-subtle">
-        {post.category}, {post.readingMinutes} min read
+      <p className="eyebrow mt-10 text-accent-ink">
+        {post.category} · {post.readingMinutes} min read
       </p>
-      <h1 className="mt-3 text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl">{post.title}</h1>
+      <h1 className="mt-5 text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1] tracking-[-0.05em]">{post.title}</h1>
       <p className="mt-5 text-muted">
         By {post.author}, {formatDate(post.publishedAt)}
       </p>
       <div className="mt-12 border-t border-line pt-10">
         {post.body.map((block, i) => {
-          if (block.type === "h2") return <h2 key={i} className="mt-12 text-2xl font-semibold tracking-tight">{block.text}</h2>;
+          if (block.type === "h2") return <h2 key={i} className="h-sub mt-14">{block.text}</h2>;
           if (block.type === "quote")
             return (
-              <blockquote key={i} className="my-10 text-2xl font-semibold leading-snug tracking-tight">
+              <blockquote key={i} className="my-12 border-l-2 border-accent pl-6 text-[1.7rem] font-semibold leading-snug tracking-[-0.03em]">
                 “{block.text}”
               </blockquote>
             );
           if (block.type === "tip")
             return (
-              <aside key={i} className="my-10 rounded-2xl bg-violet p-6 text-on-violet">
-                <p className="text-sm font-medium">Try this</p>
-                <p className="mt-2 text-lg leading-relaxed text-on-violet-muted">{block.text}</p>
+              <aside key={i} className="my-12 rounded-[1.6rem] bg-violet p-7 text-on-violet sm:p-9">
+                <p className="eyebrow text-on-violet-muted">Try this</p>
+                <p className="mt-4 text-lg leading-relaxed">{block.text}</p>
               </aside>
             );
           return (
@@ -56,18 +56,19 @@ export default async function JournalPostPage({ params }: Props) {
           );
         })}
       </div>
-      <div className="mt-16 rounded-2xl border border-line bg-raised p-7">
-        <p className="text-lg font-semibold">Practise ideas like this, not just read them.</p>
-        <p className="mt-1 text-muted">Our courses stop the video and ask how an idea shows up in your life.</p>
-        <Link href="/courses" className={buttonClasses({ variant: "secondary", className: "mt-5" })}>
-          See courses
+      <div className="mt-16 rounded-[2rem] bg-frame p-8 text-on-frame shadow-frame sm:p-10">
+        <span className="eyebrow text-on-frame-muted">Ready when you are</span>
+        <p className="h-sub mt-5">Practise ideas like this, not just read them.</p>
+        <p className="mt-3 text-on-frame-muted">Our courses stop the video and ask how an idea shows up in your life.</p>
+        <Link href="/courses" className={buttonClasses({ variant: "light", className: "mt-7" })}>
+          See courses <ArrowUpRight size={15} aria-hidden />
         </Link>
       </div>
-      <div className="mt-12 grid gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {others.map((p) => (
-          <Link key={p.slug} href={`/journal/${p.slug}`} className="rounded-2xl border border-line p-5 transition-colors hover:border-line-strong">
-            <p className="text-sm text-subtle">Read next</p>
-            <p className="mt-2 font-semibold leading-snug">{p.title}</p>
+          <Link key={p.slug} href={`/journal/${p.slug}`} className="rounded-[1.6rem] bg-raised p-6 ring-1 ring-line transition-shadow hover:shadow-card">
+            <p className="eyebrow text-muted">Read next</p>
+            <p className="mt-3 text-lg font-semibold leading-snug tracking-[-0.02em]">{p.title}</p>
           </Link>
         ))}
       </div>

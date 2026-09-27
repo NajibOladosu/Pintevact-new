@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowUpRight } from "@/components/icons";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { siteConfig } from "@/lib/site";
 
@@ -7,28 +9,24 @@ export const metadata: Metadata = { title: "Contact", description: "Questions, t
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
   const { topic } = await searchParams;
   return (
-    <div className="mx-auto grid max-w-5xl gap-12 px-5 pb-24 pt-14 sm:px-8 md:pt-20 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+    <div className="shell grid gap-14 pt-8 sm:pt-14 lg:grid-cols-[1fr_1fr] lg:gap-20">
       <div>
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Contact</h1>
-        <p className="mt-4 text-lg text-muted">A person reads every message and replies within one or two working days.</p>
-        <dl className="mt-10 space-y-6 text-sm">
-          <div>
-            <dt className="text-subtle">Email</dt>
-            <dd className="mt-1">
-              <a href={`mailto:${siteConfig.email}`} className="font-medium underline decoration-line-strong hover:decoration-fg">
-                {siteConfig.email}
-              </a>
-            </dd>
-          </div>
-          <div>
-            <dt className="text-subtle">Teams and organisations</dt>
-            <dd className="mt-1 text-muted">Seats, onboarding and reporting for groups of five or more.</dd>
-          </div>
-          <div>
-            <dt className="text-subtle">Stuck on a lesson?</dt>
-            <dd className="mt-1 text-muted">Tell us which one and what happened.</dd>
-          </div>
-        </dl>
+        <span className="eyebrow text-muted">Talk to us</span>
+        <h1 className="h-section mt-6 max-w-[12ch]">Good things start with a conversation.</h1>
+        <p className="mt-7 max-w-[40ch] text-lg leading-relaxed text-muted">A question about learning, a little help with your account, or an idea you would like to share. A person reads every message.</p>
+        <div className="mt-12 max-w-sm border-t border-line pt-8">
+          <span className="eyebrow text-muted">Before you write</span>
+          <p className="mt-5 leading-relaxed text-muted">
+            Our{" "}
+            <Link href="/pricing" className="text-fg underline decoration-fg/40 underline-offset-4 hover:decoration-fg">
+              frequently asked questions
+            </Link>{" "}
+            may have the answer you need. Teams of five or more can ask about seats and onboarding.
+          </p>
+          <a href={`mailto:${siteConfig.email}`} className="mt-8 inline-flex items-center gap-3 text-lg text-fg hover:text-accent-ink">
+            {siteConfig.email} <ArrowUpRight size={16} className="text-accent-ink" aria-hidden />
+          </a>
+        </div>
       </div>
       <ContactForm defaultTopic={topic} />
     </div>

@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Check } from "@/components/icons";
-import { LineBullet } from "@/components/brand/station-line";
+import { ArrowLeft, ArrowUpRight, Check } from "@/components/icons";
 import { InteractionIcon } from "@/components/course/interaction-icon";
+import { CourseArt } from "@/components/course/course-card";
 import { PurchasePanel, type CourseAccessState } from "@/components/course/purchase-panel";
 import { Avatar } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { getCourse, getStore, getViewer } from "@/lib/data";
+import { buttonClasses } from "@/components/ui/button";
+import { getCourse, getCourses, getStore, getViewer } from "@/lib/data";
 import { canAccessCourse } from "@/lib/access";
-import { courseCode, flattenLessons, summarizeCourse } from "@/lib/course";
+import { flattenLessons, summarizeCourse } from "@/lib/course";
 import { formatDuration, formatMinutes } from "@/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -26,104 +26,143 @@ export default async function CourseDetailPage({ params }: Props) {
   const course = await getCourse(slug);
   if (!course) notFound();
 
-  const viewer = await getViewer();
+  const [viewer, courses] = await Promise.all([getViewer(), getCourses()]);
   let state: CourseAccessState = "guest";
   if (viewer) {
     const access = await getStore().getAccess(viewer.id);
     state = canAccessCourse(course, access) ? "owned" : "locked";
   }
 
+  const index = Math.max(0, courses.findIndex((c) => c.id === course.id));
   const summary = summarizeCourse(course);
   const lessons = flattenLessons(course);
   const preview = lessons.find((l) => l.isPreview) ?? lessons[0];
+  const previewHref = `/learn/${course.slug}/${preview.slug}`;
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-24 pt-10 sm:px-8 md:pt-14">
-      <Link href="/courses" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">
-        <ArrowLeft size={14} /> All courses
-      </Link>
-
-      <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
-        <div>
-          <div className="flex items-center gap-3">
-            <LineBullet code={courseCode(course)} tone="solid" />
-            <span className="text-sm text-muted">
-              {course.category}, {course.level.toLowerCase()}
-            </span>
+    <>
+      {/* Hero */}
+      <section className="shell pt-6 sm:pt-10">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
+          <div>
+            <Link href="/courses" className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[0.8125rem] font-medium text-muted ring-1 ring-line transition-colors hover:text-fg hover:ring-line-strong">
+              <ArrowLeft size={13} /> All courses
+            </Link>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {[course.category, course.level, course.priceCents === 0 ? "Free" : "Preview available"].map((t) => (
+                <span key={t} className="rounded-full bg-raised px-3 py-1.5 text-[0.72rem] font-medium ring-1 ring-line">
+                  {t}
+                </span>
+              ))}
+            </div>
+            <h1 className="h-section mt-6">{course.title}</h1>
+            <p className="mt-6 max-w-[48ch] text-lg leading-relaxed text-muted">{course.subtitle}</p>
+            <p className="mt-4 text-sm text-muted">
+              {summary.lessonCount} lessons · {formatMinutes(summary.durationSeconds)} of video · {summary.interactionCount} checkpoints
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href={state === "owned" ? `/learn/${course.slug}` : previewHref} className={buttonClasses({ size: "lg" })}>
+                {state === "owned" ? "Continue learning" : "Watch the free preview"} <ArrowUpRight size={15} aria-hidden />
+              </Link>
+              <Link href="#curriculum" className={buttonClasses({ variant: "outline", size: "lg" })}>
+                See the lessons
+              </Link>
+            </div>
           </div>
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">{course.title}</h1>
-          <p className="mt-4 max-w-[52ch] text-lg text-muted">{course.subtitle}</p>
-          <p className="tabular mt-6 text-sm text-subtle">
-            {summary.lessonCount} lessons, {formatMinutes(summary.durationSeconds)} of video, {summary.interactionCount} checkpoints
-          </p>
+          <CourseArt index={index} className="aspect-[4/3] rounded-[2rem] shadow-frame">
+            <span aria-hidden className="absolute bottom-3 right-6 text-[clamp(4rem,8vw,7rem)] font-bold leading-none tracking-[-0.06em] text-white">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          </CourseArt>
+        </div>
+        <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3 rounded-full bg-raised px-7 py-4 text-[0.8125rem] font-medium ring-1 ring-line max-sm:rounded-[1.4rem]">
+          {["Self-paced", "Short video lessons", "Private reflections", "Certificate when you finish"].map((f) => (
+            <li key={f} className="flex items-center gap-2">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" /> {f}
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          <p className="mt-10 max-w-[65ch] leading-relaxed text-muted">{course.description}</p>
-
-          <h2 className="mt-14 text-xl font-semibold tracking-tight">What you&apos;ll be able to do</h2>
-          <ul className="mt-5 space-y-3">
+      {/* Outcomes */}
+      <section className="shell mt-24 sm:mt-32">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20">
+          <div>
+            <span className="eyebrow text-muted">What you can take away</span>
+            <h2 className="h-section mt-6 max-w-[13ch]">Useful in the lesson. Even better in life.</h2>
+            <p className="mt-6 max-w-[60ch] leading-relaxed text-muted">{course.description}</p>
+          </div>
+          <ul className="self-end border-t border-line">
             {course.outcomes.map((o) => (
-              <li key={o} className="flex items-start gap-3">
-                <Check size={18} className="mt-0.5 shrink-0 text-accent-ink" />
-                <span>{o}</span>
+              <li key={o} className="flex items-start gap-4 border-b border-line py-5">
+                <Check size={17} className="mt-0.5 shrink-0 text-accent-ink" aria-hidden />
+                <span className="text-[1.02rem]">{o}</span>
               </li>
             ))}
           </ul>
+        </div>
+      </section>
 
-          <h2 id="curriculum" className="mt-14 text-xl font-semibold tracking-tight">
-            The line
-          </h2>
-          <div className="relative mt-6">
-            <span aria-hidden className="absolute bottom-3 left-[7px] top-3 w-0.5 bg-line-strong" />
+      {/* Curriculum */}
+      <section id="curriculum" className="shell mt-24 scroll-mt-28 sm:mt-32">
+        <span className="eyebrow text-muted">The learning path</span>
+        <h2 className="h-section mt-6 max-w-[14ch]">One idea leads to the next.</h2>
+        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
+          <div>
             {course.modules.map((m, mi) => (
-              <section key={m.id} className="relative pb-6">
-                <h3 className="flex items-center gap-4 font-semibold">
-                  <span aria-hidden className="relative h-4 w-4 rounded-full bg-fg" />
-                  Module {mi + 1}: {m.title}
+              <div key={m.id} className="mb-10 last:mb-0">
+                <h3 className="eyebrow text-muted">
+                  Module {mi + 1} · {m.title}
                 </h3>
-                <ol className="mt-3">
+                <ol className="mt-4 border-t border-line">
                   {m.lessons.map((l) => (
-                    <li key={l.id} className="relative flex gap-4 py-3">
-                      <span aria-hidden className="relative mt-1.5 ml-[3px] h-2.5 w-2.5 shrink-0 rounded-full border-2 border-line-strong bg-bg" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-                          <p className="font-medium">
-                            {l.title}
-                            {l.isPreview ? (
-                              <Badge tone="soft" className="ml-2 align-middle">
-                                Free preview
-                              </Badge>
-                            ) : null}
-                          </p>
-                          <span className="flex items-center gap-2.5 text-subtle">
-                            {l.interactions.map((i) => (
-                              <InteractionIcon key={i.id} type={i.type} size={14} />
-                            ))}
-                            <span className="tabular text-xs">{formatDuration(l.durationSeconds)}</span>
-                          </span>
-                        </div>
-                        <p className="mt-1 text-sm text-muted">{l.summary}</p>
+                    <li key={l.id} className="grid grid-cols-[2.5rem_1fr] gap-x-4 border-b border-line py-5 sm:grid-cols-[3rem_1fr_auto] sm:gap-x-6">
+                      <span className="text-lg font-semibold text-accent-ink tabular">{String(lessons.indexOf(l) + 1).padStart(2, "0")}</span>
+                      <div className="min-w-0">
+                        <p className="font-semibold tracking-[-0.01em]">
+                          {l.title}
+                          {l.isPreview ? <span className="ml-2 rounded-full bg-accent/10 px-2 py-0.5 align-middle text-[0.68rem] font-semibold text-accent-ink">Free preview</span> : null}
+                        </p>
+                        <p className="mt-1 text-sm leading-relaxed text-muted">{l.summary}</p>
                       </div>
+                      <span className="col-start-2 mt-2 flex items-center gap-2.5 text-muted sm:col-start-auto sm:mt-0">
+                        {l.interactions.map((i) => (
+                          <InteractionIcon key={i.id} type={i.type} size={14} />
+                        ))}
+                        <span className="text-xs tabular">{formatDuration(l.durationSeconds)}</span>
+                      </span>
                     </li>
                   ))}
                 </ol>
-              </section>
+              </div>
             ))}
-          </div>
-
-          <div className="mt-10 flex items-start gap-4 border-t border-line pt-10">
-            <Avatar name={course.instructor.name} size={48} />
-            <div>
-              <p className="font-semibold">{course.instructor.name}</p>
-              <p className="text-sm text-subtle">{course.instructor.title}</p>
-              <p className="mt-3 max-w-[60ch] text-muted">{course.instructor.bio}</p>
+            <div className="mt-14 flex items-start gap-4 rounded-[1.6rem] bg-raised p-6 ring-1 ring-line sm:p-8">
+              <Avatar name={course.instructor.name} size={52} />
+              <div>
+                <span className="eyebrow text-muted">Your guide</span>
+                <p className="mt-3 text-lg font-semibold tracking-[-0.02em]">{course.instructor.name}</p>
+                <p className="text-sm text-muted">{course.instructor.title}</p>
+                <p className="mt-3 max-w-[60ch] leading-relaxed text-muted">{course.instructor.bio}</p>
+              </div>
             </div>
           </div>
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <PurchasePanel course={course} state={state} firstLessonHref={previewHref} />
+          </aside>
         </div>
+      </section>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <PurchasePanel course={course} state={state} firstLessonHref={`/learn/${course.slug}/${preview.slug}`} />
-        </aside>
-      </div>
-    </div>
+      {/* Closing */}
+      <section className="shell mt-24 sm:mt-32">
+        <div className="rounded-[2.4rem] bg-frame px-8 py-14 text-on-frame shadow-frame sm:px-16 sm:py-20">
+          <span className="eyebrow text-on-frame-muted">Ready when you are</span>
+          <h2 className="h-section mt-6">Try the first step.</h2>
+          <p className="mt-5 max-w-[48ch] leading-relaxed text-on-frame-muted">The preview lesson is free. Watch, answer, and see if this is for you.</p>
+          <Link href={previewHref} className={buttonClasses({ variant: "light", className: "mt-8" })}>
+            Watch and take part <ArrowUpRight size={15} aria-hidden />
+          </Link>
+        </div>
+      </section>
+    </>
   );
 }
