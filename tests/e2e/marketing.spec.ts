@@ -5,7 +5,7 @@ test.describe("public site", () => {
   test("home page tells the story and links to courses", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Pintevact/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Psychology you answer");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Know your own mind");
     await expect(page.getByText("Every lesson stops to ask about you.")).toBeVisible();
     await expectNoHorizontalScroll(page);
     await openMobileMenuIfNeeded(page);
@@ -13,7 +13,7 @@ test.describe("public site", () => {
     await expect(page).toHaveURL(/\/courses$/);
   });
 
-  test("hero deck: answering flips the card and moves along the line", async ({ page }) => {
+  test("hero deck: answering flips the card and moves to the next one", async ({ page }) => {
     await page.goto("/");
     const deck = page.getByTestId("hero-deck");
     await deck.getByRole("button", { name: "5 cents", exact: true }).click();
@@ -30,7 +30,8 @@ test.describe("public site", () => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/pricing");
     await expect(page.locator("html")).not.toHaveClass(/dark/);
-    await page.getByRole("button", { name: "Switch to dark theme" }).first().click();
+    await page.getByRole("button", { name: "Show settings" }).click();
+    await page.getByRole("button", { name: "Switch to dark theme" }).click();
     await expect(page.locator("html")).toHaveClass(/dark/);
     await page.reload();
     await expect(page.locator("html")).toHaveClass(/dark/);
@@ -60,7 +61,7 @@ test.describe("public site", () => {
   test("unknown course returns 404", async ({ page }) => {
     const res = await page.goto("/courses/not-a-course");
     expect(res?.status()).toBe(404);
-    await expect(page.getByText("This station doesn't exist.")).toBeVisible();
+    await expect(page.getByText("This page doesn't exist.")).toBeVisible();
   });
 
   test("pricing toggles billing interval", async ({ page }) => {
