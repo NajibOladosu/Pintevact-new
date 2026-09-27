@@ -233,3 +233,18 @@ tests/
 ## Deploying
 
 Deploy to Vercel (or any Node host), set the environment variables from `.env.example`, and point the Supabase hook and Stripe webhook at your domain. The app requires Supabase and refuses to send email without Resend or SMTP configured.
+
+GitHub Actions deploys to Vercel (`.github/workflows/ci.yml`); Vercel's own Git deployments are off in `vercel.json`:
+
+- **Every push** runs lint, types and unit tests. A push to any branch other than the default one then deploys a **preview**.
+- **The default branch** also runs the database, integration and end-to-end suites, then deploys to **production** only if all of them pass. You can also start it from the Actions tab (`workflow_dispatch`).
+
+It needs the repository variables `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` (from `.vercel/project.json` after `vercel link`) and the secret `VERCEL_TOKEN` (create one at vercel.com/account/tokens):
+
+```bash
+gh secret set VERCEL_TOKEN
+```
+
+Environment variables come from the Vercel project (`vercel pull`), so manage them there.
+
+Database changes are not applied by the pipeline. Run `supabase db push` against the production project before merging a new migration.
