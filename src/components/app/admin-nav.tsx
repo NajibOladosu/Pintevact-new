@@ -9,13 +9,10 @@ export function AdminNav({ active }: { active: "overview" | "courses" | "users" 
   ] as const;
   return (
     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-      <div>
-        <p className="eyebrow text-ember">Admin</p>
-        <h1 className="mt-2 text-5xl">Mission control</h1>
-      </div>
-      <nav className="inline-flex rounded-full border border-white/10 bg-night-2 p-1">
+      <h1 className="text-3xl tracking-tight sm:text-4xl">Admin</h1>
+      <nav className="inline-flex self-start rounded-[10px] bg-sunken p-1 sm:self-auto">
         {items.map((i) => (
-          <Link key={i.id} href={i.href} aria-current={active === i.id ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-semibold", active === i.id ? "bg-ember text-ink" : "text-mist hover:text-paper")}>
+          <Link key={i.id} href={i.href} aria-current={active === i.id ? "page" : undefined} className={cn("rounded-lg px-3.5 py-1.5 text-sm transition-colors", active === i.id ? "bg-raised font-medium text-fg shadow-[0_1px_2px_rgb(17_16_28/0.12)]" : "text-muted hover:text-fg")}>
             {i.label}
           </Link>
         ))}

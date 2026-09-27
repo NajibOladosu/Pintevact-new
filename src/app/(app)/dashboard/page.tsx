@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, Flame, NotebookPen, Sparkles } from "lucide-react";
+import { ArrowRight } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
-import { Progress, ProgressRing } from "@/components/ui/progress";
-import { CourseCover } from "@/components/course/course-cover";
-import { MindConstellation } from "@/components/app/mind-constellation";
-import { HeatStrip } from "@/components/app/heat-strip";
-import { StatCard } from "@/components/app/stat-card";
+import { Progress } from "@/components/ui/progress";
+import { LineBullet, StationLine } from "@/components/brand/station-line";
+import { badgeIcon } from "@/components/app/badge-icon";
 import { requireViewer } from "@/lib/auth/session";
 import { getLearnerSnapshot } from "@/lib/learner";
-import { summarizeCourse } from "@/lib/course";
-import { formatMinutes, formatPrice } from "@/lib/utils";
+import { courseCode, courseStations, summarizeCourse } from "@/lib/course";
+import { cn, formatMinutes, formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -34,188 +32,166 @@ export default async function DashboardPage() {
   const snap = await getLearnerSnapshot(viewer.id);
   const firstName = viewer.profile.fullName?.split(" ")[0] ?? viewer.email.split("@")[0];
   const cont = snap.continueWith;
-  const completedIds = snap.completedLessonIds;
+  const done = snap.completedLessonIds;
   const prompt = prompts[new Date().getDay() % prompts.length];
   const latestReflection = snap.reflections[0];
   const reflectionCtx = latestReflection ? snap.lessonIndex.get(latestReflection.lessonId) : null;
-  const earnedBadges = snap.badges.filter((b) => b.earned);
+  const earned = snap.badges.filter((b) => b.earned);
   const nextBadge = snap.badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)[0];
   const recommended = snap.recommended[0];
+  const activeDays = snap.heatmap.filter((d) => d.xp > 0).length;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
-      <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p className="eyebrow text-lucid">
-            Level {snap.level.level} · {snap.level.name}
-          </p>
-          <h1 className="mt-2 text-5xl leading-none sm:text-6xl">
-            {greeting()}, <span className="display-italic">{firstName}.</span>
-          </h1>
-        </div>
-        {snap.level.next ? (
-          <div className="w-full max-w-xs">
-            <div className="mb-1.5 flex justify-between font-mono text-xs text-mist">
-              <span>{snap.level.xpForNext} XP to {snap.level.next.name}</span>
-              <span>{snap.level.percent}%</span>
-            </div>
-            <Progress value={snap.level.percent} label="Level progress" />
-          </div>
-        ) : null}
+    <div className="mx-auto max-w-5xl">
+      <header>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {greeting()}, {firstName}.
+        </h1>
+        <p className="tabular mt-2 text-muted">
+          {snap.level.name}, level {snap.level.level}. {snap.stats.totalXp.toLocaleString()} XP
+          {snap.level.next ? `, ${snap.level.xpForNext} to ${snap.level.next.name}` : ""}. {snap.streak}-day streak.
+        </p>
       </header>
 
-      {/* Continue */}
+      {/* The next card */}
       {cont && cont.resume ? (
-        <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-night-2">
-          <div className="grid gap-0 md:grid-cols-[1fr_16rem]">
-            <div className="p-6 sm:p-8">
-              <p className="eyebrow text-ember">{cont.progress.completed === 0 ? "Start here" : "Continue where you left off"}</p>
-              <h2 className="mt-3 text-3xl sm:text-4xl">{cont.resume.title}</h2>
-              <p className="mt-2 text-mist">
-                {cont.course.title} · {formatMinutes(cont.resume.durationSeconds)} · {cont.resume.interactions.length} interactive moments
+        <section className="mt-8 rounded-2xl border border-line bg-raised p-6 sm:p-8">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="text-sm text-subtle">{cont.progress.completed === 0 ? "Start here" : "Up next"}</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{cont.resume.title}</h2>
+              <p className="tabular mt-2 text-sm text-muted">
+                {cont.course.title}, {formatMinutes(cont.resume.durationSeconds)}, {cont.resume.interactions.length} checkpoints
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-4">
-                <Link href={`/learn/${cont.course.slug}/${cont.resume.slug}`} className={buttonClasses({ variant: "lucid", size: "lg" })}>
-                  {cont.progress.completed === 0 ? "Begin lesson" : "Resume lesson"} <ArrowRight size={18} />
-                </Link>
-                <div className="flex items-center gap-3">
-                  <span className="relative flex h-12 w-12 items-center justify-center">
-                    <ProgressRing value={cont.progress.percent} size={48} className="absolute inset-0 text-paper" />
-                    <span className="font-mono text-xs">{cont.progress.percent}%</span>
-                  </span>
-                  <span className="text-sm text-mist">
-                    {cont.progress.completed}/{cont.progress.total} lessons
-                  </span>
-                </div>
-              </div>
             </div>
-            <CourseCover theme={cont.course.theme} glyph={cont.course.glyph} size="md" className="hidden min-h-full md:block" />
+            <Link href={`/learn/${cont.course.slug}/${cont.resume.slug}`} className={buttonClasses({ size: "lg", className: "self-start md:self-auto" })}>
+              {cont.progress.completed === 0 ? "Begin lesson" : "Resume lesson"} <ArrowRight size={16} />
+            </Link>
           </div>
+          <StationLine className="mt-8" stations={courseStations(cont.course, done, cont.resume.id, (s) => `/learn/${cont.course.slug}/${s}`)} />
+          <p className="tabular mt-3 text-xs text-subtle">
+            {cont.progress.completed} of {cont.progress.total} lessons
+          </p>
         </section>
       ) : (
-        <section className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-iris/30 via-night-2 to-ember/20 p-8">
-          <p className="eyebrow text-lucid">Your first step</p>
-          <h2 className="mt-3 text-4xl">Start with the free course: Meet Your Mind.</h2>
-          <p className="mt-2 max-w-xl text-mist">Four interactive lessons, about 30 minutes, and your first stars on the map.</p>
-          <Link href="/learn/meet-your-mind" className={buttonClasses({ variant: "lucid", size: "lg", className: "mt-6" })}>
-            Start free course <ArrowRight size={18} />
+        <section className="mt-8 rounded-2xl bg-violet p-6 text-on-violet sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight">Start with Meet Your Mind.</h2>
+          <p className="mt-2 max-w-[50ch] text-on-violet-muted">Four short lessons, about half an hour. Your first stations on the line.</p>
+          <Link href="/learn/meet-your-mind" className={buttonClasses({ size: "lg", className: "mt-6" })}>
+            Start free course
           </Link>
         </section>
       )}
 
-      {/* Stats */}
-      <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="Total XP" value={snap.stats.totalXp.toLocaleString()} icon={Sparkles} hint={`Level ${snap.level.level}`} />
-        <StatCard label="Streak" value={`${snap.streak}d`} icon={Flame} accent="text-ember" hint={`Best: ${snap.stats.longestStreak} days`} />
-        <StatCard label="Lessons" value={snap.stats.lessonsCompleted} icon={BookOpenCheck} accent="text-iris-2" hint="completed" />
-        <StatCard label="Reflections" value={snap.stats.reflections} icon={NotebookPen} accent="text-tide" hint="in your vault" />
-      </section>
+      <div className="mt-12 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-10">
+        {/* Lines */}
+        <section>
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-lg font-semibold">Your lines</h2>
+            <p className="tabular text-sm text-subtle">{done.size} stations reached</p>
+          </div>
+          {snap.enrolled.length ? (
+            <ul className="mt-4 space-y-2">
+              {snap.enrolled.map((e) => (
+                <li key={e.course.id}>
+                  <Link href={`/learn/${e.course.slug}`} className="group grid grid-cols-[auto_1fr] items-center gap-4 rounded-xl p-3 transition-colors hover:bg-fg/[0.03]">
+                    <LineBullet code={courseCode(e.course)} />
+                    <div className="min-w-0">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <p className="truncate font-medium">{e.course.title}</p>
+                        <p className="tabular shrink-0 text-xs text-subtle">
+                          {e.progress.completed}/{e.progress.total}
+                        </p>
+                      </div>
+                      <StationLine className="mt-3" size="sm" stations={courseStations(e.course, done, e.resume?.id)} />
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-4 text-muted">No courses yet. Your lines appear here when you start one.</p>
+          )}
 
-      {/* Constellation + activity */}
-      <section className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-        <div className="rounded-[2rem] border border-white/10 bg-night-2 p-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl">Your constellation</h2>
-            <span className="font-mono text-xs text-mist">{completedIds.size} stars lit</span>
-          </div>
-          <div className="mt-4">
-            <MindConstellation enrolled={snap.enrolled} completedIds={completedIds} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-6">
-          <div className="rounded-[2rem] border border-white/10 bg-night-2 p-6">
-            <h2 className="text-2xl">Last 4 weeks</h2>
-            <div className="mt-4">
-              <HeatStrip days={snap.heatmap} />
-            </div>
-          </div>
-          <div className="flex-1 rounded-[2rem] border border-white/10 bg-night-2 p-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl">Badges</h2>
-              <Link href="/achievements" className="text-sm font-semibold text-lucid">
-                All →
-              </Link>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {earnedBadges.length ? (
-                earnedBadges.map((b) => (
-                  <span key={b.id} title={b.description} className="inline-flex items-center gap-1.5 rounded-full bg-lucid px-3 py-1 text-sm font-semibold text-ink">
-                    <span aria-hidden>{b.glyph}</span> {b.name}
-                  </span>
-                ))
-              ) : (
-                <p className="text-mist">Complete a lesson to earn your first badge.</p>
-              )}
-            </div>
-            {nextBadge ? (
-              <div className="mt-5">
-                <p className="text-sm text-mist">
-                  Next: <strong className="text-paper">{nextBadge.name}</strong> — {nextBadge.description.toLowerCase()}
-                </p>
-                <Progress value={nextBadge.progress * 100} className="mt-2" label={`${nextBadge.name} progress`} />
+          {recommended ? (
+            <Link href={`/courses/${recommended.slug}`} className="group mt-8 flex items-center gap-4 rounded-xl border border-dashed border-line-strong p-4 transition-colors hover:border-fg">
+              <LineBullet code={courseCode(recommended)} className="border-line-strong text-muted" />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-subtle">Suggested next line</p>
+                <p className="truncate font-medium">{recommended.title}</p>
+              </div>
+              <span className="tabular text-sm text-muted">
+                {summarizeCourse(recommended).lessonCount} lessons, {formatPrice(recommended.priceCents)}
+              </span>
+            </Link>
+          ) : null}
+        </section>
+
+        {/* Side: vault, badges, rhythm */}
+        <div className="space-y-10">
+          <section className="rounded-2xl bg-violet p-6 text-on-violet">
+            <p className="text-sm text-on-violet-muted">Today&apos;s prompt</p>
+            <p className="mt-2 text-lg font-semibold leading-snug">{prompt}</p>
+            {latestReflection && reflectionCtx ? (
+              <div className="mt-6 border-t border-on-violet/15 pt-4">
+                <p className="text-sm text-on-violet-muted">Your latest reflection, {reflectionCtx.lesson.title}</p>
+                <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed">“{latestReflection.response.text}”</p>
               </div>
             ) : null}
-          </div>
-        </div>
-      </section>
+            <Link href="/reflections" className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium">
+              Open your vault <ArrowRight size={14} />
+            </Link>
+          </section>
 
-      {/* Courses */}
-      <section>
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl">Your courses</h2>
-          <Link href="/learn" className="text-sm font-semibold text-lucid">
-            View all →
-          </Link>
-        </div>
-        {snap.enrolled.length ? (
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {snap.enrolled.slice(0, 4).map((e) => (
-              <Link key={e.course.id} href={`/learn/${e.course.slug}`} className="group flex items-center gap-4 rounded-3xl border border-white/10 bg-night-2 p-4 transition hover:border-lucid/40">
-                <CourseCover theme={e.course.theme} glyph={e.course.glyph} size="sm" className="h-20 w-20 shrink-0 rounded-2xl" />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-lg font-semibold group-hover:text-lucid">{e.course.title}</p>
-                  <p className="text-sm text-mist">
-                    {e.progress.completed}/{e.progress.total} lessons
-                  </p>
-                  <Progress value={e.progress.percent} className="mt-2" label={`${e.course.title} progress`} />
-                </div>
+          <section>
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-lg font-semibold">Badges</h2>
+              <Link href="/achievements" className="text-sm text-muted hover:text-fg">
+                See all
               </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="mt-4 text-mist">No courses yet — your library fills up as you enrol.</p>
-        )}
-      </section>
+            </div>
+            {earned.length ? (
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {earned.map((b) => {
+                  const Icon = badgeIcon(b.id);
+                  return (
+                    <li key={b.id} title={b.description} className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1 text-sm">
+                      <Icon size={15} weight="fill" className="text-accent-ink" /> {b.name}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-muted">Finish a lesson to earn your first badge.</p>
+            )}
+            {nextBadge ? (
+              <div className="mt-5">
+                <p className="text-sm text-muted">
+                  Next: <span className="font-medium text-fg">{nextBadge.name}</span>, {nextBadge.description.toLowerCase()}
+                </p>
+                <Progress value={nextBadge.progress * 100} className="mt-3" label={`${nextBadge.name} progress`} />
+              </div>
+            ) : null}
+          </section>
 
-      {/* Reflection + recommendation */}
-      <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-ember/25 to-night-2 p-6 sm:p-8">
-          <p className="eyebrow text-ember">Today&apos;s mind prompt</p>
-          <p className="mt-3 font-display text-3xl italic leading-snug">{prompt}</p>
-          {latestReflection && reflectionCtx ? (
-            <div className="mt-6 rounded-2xl bg-night/60 p-4">
-              <p className="eyebrow text-mist">Your latest reflection · {reflectionCtx.lesson.title}</p>
-              <p className="mt-2 line-clamp-3 text-paper/90">“{latestReflection.response.text}”</p>
+          <section>
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-lg font-semibold">Last 4 weeks</h2>
+              <p className="tabular text-sm text-subtle">{activeDays} active days</p>
             </div>
-          ) : null}
-          <Link href="/reflections" className="mt-6 inline-block font-semibold text-lucid underline underline-offset-4">
-            Open the Reflection Vault →
-          </Link>
+            <div className="mt-4 grid grid-cols-14 gap-1.5" style={{ gridTemplateColumns: "repeat(14, minmax(0, 1fr))" }}>
+              {snap.heatmap.map((d) => (
+                <span
+                  key={d.date}
+                  title={`${d.date}: ${d.xp} XP`}
+                  className={cn("aspect-square rounded-full border-2", d.xp > 0 ? "border-accent bg-accent" : "border-line-strong")}
+                  style={d.xp > 0 ? { opacity: Math.min(1, 0.45 + d.xp / 80) } : undefined}
+                />
+              ))}
+            </div>
+          </section>
         </div>
-        {recommended ? (
-          <Link href={`/courses/${recommended.slug}`} className="group overflow-hidden rounded-[2rem] border border-white/10 bg-night-2 transition hover:border-lucid/40">
-            <CourseCover theme={recommended.theme} glyph={recommended.glyph} size="sm" className="h-32" />
-            <div className="p-6">
-              <p className="eyebrow text-lucid">Recommended next</p>
-              <p className="mt-2 text-2xl font-display group-hover:text-lucid">{recommended.title}</p>
-              <p className="mt-1 line-clamp-2 text-mist">{recommended.subtitle}</p>
-              <p className="mt-3 font-mono text-xs text-mist">
-                {summarizeCourse(recommended).lessonCount} lessons · {formatPrice(recommended.priceCents)}
-              </p>
-            </div>
-          </Link>
-        ) : null}
-      </section>
+      </div>
     </div>
   );
 }

@@ -8,10 +8,10 @@ import type { Course, Lesson } from "@/lib/types";
 
 function Status({ ok, message }: { ok?: boolean; message?: string }) {
   if (!message) return null;
-  return <p role="status" className={ok ? "text-sm font-semibold text-lucid" : "text-sm font-semibold text-ember"}>{message}</p>;
+  return <p role="status" className={ok ? "text-sm font-semibold text-accent-ink" : "text-sm font-semibold text-danger"}>{message}</p>;
 }
 
-const select = "h-12 w-full rounded-2xl border-2 border-white/10 bg-night-3 px-4 text-paper focus:border-iris focus:outline-none";
+const select = "h-11 w-full rounded-[10px] border border-line-strong bg-raised px-3.5 text-fg focus:border-fg focus:outline-none";
 
 export function CourseForm({ course }: { course: Course }) {
   const [state, action, pending] = useActionState(saveCourse, {});
@@ -67,14 +67,14 @@ export function CourseForm({ course }: { course: Course }) {
       </div>
       <div className="flex flex-wrap gap-6">
         <label className="flex items-center gap-2">
-          <input type="checkbox" name="published" defaultChecked={course.published} className="h-5 w-5 accent-[var(--color-lucid)]" /> Published
+          <input type="checkbox" name="published" defaultChecked={course.published} className="h-5 w-5 accent-[var(--accent)]" /> Published
         </label>
         <label className="flex items-center gap-2">
-          <input type="checkbox" name="featured" defaultChecked={course.featured} className="h-5 w-5 accent-[var(--color-lucid)]" /> Featured on home page
+          <input type="checkbox" name="featured" defaultChecked={course.featured} className="h-5 w-5 accent-[var(--accent)]" /> Featured on home page
         </label>
       </div>
       <div className="flex items-center gap-4">
-        <Button type="submit" variant="lucid" loading={pending}>
+        <Button type="submit" variant="primary" loading={pending}>
           Save course
         </Button>
         <Status ok={state.ok} message={state.message} />
@@ -113,9 +113,9 @@ export function LessonForm({ lesson, videos }: { lesson: Lesson; videos: { guid:
       </div>
       <div className="flex items-center gap-3 pb-1">
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="isPreview" defaultChecked={lesson.isPreview} className="h-5 w-5 accent-[var(--color-lucid)]" /> Preview
+          <input type="checkbox" name="isPreview" defaultChecked={lesson.isPreview} className="h-5 w-5 accent-[var(--accent)]" /> Preview
         </label>
-        <Button type="submit" size="sm" variant="subtle" loading={pending}>
+        <Button type="submit" size="sm" variant="outline" loading={pending}>
           Save
         </Button>
       </div>

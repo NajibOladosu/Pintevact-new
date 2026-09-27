@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search } from "@/components/icons";
 import { cn, formatDate, formatDuration } from "@/lib/utils";
 
 export type VaultReflection = { id: string; prompt: string; text: string; lessonTitle: string; courseTitle: string; href: string; createdAt: string };
@@ -20,21 +20,21 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
 
   return (
     <div>
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div role="tablist" className="inline-flex rounded-full border border-white/10 bg-night-2 p-1">
+      <div className="flex flex-col gap-4 border-b border-line pb-6 md:flex-row md:items-center md:justify-between">
+        <div role="tablist" className="inline-flex self-start rounded-[10px] bg-sunken p-1">
           {(["reflections", "notes"] as const).map((t) => (
-            <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={cn("rounded-full px-5 py-2 text-sm font-semibold capitalize transition", tab === t ? "bg-lucid text-ink" : "text-mist hover:text-paper")}>
-              {t} <span className="ml-1 font-mono text-xs opacity-70">{t === "reflections" ? reflections.length : notes.length}</span>
+            <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={cn("rounded-lg px-4 py-1.5 text-sm capitalize transition-colors", tab === t ? "bg-raised font-medium text-fg shadow-[0_1px_2px_rgb(17_16_28/0.12)]" : "text-muted hover:text-fg")}>
+              {t} <span className="tabular ml-1 text-xs text-subtle">{t === "reflections" ? reflections.length : notes.length}</span>
             </button>
           ))}
         </div>
         <div className="flex gap-2">
           <label className="relative flex-1 md:w-64">
             <span className="sr-only">Search your vault</span>
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-mist" />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} type="search" placeholder="Search your thoughts…" className="h-11 w-full rounded-full border border-white/10 bg-night-2 pl-10 pr-4 text-paper placeholder:text-mist/60 focus:border-iris focus:outline-none" />
+            <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-subtle" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} type="search" placeholder="Search your writing" className="h-10 w-full rounded-[10px] border border-line-strong bg-raised pl-9 pr-3 text-sm placeholder:text-subtle focus:border-fg focus:outline-none focus-visible:outline-none" />
           </label>
-          <select aria-label="Filter by course" value={course} onChange={(e) => setCourse(e.target.value)} className="h-11 max-w-40 rounded-full border border-white/10 bg-night-2 px-4 text-paper focus:border-iris focus:outline-none">
+          <select aria-label="Filter by course" value={course} onChange={(e) => setCourse(e.target.value)} className="h-10 max-w-44 rounded-[10px] border border-line-strong bg-raised px-3 text-sm focus:border-fg focus:outline-none">
             {courses.map((c) => (
               <option key={c}>{c}</option>
             ))}
@@ -44,42 +44,43 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
 
       {tab === "reflections" ? (
         shownReflections.length ? (
-          <div className="mt-8 columns-1 gap-5 md:columns-2">
-            {shownReflections.map((r, i) => (
-              <article key={r.id} className={cn("mb-5 break-inside-avoid rounded-3xl border border-white/10 p-6", i % 3 === 0 ? "bg-gradient-to-br from-iris/20 to-night-2" : i % 3 === 1 ? "bg-night-2" : "bg-gradient-to-br from-ember/15 to-night-2")}>
-                <p className="eyebrow text-lucid">{r.courseTitle}</p>
-                <p className="mt-2 text-sm italic text-mist">{r.prompt}</p>
-                <p className="mt-4 whitespace-pre-wrap font-display text-xl leading-relaxed">“{r.text}”</p>
-                <div className="mt-5 flex items-center justify-between text-sm text-mist">
-                  <Link href={r.href} className="font-semibold text-paper underline-offset-4 hover:underline">
-                    {r.lessonTitle}
+          <div className="mt-8 columns-1 gap-4 md:columns-2">
+            {shownReflections.map((r) => (
+              <article key={r.id} className="mb-4 break-inside-avoid rounded-2xl border border-line bg-raised p-6">
+                <p className="text-sm text-subtle">{r.prompt}</p>
+                <p className="mt-3 whitespace-pre-wrap text-lg leading-relaxed">“{r.text}”</p>
+                <div className="mt-5 flex items-center justify-between gap-4 text-sm text-subtle">
+                  <Link href={r.href} className="truncate hover:text-fg">
+                    {r.courseTitle}, {r.lessonTitle}
                   </Link>
-                  <time dateTime={r.createdAt}>{formatDate(r.createdAt)}</time>
+                  <time dateTime={r.createdAt} className="tabular shrink-0">
+                    {formatDate(r.createdAt)}
+                  </time>
                 </div>
               </article>
             ))}
           </div>
         ) : (
-          <Empty text={reflections.length ? "No reflections match your search." : "Reflections you write during lessons will live here — private, searchable, yours."} />
+          <Empty text={reflections.length ? "No reflections match your search." : "Reflections you write during lessons will collect here. Private, searchable, yours."} />
         )
       ) : shownNotes.length ? (
-        <ul className="mt-8 space-y-3">
+        <ul className="mt-6">
           {shownNotes.map((n) => (
-            <li key={n.id} className="flex gap-4 rounded-3xl border border-white/10 bg-night-2 p-5">
-              <Link href={n.href} className="h-fit shrink-0 rounded-full bg-lucid px-3 py-1 font-mono text-xs font-semibold text-ink">
+            <li key={n.id} className="flex gap-4 border-b border-line py-4">
+              <Link href={n.href} className="tabular h-fit shrink-0 rounded-md bg-fg/[0.07] px-1.5 py-0.5 text-xs font-medium hover:bg-accent hover:text-on-accent">
                 {formatDuration(n.atSeconds)}
               </Link>
               <div className="min-w-0">
                 <p className="whitespace-pre-wrap">{n.body}</p>
-                <p className="mt-2 text-sm text-mist">
-                  {n.courseTitle} · {n.lessonTitle}
+                <p className="mt-1.5 text-sm text-subtle">
+                  {n.courseTitle}, {n.lessonTitle}
                 </p>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <Empty text={notes.length ? "No notes match your search." : "Press N while watching any lesson to capture a timestamped note."} />
+        <Empty text={notes.length ? "No notes match your search." : "Press N while watching any lesson to save a timestamped note."} />
       )}
     </div>
   );
@@ -87,8 +88,8 @@ export function Vault({ reflections, notes }: { reflections: VaultReflection[]; 
 
 function Empty({ text }: { text: string }) {
   return (
-    <div className="mt-8 rounded-[2rem] border border-dashed border-white/15 p-12 text-center">
-      <p className="font-display text-2xl italic">{text}</p>
+    <div className="mt-8 rounded-2xl border border-dashed border-line-strong px-6 py-14 text-center">
+      <p className="text-muted">{text}</p>
     </div>
   );
 }

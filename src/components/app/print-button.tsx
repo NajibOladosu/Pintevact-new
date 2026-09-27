@@ -1,11 +1,12 @@
 "use client";
 
-import { Printer } from "lucide-react";
+import { Printer } from "@/components/icons";
+import { buttonClasses } from "@/components/ui/button";
 
 export function PrintButton() {
   return (
-    <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-lucid px-5 py-2.5 font-semibold shadow-hard">
-      <Printer size={16} /> Print / Save PDF
+    <button type="button" onClick={() => window.print()} className={buttonClasses({ variant: "secondary" })}>
+      <Printer size={16} /> Print or save as PDF
     </button>
   );
 }

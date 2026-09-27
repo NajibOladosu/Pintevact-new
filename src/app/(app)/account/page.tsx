@@ -9,10 +9,10 @@ export const metadata: Metadata = { title: "Account" };
 
 function Section({ title, description, children, danger }: { title: string; description: string; children: React.ReactNode; danger?: boolean }) {
   return (
-    <section className={`grid gap-6 rounded-[2rem] border p-6 sm:p-8 lg:grid-cols-[16rem_1fr] ${danger ? "border-ember/40" : "border-white/10 bg-night-2"}`}>
+    <section className={`grid gap-6 rounded-2xl border p-6 sm:p-8 lg:grid-cols-[16rem_1fr] ${danger ? "border-danger/40" : "border-line bg-raised"}`}>
       <div>
-        <h2 className={`text-2xl ${danger ? "text-ember" : ""}`}>{title}</h2>
-        <p className="mt-1 text-sm text-mist">{description}</p>
+        <h2 className={`text-lg ${danger ? "text-danger" : ""}`}>{title}</h2>
+        <p className="mt-1 text-sm text-muted">{description}</p>
       </div>
       <div>{children}</div>
     </section>
@@ -28,8 +28,8 @@ export default async function AccountPage() {
         <div className="flex items-center gap-5">
           <Avatar name={p.fullName ?? viewer.email} size={72} />
           <div>
-            <h1 className="text-4xl sm:text-5xl">{p.fullName ?? "Your account"}</h1>
-            <p className="text-mist">
+            <h1 className="text-3xl tracking-tight sm:text-4xl">{p.fullName ?? "Your account"}</h1>
+            <p className="text-muted">
               {p.headline ?? viewer.email} · member since {formatDate(p.createdAt, { month: "long", year: "numeric" })}
             </p>
           </div>

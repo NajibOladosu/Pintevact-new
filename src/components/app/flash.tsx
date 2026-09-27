@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/toast";
 
 const messages: Record<string, { title: string; description?: string; tone: "success" | "xp" | "default" | "error" }> = {
-  welcome: { title: "Welcome to Pintevact ✦", description: "Your constellation starts here. Begin with Meet Your Mind.", tone: "xp" },
+  welcome: { title: "Welcome to Pintevact", description: "Your line starts here. Begin with Meet Your Mind.", tone: "xp" },
   password: { title: "Password updated", tone: "success" },
   purchased: { title: "Unlocked!", description: "The course is now in your library. Enjoy the journey.", tone: "success" },
   membership: { title: "All-Access activated", description: "Every course is now yours.", tone: "xp" },

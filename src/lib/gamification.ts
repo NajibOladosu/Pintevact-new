@@ -95,7 +95,7 @@ export function longestStreak(activityDates: (string | Date)[]) {
   return best;
 }
 
-/** Last N days of activity, oldest first — powers the dashboard heat strip. */
+/** Last N days of activity, oldest first, powers the dashboard heat strip. */
 export function activityHeatmap(events: { createdAt: string; amount: number }[], days = 28, now = new Date()) {
   const totals = new Map<string, number>();
   for (const e of events) {
@@ -126,23 +126,22 @@ export type Badge = {
   id: string;
   name: string;
   description: string;
-  glyph: string;
   earned: boolean;
   progress: number; // 0..1
 };
 
-const BADGE_DEFS: { id: string; name: string; description: string; glyph: string; metric: keyof LearnerStats; target: number }[] = [
-  { id: "first-light", name: "First Light", description: "Complete your first lesson", glyph: "✦", metric: "lessonsCompleted", target: 1 },
-  { id: "inner-voice", name: "Inner Voice", description: "Write your first reflection", glyph: "✎", metric: "reflections", target: 1 },
-  { id: "sharp-mind", name: "Sharp Mind", description: "Answer 10 quiz questions correctly", glyph: "◆", metric: "correctQuizzes", target: 10 },
-  { id: "kindled", name: "Kindled", description: "Reach a 3-day learning streak", glyph: "🜂", metric: "longestStreak", target: 3 },
-  { id: "unbroken", name: "Unbroken", description: "Reach a 7-day learning streak", glyph: "∞", metric: "longestStreak", target: 7 },
-  { id: "deep-diver", name: "Deep Diver", description: "Write 10 reflections", glyph: "◉", metric: "reflections", target: 10 },
-  { id: "cartographer", name: "Cartographer", description: "Complete 10 lessons", glyph: "✧", metric: "lessonsCompleted", target: 10 },
-  { id: "polymath", name: "Polymath", description: "Enrol in 3 courses", glyph: "❖", metric: "enrollments", target: 3 },
-  { id: "scribe", name: "Scribe", description: "Take 5 timestamped notes", glyph: "✐", metric: "notes", target: 5 },
-  { id: "integrated", name: "Integrated", description: "Complete a full course", glyph: "☀", metric: "coursesCompleted", target: 1 },
-  { id: "luminary", name: "Luminary", description: "Earn 7,000 XP", glyph: "✺", metric: "totalXp", target: 7000 },
+const BADGE_DEFS: { id: string; name: string; description: string; metric: keyof LearnerStats; target: number }[] = [
+  { id: "first-light", name: "First Light", description: "Complete your first lesson", metric: "lessonsCompleted", target: 1 },
+  { id: "inner-voice", name: "Inner Voice", description: "Write your first reflection", metric: "reflections", target: 1 },
+  { id: "sharp-mind", name: "Sharp Mind", description: "Answer 10 quiz questions correctly", metric: "correctQuizzes", target: 10 },
+  { id: "kindled", name: "Kindled", description: "Reach a 3-day learning streak", metric: "longestStreak", target: 3 },
+  { id: "unbroken", name: "Unbroken", description: "Reach a 7-day learning streak", metric: "longestStreak", target: 7 },
+  { id: "deep-diver", name: "Deep Diver", description: "Write 10 reflections", metric: "reflections", target: 10 },
+  { id: "cartographer", name: "Cartographer", description: "Complete 10 lessons", metric: "lessonsCompleted", target: 10 },
+  { id: "polymath", name: "Polymath", description: "Enrol in 3 courses", metric: "enrollments", target: 3 },
+  { id: "scribe", name: "Scribe", description: "Take 5 timestamped notes", metric: "notes", target: 5 },
+  { id: "integrated", name: "Integrated", description: "Complete a full course", metric: "coursesCompleted", target: 1 },
+  { id: "luminary", name: "Luminary", description: "Earn 7,000 XP", metric: "totalXp", target: 7000 },
 ];
 
 export function computeBadges(stats: LearnerStats): Badge[] {
@@ -152,7 +151,6 @@ export function computeBadges(stats: LearnerStats): Badge[] {
       id: b.id,
       name: b.name,
       description: b.description,
-      glyph: b.glyph,
       earned: value >= b.target,
       progress: Math.min(1, value / b.target),
     };

@@ -33,13 +33,10 @@ export default async function ReflectionsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <p className="eyebrow text-lucid">Private to you</p>
-      <h1 className="mt-2 text-5xl sm:text-6xl">
-        The Reflection <span className="display-italic">Vault</span>
-      </h1>
-      <p className="mt-3 max-w-2xl text-mist">Everything you&apos;ve written while learning — a living journal of what you&apos;re discovering about yourself.</p>
-      <div className="mt-10">
+    <div className="mx-auto max-w-5xl">
+      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Reflection vault</h1>
+      <p className="mt-2 max-w-[60ch] text-muted">Everything you have written while learning. Only you can see it.</p>
+      <div className="mt-8">
         <Vault reflections={reflections} notes={notes} />
       </div>
     </div>

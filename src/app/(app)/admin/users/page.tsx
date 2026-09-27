@@ -14,10 +14,10 @@ export default async function AdminUsersPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <AdminNav active="users" />
-      <div className="overflow-x-auto rounded-[2rem] border border-white/10 bg-night-2">
+      <div className="overflow-x-auto rounded-2xl border border-line bg-raised">
         <table className="w-full min-w-[44rem] text-left">
-          <thead className="eyebrow text-mist">
-            <tr className="border-b border-white/10">
+          <thead className="text-sm text-muted">
+            <tr className="border-b border-line">
               <th className="p-4 font-normal">Learner</th>
               <th className="p-4 font-normal">Joined</th>
               <th className="p-4 font-normal">Courses</th>
@@ -29,20 +29,20 @@ export default async function AdminUsersPage() {
             {users.map((u) => (
               <tr key={u.id}>
                 <td className="p-4">
-                  <p className="font-medium">{u.fullName ?? "—"}</p>
-                  <p className="text-sm text-mist">{u.email}</p>
+                  <p className="font-medium">{u.fullName ?? "-"}</p>
+                  <p className="text-sm text-muted">{u.email}</p>
                 </td>
-                <td className="p-4 text-mist">{formatDate(u.createdAt)}</td>
+                <td className="p-4 text-muted">{formatDate(u.createdAt)}</td>
                 <td className="p-4 font-mono">{u.enrollments}</td>
-                <td className="p-4 font-mono text-lucid">{u.xp.toLocaleString()}</td>
+                <td className="p-4 font-mono text-accent-ink">{u.xp.toLocaleString()}</td>
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <Badge tone={u.role === "admin" ? "ember" : "glass"}>{u.role}</Badge>
+                    <Badge tone={u.role === "admin" ? "accent" : "neutral"}>{u.role}</Badge>
                     {u.id !== admin.id ? (
                       <form action={setUserRole}>
                         <input type="hidden" name="userId" value={u.id} />
                         <input type="hidden" name="role" value={u.role === "admin" ? "student" : "admin"} />
-                        <button type="submit" className="text-sm font-semibold text-mist underline-offset-4 hover:text-paper hover:underline">
+                        <button type="submit" className="text-sm font-semibold text-muted underline-offset-4 hover:text-fg hover:underline">
                           {u.role === "admin" ? "Revoke admin" : "Make admin"}
                         </button>
                       </form>

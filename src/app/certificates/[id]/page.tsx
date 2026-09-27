@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LogoMark } from "@/components/brand/logo";
-import { Constellation } from "@/components/brand/constellation";
+import { StationLine } from "@/components/brand/station-line";
 import { PrintButton } from "@/components/app/print-button";
+import { buttonClasses } from "@/components/ui/button";
 import { getStore } from "@/lib/data";
 import { UUID_RE } from "@/lib/ids";
 import { formatDate } from "@/lib/utils";
@@ -25,26 +25,36 @@ export default async function CertificatePage({ params }: Props) {
   const cert = await load(id);
   if (!cert) notFound();
   return (
-    <main id="main" className="flex min-h-dvh flex-col items-center justify-center bg-paper-2 px-4 py-10 print:bg-white print:p-0">
-      <div className="relative aspect-[1.414/1] w-full max-w-5xl overflow-hidden rounded-[2rem] border-2 border-ink bg-night text-paper shadow-hard-lg print:rounded-none print:shadow-none">
-        <Constellation className="absolute inset-0 h-full w-full text-mist" count={60} seed={id.charCodeAt(0) + id.charCodeAt(1)} lineOpacity={0.18} />
-        <div className="absolute inset-3 rounded-[1.6rem] border border-lucid/30 sm:inset-5" />
-        <div className="relative flex h-full flex-col items-center justify-center px-6 text-center sm:px-16">
-          <LogoMark className="h-10 w-10 sm:h-14 sm:w-14" />
-          <p className="eyebrow mt-4 text-lucid sm:mt-6">Certificate of Integration</p>
-          <p className="mt-3 text-sm text-mist sm:mt-6 sm:text-lg">This certifies that</p>
-          <p className="mt-1 font-display text-3xl italic sm:mt-2 sm:text-7xl">{cert.learnerName}</p>
-          <p className="mt-2 text-sm text-mist sm:mt-4 sm:text-lg">has completed every lesson, checkpoint and reflection of</p>
-          <p className="mt-1 font-display text-2xl text-ember sm:mt-2 sm:text-5xl">{cert.courseTitle}</p>
-          <div className="mt-4 flex items-center gap-6 font-mono text-[0.6rem] uppercase tracking-widest text-mist sm:mt-10 sm:gap-12 sm:text-xs">
+    <main id="main" className="flex min-h-dvh flex-col items-center justify-center px-4 py-10 print:p-0">
+      <div className="relative flex aspect-[1.414/1] w-full max-w-5xl flex-col justify-between rounded-2xl bg-violet p-6 text-on-violet sm:p-14 print:rounded-none">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-accent" aria-hidden />
+            <span className="wordmark text-sm sm:text-base">Pintevact</span>
+          </span>
+          <span className="text-xs text-on-violet-muted sm:text-sm">Certificate of completion</span>
+        </div>
+        <div>
+          <p className="text-sm text-on-violet-muted sm:text-lg">This certifies that</p>
+          <p className="mt-1 text-3xl font-semibold tracking-tight sm:mt-2 sm:text-6xl">{cert.learnerName}</p>
+          <p className="mt-2 text-sm text-on-violet-muted sm:mt-5 sm:text-lg">completed every lesson and checkpoint of</p>
+          <p className="mt-1 text-2xl font-semibold tracking-tight sm:mt-2 sm:text-4xl">{cert.courseTitle}</p>
+        </div>
+        <div>
+          <StationLine
+            className="[--bg:var(--violet)] [--line-strong:rgb(248_242_234/0.25)]"
+            stations={Array.from({ length: 6 }, (_, i) => ({ id: String(i), state: "done" as const }))}
+            size="sm"
+          />
+          <div className="tabular mt-4 flex justify-between text-[0.65rem] text-on-violet-muted sm:text-xs">
             <span>Issued {formatDate(cert.certificate.issuedAt, { dateStyle: "long" })}</span>
-            <span className="hidden sm:inline">ID {cert.certificate.id.slice(0, 8)}</span>
+            <span>ID {cert.certificate.id.slice(0, 8)}</span>
           </div>
         </div>
       </div>
-      <div className="mt-8 flex gap-4 print:hidden">
+      <div className="mt-8 flex gap-3 print:hidden">
         <PrintButton />
-        <Link href={`/courses/${cert.courseSlug}`} className="rounded-full border-2 border-ink px-5 py-2.5 font-semibold hover:bg-ink hover:text-paper">
+        <Link href={`/courses/${cert.courseSlug}`} className={buttonClasses({ variant: "outline" })}>
           About this course
         </Link>
       </div>
