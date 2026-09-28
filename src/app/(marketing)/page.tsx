@@ -3,7 +3,7 @@ import { ArrowUpRight, Check } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
 import { HeroDeck } from "@/components/marketing/hero-deck";
 import { LessonLine } from "@/components/marketing/lesson-line";
-import { CourseCard } from "@/components/course/course-card";
+import { CourseRoute } from "@/components/marketing/course-route";
 import { FaqSection } from "@/components/marketing/faq";
 import { CtaBand } from "@/components/marketing/cta-band";
 import { Progress } from "@/components/ui/progress";
@@ -11,13 +11,15 @@ import { HeroArt } from "@/components/motion/hero-art";
 import { getCourses } from "@/lib/data";
 import { flattenLessons } from "@/lib/course";
 import { MEMBERSHIP, yearlySavingsPercent } from "@/lib/pricing";
-import { formatPrice } from "@/lib/utils";
+import { countWord, formatPrice } from "@/lib/utils";
 import { generalFaqs } from "@/content/faqs";
 
 export default async function HomePage() {
   const courses = await getCourses();
   const free = courses.find((c) => c.priceCents === 0) ?? courses[0];
   const firstLesson = flattenLessons(free)[0];
+  // The free course opens the route, then featured courses, two stops in all.
+  const route = [free, ...courses.filter((c) => c.id !== free.id).sort((a, b) => Number(b.featured) - Number(a.featured) || a.position - b.position)].slice(0, 2);
 
   // Illustrative progress for the preview panel (labelled as an example on the page).
   const sample = courses.slice(0, 3).map((c, i) => {
@@ -74,23 +76,19 @@ export default async function HomePage() {
             <span className="eyebrow text-on-frame-muted">The catalogue</span>
             <div className="mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
               <div>
-                <h2 className="h-section max-w-[13ch]">Seven courses. Plenty to take away.</h2>
+                <h2 className="h-section max-w-[14ch]">{countWord(courses.length)} {courses.length === 1 ? "course" : "courses"}. One route inward.</h2>
                 <p className="mt-6 max-w-[52ch] leading-relaxed text-on-frame-muted">
-                  Choose what sparks your curiosity: habits, emotions, relationships, focus, persuasion. Start with the free course and move at your own pace.
+                  Start with how your mind works, then learn to work with what you feel. Each course is a line of short lessons that pause to ask about your life.
                 </p>
               </div>
               <Link href="/courses" data-magnetic className={buttonClasses({ variant: "light", className: "shrink-0 self-start lg:self-auto" })}>
-                Browse all courses <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
+                {courses.length > route.length ? `All ${courses.length} courses` : "Compare the courses"} <ArrowUpRight size={15} aria-hidden className="arrow-nudge" />
               </Link>
             </div>
           </div>
-          <ul data-reveal="list" className="scrollbar-none relative mt-12 flex snap-x snap-mandatory gap-3 overflow-x-auto px-8 pb-4 pt-2 sm:px-16">
-            {courses.map((c, i) => (
-              <li key={c.id} className="w-[min(20rem,82vw)] shrink-0 snap-start">
-                <CourseCard course={c} index={i} tone={c.id === free.id ? "signal" : "light"} className="h-full" />
-              </li>
-            ))}
-          </ul>
+          <div className="mt-12 px-3 sm:px-6">
+            <CourseRoute courses={route} />
+          </div>
         </div>
       </section>
 
@@ -163,7 +161,7 @@ export default async function HomePage() {
                     <span className="text-sm text-muted">/ {plan.per}</span>
                   </p>
                   <ul className="mt-8 flex-1 space-y-3 border-t border-line pt-7 text-[0.9375rem]">
-                    {["All seven courses", "Every interactive lesson", "Saved progress and private notes", "Certificates as you finish"].map((f) => (
+                    {["Every course, and every new one", "Every interactive lesson", "Saved progress and private notes", "Certificates as you finish"].map((f) => (
                       <li key={f} className="flex items-start gap-3">
                         <Check size={15} className="mt-1 shrink-0 text-accent-ink" aria-hidden /> {f}
                       </li>

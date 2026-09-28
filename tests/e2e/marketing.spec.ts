@@ -7,6 +7,11 @@ test.describe("public site", () => {
     await expect(page).toHaveTitle(/Pintevact/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Know your own mind");
     await expect(page.getByText("Every lesson stops to ask about you.")).toBeVisible();
+    // The catalogue is a route of two stops: the free course first, then the paid one.
+    await expect(page.getByRole("heading", { name: "Two courses. One route inward." })).toBeVisible();
+    await expect(page.getByRole("list", { name: "First lessons in Meet Your Mind" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Start free.*Meet Your Mind/ })).toHaveAttribute("href", "/courses/meet-your-mind");
+    await expect(page.getByRole("link", { name: /View course.*Emotional Alchemy/ })).toHaveAttribute("href", "/courses/emotional-alchemy");
     await expectNoHorizontalScroll(page);
     await openMobileMenuIfNeeded(page);
     await page.getByRole("link", { name: "Courses" }).first().click();
@@ -39,15 +44,15 @@ test.describe("public site", () => {
 
   test("catalog filters by category and search", async ({ page }) => {
     await page.goto("/courses");
-    await expect(page.getByText("7 courses")).toBeVisible();
-    await page.getByRole("button", { name: "Relationships" }).click();
+    await expect(page.getByText("2 courses")).toBeVisible();
+    await page.getByRole("button", { name: "Emotions" }).click();
     await expect(page.getByText("1 course", { exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Attachment & You" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Emotional Alchemy" })).toBeVisible();
     await page.getByRole("button", { name: "All" }).click();
     await page.getByPlaceholder(/Search/).fill("zzzz");
     await expect(page.getByText("No courses match those filters.")).toBeVisible();
     await page.getByRole("button", { name: "Clear filters" }).click();
-    await expect(page.getByText("7 courses")).toBeVisible();
+    await expect(page.getByText("2 courses")).toBeVisible();
   });
 
   test("course detail shows curriculum and a guest call to action", async ({ page }) => {

@@ -60,3 +60,15 @@ export function safeRedirect(path: string | null | undefined, fallback = "/dashb
   if (!path.startsWith("/") || path.startsWith("//") || path.startsWith("/\\")) return fallback;
   return path;
 }
+
+const NUMBER_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+
+/** "Two", "Seven", then digits past twelve, for headlines like "Two courses." */
+export function countWord(n: number): string {
+  return NUMBER_WORDS[n] ?? String(n);
+}
+
+/** Money amounts (revenue, totals), where zero reads "$0" rather than "Free". */
+export function formatMoney(cents: number, currency = "usd"): string {
+  return cents === 0 ? formatPrice(1, currency).replace(/[\d.,]+/, "0") : formatPrice(cents, currency);
+}
