@@ -28,7 +28,7 @@ The look follows **pintevact.com**. The system is documented in [`DESIGN.md`](DE
 | **Marketing** | `/` home with a playable checkpoint card · `/courses` filterable catalog · `/courses/[slug]` course detail · `/pricing` · `/discover` 2-minute mind quiz · `/journal` + articles · `/about` · `/contact` · `/terms` · `/privacy` · 404 |
 | **Auth** | `/signin` + `/signup` (one page; password, magic link or Google) · `/forgot-password` · `/reset-password` · `/verify-email` · `/auth/confirm` · `/auth/callback` (OAuth) · `/auth/signout` |
 | **Learner app** | `/dashboard` (XP, streak, constellation, heatmap, badges) · `/learn` library · `/learn/[course]` · `/learn/[course]/[lesson]` interactive player · `/reflections` (vault + notes) · `/achievements` · `/account` · `/account/billing` · `/certificates/[id]` (public, printable) |
-| **Admin** | `/admin` stats & integration health · `/admin/courses` + editor (pricing, publishing, Bunny video per lesson) · `/admin/users` · `/admin/emails` (Thursday-letter composer, learner announcements, past issues) |
+| **Admin** | `/admin` stats, integration health and activity log · `/admin/courses` (create, reorder, duplicate, delete) · `/admin/courses/[slug]` (details, cover image, drag-and-drop curriculum) · `/admin/courses/[slug]/lessons/[id]` (lesson details, video, checkpoints) · `/admin/videos` (Bunny Stream library and uploads) · `/admin/users` + `/admin/users/[id]` (search, CSV export, access grants, roles, suspension) · `/admin/emails` (Thursday-letter composer, learner announcements, past issues) |
 | **APIs** | `/api/stripe/checkout` · `/api/stripe/portal` · `/api/stripe/webhook` · `/api/hooks/send-email` (Supabase auth email hook) · `/api/cron/engagement` · `/api/unsubscribe` (RFC 8058 one-click) |
 
 ### The interactive player
@@ -52,7 +52,7 @@ Pintevact always runs on real services. For local development, run them on your 
 
 ```bash
 npm install
-npm run stack:up    # local Supabase (Postgres, Auth, PostgREST, Mailpit) + Stripe's stripe-mock
+npm run stack:up    # local Supabase (Postgres, Auth, PostgREST, Storage, Mailpit) + Stripe's stripe-mock
 cp .env.example .env.local
 ```
 
@@ -135,11 +135,11 @@ For local testing: `stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 ### 4. Bunny Stream
 
-1. Create a Stream library and upload your videos.
-2. Set `BUNNY_STREAM_LIBRARY_ID` and `BUNNY_STREAM_API_KEY` so the admin lesson editor can autocomplete videos from your library.
+1. Create a Stream library.
+2. Set `BUNNY_STREAM_LIBRARY_ID` and `BUNNY_STREAM_API_KEY` (Stream → your library → API). The admin needs them to upload videos, list the library and pick a video for each lesson.
 3. Set `BUNNY_STREAM_CDN_HOSTNAME` to the library's pull-zone host (for example `vz-xxxx.b-cdn.net`). A full origin such as `http://127.0.0.1:4010` is also accepted, which is how the tests serve local HLS fixtures.
 4. Enable **Token Authentication** on that pull zone and set `BUNNY_STREAM_TOKEN_KEY`. The app signs a directory token (`token_path=/{videoId}/`), so the playlist and every segment are authorised, and it expires after `BUNNY_STREAM_TOKEN_TTL` seconds.
-5. In **Admin → Courses → (course)**, paste or pick each lesson's video GUID and its duration. Place interaction timestamps inside the real video length.
+5. Upload videos in **Admin → Videos**, or straight from a lesson's **Choose or upload** button. Files go from the browser directly to Bunny over resumable TUS uploads; the server only creates the video and signs the upload (SHA-256 of library ID, API key, expiry and video ID), so large files never pass through the app. Once Bunny has encoded a video, the lesson takes its real length.
 
 ### 5. Engagement emails (optional)
 
@@ -147,15 +147,24 @@ Set `CRON_SECRET`. `vercel.json` schedules `/api/cron/engagement` daily. It send
 
 ---
 
-## Authoring content
+## Managing courses in the admin
 
-Courses, lessons, chapters, takeaways, exercises and every interactive checkpoint are authored in **`src/content/catalog.ts`** as typed, compact definitions with stable IDs. After editing:
+Everything about a course can be changed from **Admin** without touching code:
 
-```bash
-npm run db:seed:generate   # regenerates supabase/seed.sql (idempotent upserts)
-```
+- **Courses:** create a draft, then drag courses into the order the site shows them. Publish or unpublish, duplicate (every module, lesson and checkpoint is copied into a new draft), or delete. A course someone has bought can't be deleted, only unpublished, so receipts keep pointing at it. Admins can preview drafts at `/courses/[slug]`.
+- **Course details:** title, web address, subtitle, description, outcomes, price, an optional Stripe price, category, level, theme, instructor, and a **cover image**. Covers are uploaded to the public `course-covers` Supabase Storage bucket as JPG, PNG, WebP or AVIF, up to 5 MB. Without a cover the course uses its crop of the papercut art.
+- **Curriculum:** drag lessons to reorder them or move them between modules. This also works with the keyboard: Space to pick up, arrows to move, Space to drop. Modules move up and down and can be renamed inline. Lessons can be added, duplicated and deleted. The whole order is saved in one transaction by `admin_reorder_curriculum`.
+- **Lessons:** title, web address, summary, length, free preview, chapters (`2:30 Title` per line), takeaways, exercise, and the video.
+- **Checkpoints:** a timeline of the video with a marker per checkpoint. Add or edit a quiz (one correct answer, optional per-answer feedback), a reflection (optionally required), a poll, a self-rating scale or an insight.
+- **Videos:** the Bunny Stream library with encoding status, search, a filter for unused videos, renaming, copying IDs, and a list of the lessons that use each video. A video that a lesson still plays can't be deleted.
+- **Learners:**
+  - search by name or email, filter by role, and export everyone as CSV;
+  - on each learner's page: profile, email preference, courses with progress, purchases, membership and certificates;
+  - grant or revoke free access to a course;
+  - make or remove admins, send a password reset, suspend or restore sign-in, and delete the account.
+- **Activity log:** every admin change is recorded in `admin_audit_log` and shown on the overview.
 
-Then run the seed against your database. Use the admin panel for day-to-day changes: pricing, publishing, featuring, preview lessons and Bunny video IDs.
+The two launch courses are seeded from **`src/content/catalog.ts`** (`npm run db:seed:generate` regenerates `supabase/seed.sql`). Seeding only needs to happen once for a new database; after that, the admin is the source of truth.
 
 > The instructors, course copy and journal articles are placeholders written for this build. Replace them with your own before launch.
 
@@ -187,7 +196,10 @@ npm run test:all          # unit + integration + e2e
   - email sync.
 - **Integration tests** (`tests/integration/`) use real signed-in Supabase sessions, so row-level security applies exactly as it does in the app. They cover:
   - the lesson service: scoring, XP idempotency, completion, certificates;
-  - the data store, including admin operations;
+  - the data store;
+  - admin authoring: drafts, curriculum reordering and its all-or-nothing guard, lesson and course duplication, checkpoint rules, delete guards, cover uploads to Supabase Storage;
+  - the Bunny Stream library: signed TUS uploads, renaming and deleting (against the stand-in in `tests/support/video-server.mjs`);
+  - learner management: search, access grants, suspension, CSV export, password resets and the activity log;
   - the Stripe webhook, with events signed like Stripe signs them;
   - the Supabase Send Email hook, with real signatures;
   - SMTP delivery and batch sends;
@@ -205,7 +217,9 @@ npm run test:all          # unit + integration + e2e
   - notes and the vault;
   - locked lessons;
   - Stripe Checkout (created on stripe-mock), then a signed webhook that unlocks the course or membership and sends the receipt;
-  - account deletion and admin editing;
+  - account deletion;
+  - the admin studio: create a course, upload a cover and a video, add a checkpoint, reorder with the keyboard, duplicate, preview the draft and delete it;
+  - the video library, and managing a learner (grant a course, suspend, restore);
   - writing and sending the newsletter from Admin → Emails, then unsubscribing from the delivered issue;
   - the public site and quiz;
   - axe accessibility checks.

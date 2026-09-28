@@ -67,7 +67,7 @@ The product stays interactive. The home hero holds a playable checkpoint card, a
 Outfit for everything, set tight:
 
 - **Hero display:** light weight for the first words and bold weight with a peach-to-orange gradient on the last word ("Know your own **mind.**"), following the reference's "New Way Of **Growing**".
-- **Section headlines:** 600 weight, −0.05em tracking, line height under 1, often broken into two short sentences ("Seven courses. Plenty to take away.").
+- **Section headlines:** 600 weight, −0.05em tracking, line height under 1, often broken into two short sentences ("Two courses. One route inward.").
 - **Eyebrows:** small uppercase labels with wide tracking. Orange opens a page; muted opens a section.
 - **Numbers:** `01 02 03` in orange index lists (lesson path, FAQ, curriculum, beliefs, journal).
 
@@ -90,6 +90,8 @@ Outfit for everything, set tight:
   - Outline: a pill.
 - **Fields.** 3.15rem tall with a 0.85rem radius and a hairline border. Focus shows an orange border with a soft orange ring. Password fields have a text **Show/Hide** toggle.
 - **Auth frame.** One rounded frame split in two, with the form on one side and the papercut art on the other. On `/login` the art is on the right; on `/signup` it slides to the left over 0.82s, and the image shifts from its violet end to its brown end. The top bar holds the wordmark and an orange **sliding switch** between Sign in and Sign up. The form has "Back to site", an orange eyebrow, a big headline ("Welcome back." / "Come as you are."), a lead, fields, a full-width orange submit with an arrow, a swap line, and a footer with © and Help/Home. On phones the art fills the screen behind a frosted form card.
+- **Course route (home).** The catalogue frame shows the courses as stops on one line rather than a scrolling row. The free course is the orange stop ("Start here") and the next is a panel stop ("Go deeper"). Each has its art or cover, a big index number, a line code, and its first lessons as stations on a vertical rail. An orange arrow badge on the seam joins them. On wide screens the stop you hover or focus widens.
+- **Admin.** Same panels as the learner app: rounded `bg-raised` cards with a hairline ring. Reorderable rows have a grip handle, and destructive actions confirm in a native modal `<dialog>`. Outcomes appear as toasts. The course and lesson editors keep their Save button in a sticky bar.
 - **Course card.** The art crop sits at the top with category and level chips and a big white index number. Below it are an uppercase meta line, the title, the subtitle, four feature bullets and a block "View course" button. The free course uses the orange variant. On `/courses` the cards sit inside a dark bezel frame.
 - **FAQ.** A violet statement block ("Curious? Good.") next to a panel of numbered accordion rows.
 - **Learner app:**
