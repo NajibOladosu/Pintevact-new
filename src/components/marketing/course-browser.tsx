@@ -6,6 +6,13 @@ import { CourseCard } from "@/components/course/course-card";
 import { cn } from "@/lib/utils";
 import type { Course } from "@/lib/types";
 
+/** Column span for card `i` of `n`, so a short last row stretches to fill the width (2 cols on sm, 3 on lg via a 6-col grid). */
+function spanFor(i: number, n: number) {
+  const lgRemainder = n % 3;
+  const lgSpan = lgRemainder && i >= n - lgRemainder ? (lgRemainder === 1 ? "lg:col-span-6" : "lg:col-span-3") : "lg:col-span-2";
+  return cn(n % 2 === 1 && i === n - 1 && "sm:col-span-2", lgSpan);
+}
+
 export function CourseBrowser({ courses }: { courses: Course[] }) {
   const categories = useMemo(() => ["All", ...Array.from(new Set(courses.map((c) => c.category)))], [courses]);
   const [category, setCategory] = useState("All");
@@ -69,9 +76,9 @@ export function CourseBrowser({ courses }: { courses: Course[] }) {
       </p>
       {filtered.length ? (
         <div data-reveal="frame" className="mt-5 rounded-[2.4rem] bg-frame p-2.5 shadow-frame sm:p-3">
-          <ul className="grid gap-3 rounded-[2rem] bg-raised p-3 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((c) => (
-              <li key={c.id}>
+          <ul className="grid gap-3 rounded-[2rem] bg-raised p-3 sm:grid-cols-2 lg:grid-cols-6">
+            {filtered.map((c, i) => (
+              <li key={c.id} className={spanFor(i, filtered.length)}>
                 <CourseCard course={c} index={courses.indexOf(c)} tone={c.priceCents === 0 ? "signal" : "light"} headingLevel="h2" className="h-full ring-0 [&:not(.bg-accent)]:bg-bg" />
               </li>
             ))}
