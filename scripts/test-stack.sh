@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Starts the local services the integration and e2e suites run against:
-#   - Supabase (Postgres, Auth, PostgREST, Mailpit inbox) via the Supabase CLI and Docker
+#   - Supabase (Postgres, Auth, PostgREST, Storage, Mailpit inbox) via the Supabase CLI and Docker
 #   - stripe/stripe-mock, Stripe's official API test server
 # Usage: npm run stack:up   (npm run stack:down to stop)
 set -euo pipefail
@@ -11,7 +11,7 @@ export SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET="${SUPABASE_AUTH_EXTERNAL_GOOGLE_SEC
 
 case "${1:-up}" in
   up)
-    npx supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,storage-api,postgres-meta,supavisor
+    npx supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,postgres-meta,supavisor
     # Behind a TLS-intercepting proxy, let the Auth container trust its CA so it can reach Google's OIDC config.
     if [ -n "${STACK_EXTRA_CA_CERT:-}" ]; then
       docker cp "$STACK_EXTRA_CA_CERT" supabase_auth_pintevact:/etc/ssl/certs/ca-certificates.crt

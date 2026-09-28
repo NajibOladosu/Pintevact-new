@@ -25,7 +25,8 @@ declare free_course uuid; paid_course uuid; lesson uuid; ok boolean;
 begin
   select id into free_course from public.courses where price_cents = 0 limit 1;
   select id into paid_course from public.courses where price_cents > 0 limit 1;
-  assert (select count(*) from public.courses) = 7, 'reads published courses';
+  assert (select count(*) from public.courses) >= 2, 'reads published courses';
+  assert not exists (select 1 from public.courses where not published), 'drafts are hidden from learners';
   assert (select count(*) from public.profiles) = 1, 'sees only own profile';
 
   -- role escalation is silently blocked
@@ -51,6 +52,16 @@ begin
   exception when insufficient_privilege then null;
   end;
   assert ok, 'xp insert rejected';
+
+  -- admin-only helpers and the audit log are out of reach
+  ok := true;
+  begin
+    perform public.admin_duplicate_course(free_course, 'stolen', 'Stolen');
+    ok := false;
+  exception when insufficient_privilege then null;
+  end;
+  assert ok, 'admin_duplicate_course is not callable by learners';
+  assert (select count(*) from public.admin_audit_log) = 0, 'audit log hidden from learners';
 
   select id into lesson from public.lessons where course_id = free_course limit 1;
   insert into public.lesson_progress (user_id, lesson_id, course_id, last_position, watched_seconds) values (auth.uid(), lesson, free_course, 30, 30);
@@ -79,7 +90,7 @@ reset role;
 set role anon;
 select set_config('request.jwt.claim.sub', '', false);
 do $$ begin
-  assert (select count(*) from public.courses) = 7, 'anon reads catalog';
+  assert (select count(*) from public.courses) >= 2 and not exists (select 1 from public.courses where not published), 'anon reads only the published catalog';
   assert (select count(*) from public.profiles) = 0, 'anon sees no profiles';
 end $$;
 reset role;
