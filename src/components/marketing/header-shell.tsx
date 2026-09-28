@@ -43,6 +43,9 @@ export function HeaderShell({ items, signedIn }: { items: NavItem[]; signedIn: b
       className={cn(
         "sticky top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-300",
         scrolled ? "border-b border-line bg-bg/80 backdrop-blur-xl" : "border-b border-transparent",
+        // backdrop-filter makes the header the containing block for fixed children,
+        // which would clip the mobile menu overlay to the header's height.
+        "has-[[aria-expanded=true]]:transition-none has-[[aria-expanded=true]]:[backdrop-filter:none]",
       )}
     >
       <div className={cn("relative mx-auto flex max-w-[90rem] items-center justify-between px-[clamp(1.25rem,4.5vw,5rem)] transition-[height] duration-300", scrolled ? "h-[4.5rem]" : "h-24")}>
