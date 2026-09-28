@@ -9,7 +9,7 @@ export const archetypes: Record<Archetype, { name: string; tagline: string; desc
     description: "Curious and reflective, you process life by understanding it. You're drawn to patterns, meaning and the hidden machinery behind behaviour.",
     strengths: ["Deep self-reflection", "Pattern recognition", "Open to change"],
     blindSpot: "Analysis can become a hiding place. Insight without action turns into rumination.",
-    courseSlug: "shadow-work",
+    courseSlug: "meet-your-mind",
     theme: "iris",
   },
   feeler: {
@@ -27,7 +27,7 @@ export const archetypes: Record<Archetype, { name: string; tagline: string; desc
     description: "Driven and practical, you love turning insight into leverage. You'd rather run an experiment than read another think-piece.",
     strengths: ["Follow-through", "Systems thinking", "Bias to action"],
     blindSpot: "Optimising everything can crowd out rest, play and the people around you.",
-    courseSlug: "habit-architecture",
+    courseSlug: "meet-your-mind",
     theme: "tide",
   },
   connector: {
@@ -36,7 +36,7 @@ export const archetypes: Record<Archetype, { name: string; tagline: string; desc
     description: "Warm and socially attuned, you're energised by relationships and influence. You understand others intuitively and want to be understood in return.",
     strengths: ["Social intelligence", "Persuasion", "Loyalty"],
     blindSpot: "Other people's needs can quietly drown out your own.",
-    courseSlug: "attachment-and-you",
+    courseSlug: "emotional-alchemy",
     theme: "blush",
   },
 };

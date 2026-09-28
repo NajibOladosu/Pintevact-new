@@ -63,7 +63,7 @@ export function PricingPlans({ signedIn, isMember, minCoursePrice }: { signedIn:
           {interval === "year" ? `Billed ${formatPrice(plan.amountCents)} yearly, save ${yearlySavingsPercent()}%` : "Billed monthly"}
         </p>
         <ul className="mt-8 flex-1 space-y-3 border-t border-on-violet/15 pt-7 text-[0.9375rem]">
-          {["All seven courses, and every new one", "Early access to new courses", "Live workshops for members", "Cancel in one click, any time"].map((f) => (
+          {["Every course, and every new one", "Early access to new courses", "Live workshops for members", "Cancel in one click, any time"].map((f) => (
             <li key={f} className="flex items-start gap-2.5">
               <Check size={16} className="mt-0.5 shrink-0 text-accent" /> {f}
             </li>

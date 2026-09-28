@@ -48,11 +48,6 @@ export function isLessonComplete(lesson: Lesson, watchedSeconds: number, answere
 const LINE_CODES: Record<string, string> = {
   "meet-your-mind": "MM",
   "emotional-alchemy": "EA",
-  "the-persuasion-lab": "PL",
-  "habit-architecture": "HA",
-  "attachment-and-you": "AY",
-  "deep-focus-mind": "DF",
-  "shadow-work": "SW",
 };
 
 /** Two-letter line code for a course, like a transit line bullet. */

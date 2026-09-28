@@ -3,7 +3,7 @@ import { catalog } from "@/content/catalog";
 import { deliverStripeEvent, signInAsNewUser } from "./helpers";
 import { waitForEmail } from "../support/mailpit";
 
-const persuasion = catalog.find((c) => c.slug === "the-persuasion-lab")!;
+const paid = catalog.find((c) => c.slug === "emotional-alchemy")!;
 
 /** Our checkout route answers with a redirect to the Stripe-hosted page; record where the browser is sent. */
 function watchCheckout(page: Page) {
@@ -19,8 +19,8 @@ test.describe("payments", () => {
     const user = await signInAsNewUser(page, { name: "Buyer" });
     const checkoutUrl = watchCheckout(page);
 
-    await page.goto(`/courses/${persuasion.slug}`);
-    await page.getByRole("button", { name: `Buy for $${persuasion.priceCents / 100}` }).click();
+    await page.goto(`/courses/${paid.slug}`);
+    await page.getByRole("button", { name: `Buy for $${paid.priceCents / 100}` }).click();
     await expect.poll(checkoutUrl).toContain("checkout.stripe.com");
 
     // Stripe confirms payment to the webhook, then returns the learner to the success URL.
@@ -30,17 +30,17 @@ test.describe("payments", () => {
       mode: "payment",
       payment_status: "paid",
       payment_intent: `pi_e2e_${Date.now()}`,
-      amount_total: persuasion.priceCents,
+      amount_total: paid.priceCents,
       currency: "usd",
-      metadata: { user_id: user.id, course_id: persuasion.id },
+      metadata: { user_id: user.id, course_id: paid.id },
     });
-    await page.goto(`/learn/${persuasion.slug}?purchased=1`);
+    await page.goto(`/learn/${paid.slug}?purchased=1`);
     await expect(page.getByText("Unlocked!")).toBeVisible();
     await expect(page.getByText("You're previewing this course.")).toHaveCount(0);
 
     await page.goto("/account/billing");
-    await expect(page.getByRole("cell", { name: persuasion.title })).toBeVisible();
-    await expect(page.getByRole("cell", { name: `$${persuasion.priceCents / 100}` })).toBeVisible();
+    await expect(page.getByRole("cell", { name: paid.title })).toBeVisible();
+    await expect(page.getByRole("cell", { name: `$${paid.priceCents / 100}` })).toBeVisible();
     await waitForEmail(user.email, /Your receipt/);
   });
 
@@ -63,7 +63,7 @@ test.describe("payments", () => {
       items: { data: [{ current_period_end: Math.floor(Date.now() / 1000) + 30 * 86_400, price: { id: "price_monthly", recurring: { interval: "month" } } }] },
     });
 
-    await page.goto("/learn/shadow-work");
+    await page.goto(`/learn/${paid.slug}`);
     await expect(page.getByText("You're previewing this course.")).toHaveCount(0);
     await page.goto("/account/billing");
     await expect(page.getByText("All-Access, Monthly")).toBeVisible();
@@ -72,8 +72,8 @@ test.describe("payments", () => {
   });
 
   test("guests are sent to sign up before buying", async ({ page }) => {
-    await page.goto("/courses/deep-focus-mind");
-    await page.getByRole("link", { name: "Get Deep Focus Mind" }).click();
-    await expect(page).toHaveURL(/\/signup\?next=%2Fcourses%2Fdeep-focus-mind/);
+    await page.goto(`/courses/${paid.slug}`);
+    await page.getByRole("link", { name: `Get ${paid.title}` }).click();
+    await expect(page).toHaveURL(/\/signup\?next=%2Fcourses%2Femotional-alchemy/);
   });
 });
