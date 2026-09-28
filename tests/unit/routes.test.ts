@@ -15,6 +15,9 @@ describe("route guards", () => {
     expect(routeDecision("/signin", "", true)).toEqual({ redirect: "/dashboard" });
     expect(routeDecision("/reset-password", "", true)).toBeNull();
   });
+  it("sends signed-in users from the home page to the dashboard", () => {
+    expect(routeDecision("/", "", true)).toEqual({ redirect: "/dashboard" });
+  });
   it("lets everyone see public pages", () => {
     expect(routeDecision("/", "", false)).toBeNull();
     expect(routeDecision("/pricing", "", true)).toBeNull();

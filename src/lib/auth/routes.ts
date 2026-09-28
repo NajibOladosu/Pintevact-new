@@ -18,7 +18,8 @@ export function routeDecision(pathname: string, search: string, signedIn: boolea
   if (!signedIn && isProtectedPath(pathname)) {
     return { redirect: `/signin?next=${encodeURIComponent(pathname + search)}` };
   }
-  if (signedIn && isGuestOnlyPath(pathname)) {
+  // Signed-in users land on their dashboard instead of the marketing home page.
+  if (signedIn && (pathname === "/" || isGuestOnlyPath(pathname))) {
     return { redirect: "/dashboard" };
   }
   return null;
