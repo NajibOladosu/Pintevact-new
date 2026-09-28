@@ -54,7 +54,10 @@ export default async function HomePage() {
                 <Link href="/signup?next=/learn/meet-your-mind" data-magnetic className={buttonClasses({ size: "lg" })}>
                   Start free <ArrowUpRight size={16} aria-hidden className="arrow-nudge" />
                 </Link>
-                <Link href="/courses" className="link-draw pb-1 text-[0.9375rem] font-medium text-on-frame">
+                <Link
+                  href="/courses"
+                  className={buttonClasses({ variant: "outline", size: "lg", className: "border-on-frame/40 text-on-frame hover:border-frame hover:bg-frame focus-visible:border-frame focus-visible:bg-frame" })}
+                >
                   Discover the courses
                 </Link>
               </div>
