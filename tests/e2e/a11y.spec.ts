@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { signInAsNewUser } from "./helpers";
 
-const publicPages = ["/", "/courses", "/courses/emotional-alchemy", "/pricing", "/discover", "/about", "/contact", "/journal", "/signin", "/signup", "/forgot-password"];
+const publicPages = ["/", "/courses", "/courses/emotional-alchemy", "/pricing", "/discover", "/about", "/contact", "/signin", "/signup", "/forgot-password"];
 
 async function seriousViolations(page: import("@playwright/test").Page) {
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).disableRules(["color-contrast"]).analyze();

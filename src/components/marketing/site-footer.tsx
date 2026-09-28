@@ -9,7 +9,6 @@ const columns = [
       { href: "/courses", label: "All courses" },
       { href: "/courses/meet-your-mind", label: "The free course" },
       { href: "/discover", label: "Mind quiz" },
-      { href: "/journal", label: "Journal" },
     ],
   },
   {

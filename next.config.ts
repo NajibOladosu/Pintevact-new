@@ -17,7 +17,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [{ source: "/login", destination: "/signin", permanent: true }];
+    return [
+      { source: "/login", destination: "/signin", permanent: true },
+      // Journal is archived (src/app/(marketing)/_journal); temporary so it can come back.
+      { source: "/journal/:path*", destination: "/", permanent: false },
+    ];
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

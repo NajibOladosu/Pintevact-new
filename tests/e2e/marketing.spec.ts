@@ -83,11 +83,9 @@ test.describe("public site", () => {
     await expect(page.getByRole("link", { name: "See the course" })).toHaveAttribute("href", "/courses/emotional-alchemy");
   });
 
-  test("journal lists and opens articles", async ({ page }) => {
-    await page.goto("/journal");
-    await page.getByRole("link", { name: /spotlight effect/i }).click();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("spotlight effect");
-    await expect(page.getByText("Try this")).toBeVisible();
+  test("archived journal redirects home", async ({ page }) => {
+    await page.goto("/journal/some-post");
+    await expect(page).toHaveURL(/\/$/);
   });
 
   test("contact form validates and submits", async ({ page }) => {

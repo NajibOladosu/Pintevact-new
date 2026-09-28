@@ -5,7 +5,6 @@ export const marketingNav = [
   { href: "/courses", label: "Courses" },
   { href: "/discover", label: "Mind quiz" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/journal", label: "Journal" },
   { href: "/about", label: "About" },
 ];
 
