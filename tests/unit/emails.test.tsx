@@ -19,6 +19,10 @@ import WeeklyDigestEmail from "@/emails/weekly-digest";
 import ContactNotificationEmail from "@/emails/contact-notification";
 import ContactAutoReplyEmail from "@/emails/contact-auto-reply";
 import NewsletterWelcomeEmail from "@/emails/newsletter-welcome";
+import NewsletterIssueEmail from "@/emails/newsletter-issue";
+import NotificationEmail from "@/emails/notification";
+import PasswordChangedEmail from "@/emails/password-changed";
+import AccountDeletedEmail from "@/emails/account-deleted";
 import { buildAuthEmails, confirmUrl, type AuthHookPayload } from "@/lib/auth/email-hook";
 import { renderEmail, sendEmail } from "@/lib/email";
 
@@ -41,6 +45,10 @@ const templates: [string, any][] = [
   ["contact-notification", ContactNotificationEmail],
   ["contact-auto-reply", ContactAutoReplyEmail],
   ["newsletter-welcome", NewsletterWelcomeEmail],
+  ["newsletter-issue", NewsletterIssueEmail],
+  ["notification", NotificationEmail],
+  ["password-changed", PasswordChangedEmail],
+  ["account-deleted", AccountDeletedEmail],
 ];
 
 describe("email templates", () => {
@@ -56,6 +64,20 @@ describe("email templates", () => {
     expect(html).toContain("https://x.test/auth/confirm?a=1");
     expect(html).toContain("123456");
     expect(html).toContain("Ada");
+  });
+
+  it("shows an unsubscribe link only when one is given", async () => {
+    const withLink = await render(<NewsletterIssueEmail {...NewsletterIssueEmail.PreviewProps} unsubscribeUrl="https://x.test/unsubscribe?t=n.abc" />);
+    expect(withLink).toContain("https://x.test/unsubscribe?t=n.abc");
+    const receipt = await render(<PurchaseReceiptEmail {...PurchaseReceiptEmail.PreviewProps} />);
+    expect(receipt).not.toContain("/unsubscribe");
+  });
+
+  it("uses mail-client-safe images", async () => {
+    const html = await render(<MagicLinkEmail {...MagicLinkEmail.PreviewProps} />);
+    const images = [...html.matchAll(/<img[^>]+src="([^"]+)"/g)].map((m) => m[1]);
+    expect(images.length).toBeGreaterThan(0);
+    for (const src of images) expect(src).toMatch(/\.(jpg|png)$/);
   });
 
   it("produces a plain-text alternative", async () => {

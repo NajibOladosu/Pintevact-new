@@ -4,16 +4,17 @@ export type MembershipCanceledEmailProps = { name?: string | null; accessUntil: 
 
 export default function MembershipCanceledEmail({ name, accessUntil }: MembershipCanceledEmailProps) {
   return (
-    <EmailLayout preview="Your All-Access membership has been canceled">
-      <Heading eyebrow="Membership">Thank you for the journey{name ? `, ${name}` : ""}.</Heading>
+    <EmailLayout preview={accessUntil ? `Your All-Access membership ends on ${accessUntil}.` : "Your All-Access membership has ended."} reason="You're receiving this because your All-Access membership changed.">
+      <Heading eyebrow="Membership">{name ? `Thank you for the journey, ${name}.` : "Thank you for the journey."}</Heading>
       <P>
-        Your All-Access membership has been canceled.{" "}
-        {accessUntil ? `You'll keep full access until ${accessUntil}.` : "Your access to member courses has ended."} Your reflections, notes and certificates stay with you forever.
+        Your All-Access membership has been canceled. {accessUntil ? <>You keep full access until <strong>{accessUntil}</strong>.</> : "Access to member courses has ended."} Your reflections, notes and certificates stay yours either way.
       </P>
-      <P>If something wasn&apos;t working for you, we&apos;d genuinely love to hear it, just reply to this email.</P>
-      <CTA href={`${siteUrl()}/pricing`}>Rejoin any time</CTA>
+      <P>If something wasn&apos;t working, we&apos;d genuinely like to hear it. Just reply to this email.</P>
+      <CTA href={`${siteUrl()}/pricing`} tone="ink">
+        Rejoin any time
+      </CTA>
     </EmailLayout>
   );
 }
 
-MembershipCanceledEmail.PreviewProps = { name: "Ada", accessUntil: "Oct 27, 2026" } satisfies MembershipCanceledEmailProps;
+MembershipCanceledEmail.PreviewProps = { name: "Ada", accessUntil: "Oct 28, 2026" } satisfies MembershipCanceledEmailProps;

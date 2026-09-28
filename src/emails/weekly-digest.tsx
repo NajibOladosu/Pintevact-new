@@ -1,5 +1,4 @@
-import { Column, Row, Section, Text } from "@react-email/components";
-import { brand, CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
+import { Callout, CalloutText, CTA, EmailLayout, Heading, P, siteUrl, Stats } from "./_components/layout";
 
 export type WeeklyDigestEmailProps = {
   name?: string | null;
@@ -8,28 +7,31 @@ export type WeeklyDigestEmailProps = {
   reflections: number;
   levelName: string;
   insight: string;
+  unsubscribeUrl?: string;
 };
 
-export default function WeeklyDigestEmail({ name, xp, lessons, reflections, levelName, insight }: WeeklyDigestEmailProps) {
-  const stat = (value: string | number, label: string) => (
-    <Column style={{ textAlign: "center", padding: "12px 4px" }}>
-      <Text style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>{value}</Text>
-      <Text style={{ margin: 0, fontSize: 12, color: brand.ink3 }}>{label}</Text>
-    </Column>
-  );
+export default function WeeklyDigestEmail({ name, xp, lessons, reflections, levelName, insight, unsubscribeUrl }: WeeklyDigestEmailProps) {
   return (
-    <EmailLayout preview={`Your week in review: ${xp} XP, ${lessons} lessons`} footerNote="Weekly digests arrive every Sunday. Turn them off in your account settings.">
-      <Heading eyebrow="Your week">Here&apos;s what you learned about yourself{name ? `, ${name}` : ""}.</Heading>
-      <Section style={{ backgroundColor: "#f8f2ea", borderRadius: 16, border: "1px solid #e2d9cc", margin: "0 0 20px" }}>
-        <Row>
-          {stat(xp, "XP")}
-          {stat(lessons, "Lessons")}
-          {stat(reflections, "Reflections")}
-        </Row>
-      </Section>
+    <EmailLayout
+      band="dusk"
+      preview={`Your week: ${xp} XP, ${lessons} ${lessons === 1 ? "lesson" : "lessons"}, ${reflections} ${reflections === 1 ? "reflection" : "reflections"}.`}
+      reason="You're receiving this Sunday digest because learning emails are on in your Pintevact account."
+      unsubscribeUrl={unsubscribeUrl}
+    >
+      <Heading eyebrow="Your week">{name ? `Here's what you noticed this week, ${name}.` : "Here's what you noticed this week."}</Heading>
+      <Stats
+        items={[
+          { value: xp, label: "XP" },
+          { value: lessons, label: lessons === 1 ? "Lesson" : "Lessons" },
+          { value: reflections, label: reflections === 1 ? "Reflection" : "Reflections" },
+        ]}
+      />
       <P>
-        You&apos;re currently a <strong>{levelName}</strong>. {insight}
+        Your current level: <strong>{levelName}</strong>. Keep answering honestly and the next one arrives on its own.
       </P>
+      <Callout eyebrow="Why it works">
+        <CalloutText>{insight}</CalloutText>
+      </Callout>
       <CTA href={`${siteUrl()}/dashboard`}>Open my dashboard</CTA>
     </EmailLayout>
   );
@@ -41,5 +43,6 @@ WeeklyDigestEmail.PreviewProps = {
   lessons: 4,
   reflections: 6,
   levelName: "Observer",
-  insight: "People who reflect in writing after learning retain up to 23% more (Di Stefano et al.). Your reflections are compounding.",
+  insight: "People who reflect in writing after learning retain noticeably more of it. Your reflections are compounding.",
+  unsubscribeUrl: "https://pintevact.com/unsubscribe?t=example",
 } satisfies WeeklyDigestEmailProps;

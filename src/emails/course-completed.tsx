@@ -1,21 +1,24 @@
 import { Section, Text } from "@react-email/components";
-import { brand, CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
+import { brand, CTA, EmailLayout, Eyebrow, Heading, P, siteUrl } from "./_components/layout";
 
 export type CourseCompletedEmailProps = { name?: string | null; courseTitle: string; certificateId: string; xpEarned: number };
 
 export default function CourseCompletedEmail({ name, courseTitle, certificateId, xpEarned }: CourseCompletedEmailProps) {
   return (
-    <EmailLayout preview={`You completed ${courseTitle}, your certificate is ready`}>
-      <Heading eyebrow="Course complete">You did the work{name ? `, ${name}` : ""}.</Heading>
+    <EmailLayout band="dawn" preview={`You finished ${courseTitle}. Your certificate is ready.`} reason="You're receiving this because you completed a course on Pintevact.">
+      <Heading eyebrow="Course complete">{name ? `You did the work, ${name}.` : "You did the work."}</Heading>
       <P>
-        You&apos;ve completed <strong>{courseTitle}</strong>. Most people who start online courses never finish them. You&apos;re not most people.
+        You&apos;ve completed <strong>{courseTitle}</strong>. Most people who start an online course never finish it. You did, one honest answer at a time.
       </P>
-      <Section style={{ backgroundColor: brand.violet, color: brand.onViolet, borderRadius: 12, padding: "24px 24px", margin: "8px 0 20px" }}>
-        <Text style={{ margin: 0, color: brand.onVioletMuted, fontSize: 13 }}>Certificate of completion</Text>
-        <Text style={{ margin: "6px 0 4px", color: brand.onViolet, fontSize: 24, fontWeight: 600 }}>{courseTitle}</Text>
-        <Text style={{ margin: 0, color: brand.onVioletMuted, fontSize: 14 }}>+{xpEarned} XP</Text>
+      {/* A small certificate card: violet, like the answered side of a checkpoint. */}
+      <Section style={{ backgroundColor: brand.violet, borderRadius: 22, padding: "26px 28px", margin: "6px 0 20px" }}>
+        <Eyebrow color={brand.onVioletMuted}>Certificate of completion</Eyebrow>
+        <Text style={{ margin: "0 0 6px", fontSize: 26, lineHeight: "30px", fontWeight: 600, letterSpacing: "-0.03em", color: brand.onViolet }}>{courseTitle}</Text>
+        <Text style={{ margin: 0, fontSize: 14, color: brand.onVioletMuted }}>
+          {name ?? "Pintevact learner"} · <span style={{ color: "#ff9a74", fontWeight: 600 }}>+{xpEarned} XP</span>
+        </Text>
       </Section>
-      <P>Share it, frame it, or simply let it remind you: you are someone who follows through.</P>
+      <P>Share it, print it, or simply let it remind you that you&apos;re someone who follows through.</P>
       <CTA href={`${siteUrl()}/certificates/${certificateId}`}>View my certificate</CTA>
     </EmailLayout>
   );

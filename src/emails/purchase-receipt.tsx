@@ -1,5 +1,4 @@
-import { Section, Text } from "@react-email/components";
-import { brand, CTA, EmailLayout, Heading, P, siteUrl } from "./_components/layout";
+import { CTA, Details, EmailLayout, Heading, P, siteUrl, Small } from "./_components/layout";
 
 export type PurchaseReceiptEmailProps = {
   name?: string | null;
@@ -11,32 +10,14 @@ export type PurchaseReceiptEmailProps = {
 };
 
 export default function PurchaseReceiptEmail({ name, courseTitle, courseSlug, amount, orderId, date }: PurchaseReceiptEmailProps) {
-  const row = (label: string, value: string) => (
-    <tr>
-      <td style={{ padding: "8px 0", fontSize: 14, color: brand.ink3 }}>{label}</td>
-      <td style={{ padding: "8px 0", fontSize: 14, textAlign: "right", fontWeight: 600 }}>{value}</td>
-    </tr>
-  );
   return (
-    <EmailLayout preview={`Your receipt for ${courseTitle}`} footerNote="Questions about your order? Just reply to this email.">
-      <Heading eyebrow="Receipt">It&apos;s yours{name ? `, ${name}` : ""}. Forever.</Heading>
+    <EmailLayout band="amber" preview={`Receipt: ${courseTitle}, ${amount}. It's yours to keep.`} footerNote="Questions about this order? Just reply to this email." reason="You're receiving this receipt because you bought a course on Pintevact.">
+      <Heading eyebrow="Receipt">{name ? `It's yours, ${name}. For good.` : "It's yours. For good."}</Heading>
       <P>
-        Thank you for investing in <strong>{courseTitle}</strong>. Research on the IKEA effect says we value what we put effort into, so here&apos;s to the effort ahead.
+        Thank you for investing in <strong>{courseTitle}</strong>. We value what we put effort into, so here&apos;s to the effort ahead.
       </P>
-      <Section style={{ backgroundColor: "#f8f2ea", borderRadius: 16, padding: "8px 20px", border: "1px solid #e2d9cc" }}>
-        <table role="presentation" style={{ width: "100%" }}>
-          <tbody>
-            {row("Course", courseTitle)}
-            {row("Date", date)}
-            {row("Order", orderId)}
-            <tr>
-              <td style={{ padding: "12px 0 8px", fontSize: 16, borderTop: "1px solid #e2d9cc" }}>Total paid</td>
-              <td style={{ padding: "12px 0 8px", fontSize: 20, textAlign: "right", fontWeight: 600, borderTop: "1px solid #e2d9cc" }}>{amount}</td>
-            </tr>
-          </tbody>
-        </table>
-      </Section>
-      <Text style={{ fontSize: 12, color: brand.ink3, margin: "8px 0 0" }}>A full Stripe receipt is sent separately for your records.</Text>
+      <Details rows={[["Course", courseTitle], ["Date", date], ["Order", orderId], ["Access", "Lifetime"]]} total={["Total paid", amount]} />
+      <Small>Stripe sends a separate payment receipt for your records. Single-course purchases have a 30-day money-back guarantee.</Small>
       <CTA href={`${siteUrl()}/learn/${courseSlug}`}>Begin the course</CTA>
     </EmailLayout>
   );
@@ -47,6 +28,6 @@ PurchaseReceiptEmail.PreviewProps = {
   courseTitle: "Emotional Alchemy",
   courseSlug: "emotional-alchemy",
   amount: "$79.00",
-  orderId: "cs_test_a1B2c3",
-  date: "Sep 27, 2026",
+  orderId: "a1B2c3D4e5F6",
+  date: "Sep 28, 2026",
 } satisfies PurchaseReceiptEmailProps;
