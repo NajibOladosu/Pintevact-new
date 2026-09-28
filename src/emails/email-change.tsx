@@ -1,17 +1,24 @@
-import { CTA, EmailLayout, FallbackLink, Heading, P } from "./_components/layout";
+import { CTA, EmailLayout, FallbackLink, Heading, P, SecurityNote } from "./_components/layout";
 
 export type EmailChangeEmailProps = { confirmUrl: string; newEmail: string; isCurrentAddress?: boolean };
 
 export default function EmailChangeEmail({ confirmUrl, newEmail, isCurrentAddress }: EmailChangeEmailProps) {
   return (
-    <EmailLayout preview="Confirm your new Pintevact email address" footerNote="If you didn't request this change, please secure your account by resetting your password.">
+    <EmailLayout preview={isCurrentAddress ? `Approve moving your Pintevact account to ${newEmail}` : "Confirm your new Pintevact email address"} reason="You're receiving this because an email change was requested on your Pintevact account.">
       <Heading eyebrow="Email change">New address, same you.</Heading>
       <P>
-        {isCurrentAddress
-          ? `Someone (hopefully you) asked to change your Pintevact email to ${newEmail}. Confirm from this address to approve it.`
-          : `Confirm that ${newEmail} is where you'd like your Pintevact updates to land from now on.`}
+        {isCurrentAddress ? (
+          <>
+            Someone, hopefully you, asked to move your Pintevact account to <strong>{newEmail}</strong>. Approve it from this address to finish the change.
+          </>
+        ) : (
+          <>
+            Confirm that <strong>{newEmail}</strong> is where your lessons, receipts and reminders should arrive from now on.
+          </>
+        )}
       </P>
-      <CTA href={confirmUrl}>Confirm email change</CTA>
+      <CTA href={confirmUrl}>{isCurrentAddress ? "Approve the change" : "Confirm my new email"}</CTA>
+      <SecurityNote>Didn&apos;t ask for this? Don&apos;t click anything, and reset your password from the sign-in page to keep your account safe.</SecurityNote>
       <FallbackLink href={confirmUrl} />
     </EmailLayout>
   );

@@ -1,19 +1,20 @@
-import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P } from "./_components/layout";
+import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P, SecurityNote, Small } from "./_components/layout";
 
 export type MagicLinkEmailProps = { loginUrl: string; token?: string };
 
 export default function MagicLinkEmail({ loginUrl, token }: MagicLinkEmailProps) {
   return (
-    <EmailLayout preview="Your Pintevact sign-in link" footerNote="This link expires in 1 hour and can only be used once. Didn't request it? You can safely ignore this email.">
-      <Heading eyebrow="Sign in">Your door back in.</Heading>
-      <P>Tap the button below to sign in to Pintevact, no password needed.</P>
+    <EmailLayout band="violet" preview="Your sign-in link for Pintevact. It works once and expires in an hour." reason="You're receiving this because someone asked to sign in to Pintevact with this address.">
+      <Heading eyebrow="Your sign-in link">Welcome back.</Heading>
+      <P>Your answers, your reflections, your next lesson. All right where you left them. Tap below to sign in, no password needed.</P>
       <CTA href={loginUrl}>Sign me in</CTA>
       {token ? (
         <>
-          <P>Or use this one-time code:</P>
+          <Small>Or type this one-time code instead:</Small>
           <OtpCode code={token} />
         </>
       ) : null}
+      <SecurityNote>This link works once and expires in 1 hour. If you didn&apos;t ask to sign in, you can ignore this email; nobody can get in without it.</SecurityNote>
       <FallbackLink href={loginUrl} />
     </EmailLayout>
   );

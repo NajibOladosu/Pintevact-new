@@ -1,19 +1,24 @@
-import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P } from "./_components/layout";
+import { CTA, EmailLayout, FallbackLink, Heading, OtpCode, P, Small } from "./_components/layout";
 
 export type ConfirmSignupEmailProps = { name?: string | null; confirmUrl: string; token?: string };
 
 export default function ConfirmSignupEmail({ name, confirmUrl, token }: ConfirmSignupEmailProps) {
   return (
-    <EmailLayout preview="Confirm your email to open your Pintevact mind map" footerNote="You received this because someone signed up for Pintevact with this address. If it wasn't you, ignore this email.">
-      <Heading eyebrow="Confirm your email">Hello{name ? `, ${name}` : ""}. Let&apos;s make it official.</Heading>
-      <P>You&apos;re one click away from a library of interactive psychology courses built to help you understand, and upgrade, the way your mind works.</P>
+    <EmailLayout
+      band="dawn"
+      preview="One click to confirm your email and open your first lesson."
+      reason="You're receiving this because this address was used to create a Pintevact account. If that wasn't you, ignore this email and nothing will happen."
+    >
+      <Heading eyebrow="Confirm your email">{name ? `Come as you are, ${name}.` : "Come as you are."}</Heading>
+      <P>You&apos;re one click away from lessons that stop to ask about your life, and a private place for everything you notice along the way.</P>
       <CTA href={confirmUrl}>Confirm my email</CTA>
       {token ? (
         <>
-          <P>Or enter this code on the confirmation screen:</P>
+          <Small>Or enter this code on the confirmation screen:</Small>
           <OtpCode code={token} />
         </>
       ) : null}
+      <Small>The link works once and expires in 24 hours.</Small>
       <FallbackLink href={confirmUrl} />
     </EmailLayout>
   );
