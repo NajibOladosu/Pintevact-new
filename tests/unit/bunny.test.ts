@@ -59,3 +59,10 @@ describe("getPlaybackSource", () => {
     expect(getPlaybackSource("vid")).toEqual({ kind: "hls", src: "http://127.0.0.1:4010/vid/playlist.m3u8", poster: "http://127.0.0.1:4010/vid/thumbnail.jpg" });
   });
 });
+
+describe("Bunny Stream uploads", () => {
+  it("signs TUS uploads as Bunny documents: sha256(library + key + expiry + video)", async () => {
+    const { tusSignature } = await import("@/lib/bunny");
+    expect(tusSignature("lib", "key", 1700000000, "vid")).toBe(createHash("sha256").update("libkey1700000000vid").digest("hex"));
+  });
+});

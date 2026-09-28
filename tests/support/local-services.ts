@@ -21,6 +21,9 @@ export const local = {
   authHookSecret: `v1,whsec_${Buffer.from("pintevact-local-auth-hook-secret").toString("base64")}`,
   videoOrigin: process.env.TEST_VIDEO_ORIGIN ?? "http://127.0.0.1:4010",
   cronSecret: "pintevact-local-cron-secret",
+  // The Bunny Stream API stand-in in video-server.mjs accepts only these.
+  bunnyLibraryId: "e2e-library",
+  bunnyApiKey: "e2e-bunny-api-key",
 };
 
 /** Environment for the app under test, pointing every integration at the local stack. */
@@ -42,8 +45,9 @@ export function appEnv(): Record<string, string> {
     STRIPE_PRICE_MEMBERSHIP_YEARLY: "",
     BUNNY_STREAM_CDN_HOSTNAME: local.videoOrigin,
     BUNNY_STREAM_TOKEN_KEY: "",
-    BUNNY_STREAM_LIBRARY_ID: "",
-    BUNNY_STREAM_API_KEY: "",
+    BUNNY_STREAM_LIBRARY_ID: local.bunnyLibraryId,
+    BUNNY_STREAM_API_KEY: local.bunnyApiKey,
+    BUNNY_API_BASE: `${local.videoOrigin}/bunny`,
     CRON_SECRET: local.cronSecret,
   };
 }

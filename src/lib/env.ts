@@ -24,6 +24,8 @@ export const env = {
   bunnyApiKey: () => process.env.BUNNY_STREAM_API_KEY ?? "",
   bunnyCdnHostname: () => process.env.BUNNY_STREAM_CDN_HOSTNAME ?? "",
   bunnyTokenKey: () => process.env.BUNNY_STREAM_TOKEN_KEY ?? "",
+  /** Bunny Stream API origin; overridden in tests to point at the local stand-in. */
+  bunnyApiBase: () => (process.env.BUNNY_API_BASE || "https://video.bunnycdn.com").replace(/\/$/, ""),
   bunnyTokenTtl: () => Number(process.env.BUNNY_STREAM_TOKEN_TTL ?? 14400) || 14400,
   cronSecret: () => process.env.CRON_SECRET ?? "",
   /** Signs learner unsubscribe links. Falls back to the service-role key so links always verify server-side. */
@@ -48,4 +50,9 @@ export function isEmailConfigured() {
 
 export function isBunnyConfigured() {
   return Boolean(env.bunnyCdnHostname());
+}
+
+/** The Stream library API (listing, uploading and deleting videos) needs the library id and API key. */
+export function isBunnyLibraryConfigured() {
+  return Boolean(env.bunnyLibraryId() && env.bunnyApiKey());
 }
