@@ -22,22 +22,6 @@ export type AccessInfo = {
 
 export type ProfilePatch = Partial<Pick<Profile, "fullName" | "headline" | "emailOptIn" | "avatarUrl">>;
 
-export type CoursePatch = Partial<
-  Pick<Course, "title" | "subtitle" | "description" | "category" | "level" | "priceCents" | "stripePriceId" | "published" | "featured" | "theme">
->;
-
-export type LessonPatch = Partial<{ title: string; summary: string; durationSeconds: number; bunnyVideoId: string | null; isPreview: boolean }>;
-
-export type AdminUserRow = {
-  id: string;
-  email: string;
-  fullName: string | null;
-  role: Profile["role"];
-  createdAt: string;
-  enrollments: number;
-  xp: number;
-};
-
 export type AdminStats = {
   users: number;
   activeSubscriptions: number;
@@ -94,8 +78,4 @@ export interface Store {
 
   // Admin
   adminStats(): Promise<AdminStats>;
-  adminListUsers(): Promise<AdminUserRow[]>;
-  adminUpdateCourse(courseId: string, patch: CoursePatch): Promise<void>;
-  adminUpdateLesson(lessonId: string, patch: LessonPatch): Promise<void>;
-  adminSetRole(userId: string, role: Profile["role"]): Promise<void>;
 }

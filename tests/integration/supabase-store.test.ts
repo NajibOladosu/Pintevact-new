@@ -85,19 +85,9 @@ describe("Supabase store", () => {
     expect(msgs).toEqual([{ topic: "teams", message: "Seats for twelve, please." }]);
   });
 
-  it("gives admins stats, the learner list, course edits and role changes", async () => {
+  it("gives admins catalogue stats", async () => {
     const { store } = await storeFor({ role: "admin" });
-    const learner = await createUser({ name: "Promoted" });
+    await createUser({ name: "Counted" });
     expect((await store.adminStats()).users).toBeGreaterThan(0);
-    expect((await store.adminListUsers()).some((u) => u.id === learner.id)).toBe(true);
-
-    await store.adminSetRole(learner.id, "admin");
-    const { data } = await admin().from("profiles").select("role").eq("id", learner.id).single();
-    expect(data!.role).toBe("admin");
-
-    const course = (await store.listCourses({ includeUnpublished: true }))[1];
-    await store.adminUpdateCourse(course.id, { subtitle: `${course.subtitle} (edited)` });
-    expect((await store.getCourse(course.slug))!.subtitle).toBe(`${course.subtitle} (edited)`);
-    await store.adminUpdateCourse(course.id, { subtitle: course.subtitle });
   });
 });

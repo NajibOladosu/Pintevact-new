@@ -19,7 +19,7 @@ import type {
   Subscription,
   XpEvent,
 } from "@/lib/types";
-import type { AdminStats, AdminUserRow, CertificateView, Store, Viewer } from "./store";
+import type { AdminStats, CertificateView, Store, Viewer } from "./store";
 
 /* eslint-disable @typescript-eslint/no-explicit-any -- row shapes come from PostgREST */
 
@@ -84,6 +84,7 @@ export function mapCourse(row: any): Course {
     stripePriceId: row.stripe_price_id,
     theme: row.theme,
     glyph: row.glyph,
+    coverImageUrl: row.cover_image_url ?? null,
     instructor: row.instructor,
     outcomes: row.outcomes ?? [],
     published: row.published,
@@ -168,9 +169,8 @@ export function createSupabaseStore(clients: SupabaseStoreClients = {}): Store {
     },
     async getCourse(slug, opts) {
       const client = opts?.includeUnpublished ? admin() : await db();
-      let q = client.from("courses").select(COURSE_SELECT).eq("slug", slug);
-      if (!opts?.includeUnpublished) q = q.eq("published", true);
-      const row = check(await q.maybeSingle());
+      // Row-level security hides drafts from everyone but admins, so admins can preview them.
+      const row = check(await client.from("courses").select(COURSE_SELECT).eq("slug", slug).maybeSingle());
       return row ? mapCourse(row) : null;
     },
 
@@ -368,57 +368,6 @@ export function createSupabaseStore(clients: SupabaseStoreClients = {}): Store {
       ]);
       const revenueCents = ((purchases.data ?? []) as any[]).reduce((s, p) => s + p.amount_cents, 0);
       return { users, activeSubscriptions, revenueCents, enrollments, lessonsCompleted, reflections };
-    },
-    async adminListUsers(): Promise<AdminUserRow[]> {
-      const client = admin();
-      const [profiles, enrollments, xp] = await Promise.all([
-        client.from("profiles").select("*").order("created_at", { ascending: false }).limit(500),
-        client.from("enrollments").select("user_id"),
-        client.from("xp_events").select("user_id, amount"),
-      ]);
-      const enrolCount = new Map<string, number>();
-      for (const e of (enrollments.data ?? []) as any[]) enrolCount.set(e.user_id, (enrolCount.get(e.user_id) ?? 0) + 1);
-      const xpSum = new Map<string, number>();
-      for (const e of (xp.data ?? []) as any[]) xpSum.set(e.user_id, (xpSum.get(e.user_id) ?? 0) + e.amount);
-      return ((check(profiles) as any[]) ?? []).map((p) => ({
-        id: p.id,
-        email: p.email,
-        fullName: p.full_name,
-        role: p.role,
-        createdAt: p.created_at,
-        enrollments: enrolCount.get(p.id) ?? 0,
-        xp: xpSum.get(p.id) ?? 0,
-      }));
-    },
-    async adminUpdateCourse(courseId, patch) {
-      const map: Record<string, string> = {
-        title: "title",
-        subtitle: "subtitle",
-        description: "description",
-        category: "category",
-        level: "level",
-        priceCents: "price_cents",
-        stripePriceId: "stripe_price_id",
-        published: "published",
-        featured: "featured",
-        theme: "theme",
-      };
-      const update = Object.fromEntries(Object.entries(patch).map(([k, v]) => [map[k], v]).filter(([k]) => k));
-      check(await admin().from("courses").update(update).eq("id", courseId));
-    },
-    async adminUpdateLesson(lessonId, patch) {
-      const map: Record<string, string> = {
-        title: "title",
-        summary: "summary",
-        durationSeconds: "duration_seconds",
-        bunnyVideoId: "bunny_video_id",
-        isPreview: "is_preview",
-      };
-      const update = Object.fromEntries(Object.entries(patch).map(([k, v]) => [map[k], v]).filter(([k]) => k));
-      check(await admin().from("lessons").update(update).eq("id", lessonId));
-    },
-    async adminSetRole(userId, role) {
-      check(await admin().from("profiles").update({ role }).eq("id", userId));
     },
   };
 }

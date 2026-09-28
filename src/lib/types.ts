@@ -65,6 +65,8 @@ export type Course = {
   stripePriceId: string | null;
   theme: CourseTheme;
   glyph: string;
+  /** Uploaded cover image; the papercut artwork is used when empty. */
+  coverImageUrl: string | null;
   instructor: Instructor;
   outcomes: string[];
   published: boolean;

@@ -15,7 +15,7 @@ export function CourseRow({ course, href, completed, nextId, className, headingL
       href={href ?? `/courses/${course.slug}`}
       className={cn("group grid grid-cols-[auto_1fr_auto] items-start gap-x-5 gap-y-4 rounded-[1.6rem] bg-raised p-4 ring-1 ring-line transition-shadow hover:shadow-card md:grid-cols-[auto_minmax(0,1.1fr)_minmax(0,1fr)_auto] md:items-center md:p-5", className)}
     >
-      <CourseArt index={course.position} className="h-14 w-14 rounded-[1rem] md:h-16 md:w-16" />
+      <CourseArt index={course.position} image={course.coverImageUrl} className="h-14 w-14 rounded-[1rem] md:h-16 md:w-16" />
       <div className="min-w-0">
         <H className="text-lg font-semibold tracking-[-0.02em]">{course.title}</H>
         <p className="mt-1 line-clamp-2 text-sm text-muted">{course.subtitle}</p>

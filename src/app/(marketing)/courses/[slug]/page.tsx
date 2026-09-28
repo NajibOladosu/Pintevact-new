@@ -37,12 +37,17 @@ export default async function CourseDetailPage({ params }: Props) {
   const summary = summarizeCourse(course);
   const lessons = flattenLessons(course);
   const preview = lessons.find((l) => l.isPreview) ?? lessons[0];
-  const previewHref = `/learn/${course.slug}/${preview.slug}`;
+  const previewHref = preview ? `/learn/${course.slug}/${preview.slug}` : "#curriculum";
 
   return (
     <>
       {/* Hero */}
       <section className="shell pt-6 sm:pt-10">
+        {!course.published ? (
+          <p role="note" className="mb-6 rounded-full bg-violet px-5 py-2.5 text-center text-sm font-medium text-on-violet">
+            Draft preview. Only admins can see this course until it&apos;s published.
+          </p>
+        ) : null}
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
           <div>
             <Link href="/courses" className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[0.8125rem] font-medium text-muted ring-1 ring-line transition-colors hover:text-fg hover:ring-line-strong">
@@ -69,7 +74,7 @@ export default async function CourseDetailPage({ params }: Props) {
               </Link>
             </div>
           </div>
-          <CourseArt index={index} className="aspect-[4/3] animate-enter rounded-[2rem] shadow-frame [animation-delay:150ms]">
+          <CourseArt index={index} image={course.coverImageUrl} className="aspect-[4/3] animate-enter rounded-[2rem] shadow-frame [animation-delay:150ms]">
             <span aria-hidden className="absolute bottom-3 right-6 text-[clamp(4rem,8vw,7rem)] font-bold leading-none tracking-[-0.06em] text-white">
               {String(index + 1).padStart(2, "0")}
             </span>

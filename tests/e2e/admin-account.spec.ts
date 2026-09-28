@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { signInAsNewUser } from "./helpers";
+import { createUser, signInAsNewUser } from "./helpers";
 import { admin, uniqueEmail } from "../support/supabase";
 import { linkIn, waitForEmail } from "../support/mailpit";
 
@@ -29,29 +29,121 @@ test.describe("account & admin", () => {
     await expect(page).toHaveURL(/\/dashboard/);
   });
 
-  test("admins can edit a course", async ({ page }) => {
+  test("admins get the overview with integrations and recent activity", async ({ page }) => {
     await signInAsNewUser(page, { role: "admin" });
     await page.goto("/admin");
     await expect(page.getByRole("heading", { name: "Admin", level: 1 })).toBeVisible();
     await expect(page.getByText("Integrations")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Recent admin activity" })).toBeVisible();
+  });
+});
 
-    await page.goto("/admin/courses/habit-architecture");
-    const subtitle = page.getByLabel("Subtitle");
-    const original = await subtitle.inputValue();
-    const edited = `Design your environment so good habits run themselves. (${Date.now()})`;
-    await subtitle.fill(edited);
+test.describe("admin course studio", () => {
+  const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64");
+
+  test("create a course, upload its cover and a video, add checkpoints, reorder, duplicate, preview and delete", async ({ page }) => {
+    await signInAsNewUser(page, { role: "admin" });
+    const title = `Studio ${Date.now()}`;
+    await page.goto("/admin/courses");
+    await page.getByLabel("New course").fill(title);
+    await page.getByRole("button", { name: "Create draft" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+    const courseUrl = page.url();
+
+    await page.getByLabel("Subtitle").fill("Built end to end in the admin.");
     await page.getByRole("button", { name: "Save course" }).click();
     await expect(page.getByText("Course saved.")).toBeVisible();
-    await page.goto("/courses/habit-architecture");
-    await expect(page.getByText(edited)).toBeVisible();
 
-    await page.goto("/admin/courses/habit-architecture");
-    await page.getByLabel("Subtitle").fill(original);
-    await page.getByRole("button", { name: "Save course" }).click();
-    await expect(page.getByText("Course saved.")).toBeVisible();
+    await page.locator("#cover-file").setInputFiles({ name: "cover.png", mimeType: "image/png", buffer: png });
+    await expect(page.getByText("Cover updated.")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Replace cover" })).toBeVisible();
 
-    await page.goto("/admin/users");
-    await expect(page.getByRole("table")).toBeVisible();
+    // First lesson: the editor opens straight away.
+    await page.getByLabel("New lesson title").fill("Opening lesson");
+    await page.getByRole("button", { name: "Add lesson" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Opening lesson" })).toBeVisible();
+
+    // Upload a video to Bunny from the picker; it's attached when the upload finishes.
+    await page.getByRole("button", { name: "Choose or upload" }).click();
+    const picker = page.getByRole("dialog", { name: "Choose the lesson video" });
+    await expect(picker.getByRole("button", { name: "Use Fixture 7 min" })).toBeVisible();
+    await picker.locator("input[type=file]").setInputFiles({ name: "opening.mp4", mimeType: "video/mp4", buffer: Buffer.alloc(300 * 1024, 1) });
+    await expect(page.getByText("Video attached.")).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText("opening", { exact: true })).toBeVisible();
+
+    // A quiz checkpoint at one minute.
+    await page.getByLabel("New checkpoint").selectOption("quiz");
+    await page.getByRole("button", { name: "Add checkpoint" }).click();
+    await page.getByLabel("At", { exact: true }).fill("1:00");
+    await page.getByLabel("Question or prompt").fill("What does naming a feeling do?");
+    await page.getByLabel("Answer 1", { exact: true }).fill("Calms the amygdala");
+    await page.getByLabel("Answer 2", { exact: true }).fill("Nothing at all");
+    await page.getByRole("form", { name: "New checkpoint" }).getByRole("button", { name: "Add checkpoint" }).click();
+    await expect(page.getByText("Checkpoint added.")).toBeVisible();
+    await expect(page.getByRole("button", { name: /Checkpoint at 1:00: What does naming a feeling do\?/ })).toBeVisible();
+
+    // Second lesson, then move it above the first with the keyboard.
+    await page.goto(courseUrl);
+    await page.getByLabel("New lesson title").fill("Warm-up");
+    await page.getByRole("button", { name: "Add lesson" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Warm-up" })).toBeVisible();
+    await page.goto(courseUrl);
+    const curriculum = page.getByRole("list", { name: "Curriculum" });
+    await expect(curriculum.getByRole("link", { name: "Warm-up" })).toBeVisible();
+    await page.getByRole("button", { name: "Reorder Warm-up" }).focus();
+    await page.keyboard.press("Space");
+    await page.keyboard.press("ArrowUp");
+    await page.keyboard.press("Space");
+    await expect(curriculum.getByRole("link").first()).toHaveText("Warm-up");
+    await page.reload();
+    await expect(curriculum.getByRole("link").first()).toHaveText("Warm-up");
+
+    await page.getByRole("button", { name: "Duplicate Opening lesson" }).click();
+    await expect(page.getByText("Lesson duplicated.")).toBeVisible();
+    await expect(curriculum.getByRole("link", { name: "Opening lesson (copy)" })).toBeVisible();
+
+    // Drafts can be previewed by admins only.
+    const slug = new URL(courseUrl).pathname.split("/").pop()!;
+    await page.goto(`/courses/${slug}`);
+    await expect(page.getByText("Draft preview.")).toBeVisible();
+    await expect(page.getByText("Built end to end in the admin.")).toBeVisible();
+
+    await page.goto(courseUrl);
+    await page.getByRole("button", { name: "Delete", exact: true }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Delete course" }).click();
+    await expect(page).toHaveURL(/\/admin\/courses$/);
+    await expect(page.getByRole("link", { name: title })).toHaveCount(0);
+  });
+
+  test("the video library lists Bunny videos and where they're used", async ({ page }) => {
+    await signInAsNewUser(page, { role: "admin" });
+    await page.goto("/admin/videos");
+    await expect(page.getByRole("heading", { level: 1, name: "Video library" })).toBeVisible();
+    const card = page.getByRole("article", { name: "Fixture 7 min" });
+    await expect(card).toBeVisible();
+    await card.getByRole("button", { name: "Rename" }).click();
+    await card.getByLabel("Video name").fill("Fixture 7 min");
+    await card.getByRole("button", { name: "Save" }).click();
+    await expect(page.getByText("Video renamed.")).toBeVisible();
+  });
+
+  test("admins manage a learner: grant a course, suspend and restore", async ({ page }) => {
+    const learner = await createUser({ name: "Managed Learner" });
+    await signInAsNewUser(page, { role: "admin" });
+    await page.goto(`/admin/users?q=${encodeURIComponent(learner.email)}`);
+    await page.getByRole("link", { name: /Managed Learner/ }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Managed Learner" })).toBeVisible();
+
+    await page.getByLabel("Course to grant").selectOption({ label: "Emotional Alchemy" });
+    await page.getByRole("button", { name: "Grant access" }).click();
+    await expect(page.getByText("Course access granted.")).toBeVisible();
+    await expect(page.getByText("Granted by admin")).toBeVisible();
+
+    await page.getByRole("button", { name: "Suspend" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Suspend" }).click();
+    await expect(page.getByText("Suspended", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Lift suspension" }).click();
+    await expect(page.getByText("Suspension lifted.")).toBeVisible();
   });
 });
 
