@@ -79,7 +79,7 @@ export function CourseBrowser({ courses }: { courses: Course[] }) {
           <ul className="grid gap-3 rounded-[2rem] bg-raised p-3 sm:grid-cols-2 lg:grid-cols-6">
             {filtered.map((c, i) => (
               <li key={c.id} className={spanFor(i, filtered.length)}>
-                <CourseCard course={c} index={courses.indexOf(c)} tone={c.priceCents === 0 ? "signal" : "light"} headingLevel="h2" className="h-full ring-0 [&:not(.bg-accent)]:bg-bg" />
+                <CourseCard course={c} index={courses.indexOf(c)} headingLevel="h2" className="h-full bg-bg ring-0" />
               </li>
             ))}
           </ul>
