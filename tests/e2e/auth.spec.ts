@@ -114,10 +114,12 @@ test.describe("authentication", () => {
 
   test("Continue with Google hands off to Google's consent screen", async ({ page }) => {
     // The app redirects to Supabase Auth, which redirects on to Google. Record where the browser is sent.
+    // Keep only the first Google request: with the fake e2e client ID, Google then bounces to its own
+    // error page, which carries client_id but no redirect_uri.
     let authorizeUrl: URL | null = null;
     page.on("request", (request) => {
       const url = new URL(request.url());
-      if (url.hostname === "accounts.google.com") authorizeUrl = url;
+      if (!authorizeUrl && url.hostname === "accounts.google.com") authorizeUrl = url;
     });
     await page.goto("/signup?next=%2Flearn");
     await page.getByRole("region", { name: "Sign up" }).getByRole("button", { name: "Sign up with Google" }).click();
