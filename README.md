@@ -28,8 +28,8 @@ The look follows **pintevact.com**. The system is documented in [`DESIGN.md`](DE
 | **Marketing** | `/` home with a playable checkpoint card · `/courses` filterable catalog · `/courses/[slug]` course detail · `/pricing` · `/discover` 2-minute mind quiz · `/journal` + articles · `/about` · `/contact` · `/terms` · `/privacy` · 404 |
 | **Auth** | `/signin` + `/signup` (one page; password, magic link or Google) · `/forgot-password` · `/reset-password` · `/verify-email` · `/auth/confirm` · `/auth/callback` (OAuth) · `/auth/signout` |
 | **Learner app** | `/dashboard` (XP, streak, constellation, heatmap, badges) · `/learn` library · `/learn/[course]` · `/learn/[course]/[lesson]` interactive player · `/reflections` (vault + notes) · `/achievements` · `/account` · `/account/billing` · `/certificates/[id]` (public, printable) |
-| **Admin** | `/admin` stats & integration health · `/admin/courses` + editor (pricing, publishing, Bunny video per lesson) · `/admin/users` |
-| **APIs** | `/api/stripe/checkout` · `/api/stripe/portal` · `/api/stripe/webhook` · `/api/hooks/send-email` (Supabase auth email hook) · `/api/cron/engagement` |
+| **Admin** | `/admin` stats & integration health · `/admin/courses` + editor (pricing, publishing, Bunny video per lesson) · `/admin/users` · `/admin/emails` (Thursday-letter composer, learner announcements, past issues) |
+| **APIs** | `/api/stripe/checkout` · `/api/stripe/portal` · `/api/stripe/webhook` · `/api/hooks/send-email` (Supabase auth email hook) · `/api/cron/engagement` · `/api/unsubscribe` (RFC 8058 one-click) |
 
 ### The interactive player
 
@@ -85,24 +85,38 @@ Copy `.env.example` to `.env.local` and fill it in. Every variable is documented
    ```
 5. Google sign-in: enable the Google provider in Supabase (Authentication → Providers → Google) with your OAuth client, and add `https://<project>.supabase.co/auth/v1/callback` as an authorised redirect URI in Google Cloud. The "Continue with Google" / "Sign up with Google" buttons are always shown; new Google users get an account on their first sign-in.
 
-The schema includes row-level security on every table. Learners only see their own progress, notes and reflections; XP, purchases, subscriptions and certificates can only be written server-side. Tables: `profiles`, `courses`, `modules`, `lessons`, `lesson_interactions`, `enrollments`, `lesson_progress`, `interaction_responses`, `notes`, `xp_events`, `certificates`, `purchases`, `subscriptions`, `stripe_events`, `contact_messages`, `newsletter_subscribers`.
+The schema includes row-level security on every table. Learners only see their own progress, notes and reflections; XP, purchases, subscriptions and certificates can only be written server-side. Tables: `profiles`, `courses`, `modules`, `lessons`, `lesson_interactions`, `enrollments`, `lesson_progress`, `interaction_responses`, `notes`, `xp_events`, `certificates`, `purchases`, `subscriptions`, `stripe_events`, `contact_messages`, `newsletter_subscribers`, `newsletter_issues`.
 
 ### 2. Resend
 
-Verify your sending domain, then set `RESEND_API_KEY`, `EMAIL_FROM` and `CONTACT_INBOX`. (Any SMTP server works too: leave `RESEND_API_KEY` empty and set `SMTP_URL`.) Preview every template locally:
+Verify your sending domain in Resend (add the SPF, DKIM and DMARC records it gives you), then set `RESEND_API_KEY`, `EMAIL_FROM` (an address on that domain) and `CONTACT_INBOX`. Set `EMAIL_UNSUBSCRIBE_SECRET` to a long random string (`openssl rand -base64 32`); it signs learners' unsubscribe links and falls back to the service-role key if unset. Any SMTP server works too: leave `RESEND_API_KEY` empty and set `SMTP_URL`.
+
+How sending works (`src/lib/email.ts`, `src/lib/notifications.ts`, `src/lib/newsletter.ts`):
+
+- Every email is a React Email template, rendered to HTML plus a plain-text part and sent through Resend.
+- Transactional sends carry an **idempotency key** (`receipt/<checkout>`, `certificate/<id>`, `streak/<user>/<day>`…), so a retried Stripe webhook or cron run never emails anyone twice.
+- Newsletters and announcements go out through **Resend batch sends**, 100 per request, each recipient with their own unsubscribe link.
+- Every non-essential email (newsletter, reminders, digests, announcements) has a visible unsubscribe link plus `List-Unsubscribe` and `List-Unsubscribe-Post` headers. Gmail and Apple Mail can then unsubscribe in one click, which bulk-sender rules require. Receipts and security notices never carry one.
+- Emails are tagged by category (`receipt`, `newsletter`, `security`…), so Resend's dashboard can filter them.
+
+Write and send the newsletter from **Admin → Emails**: send yourself a test, then send to every active subscriber. Announcements from the same page go to learners who kept learning emails on.
+
+Preview every template locally:
 
 ```bash
 npm run email:dev   # http://localhost:3001
 ```
 
-Templates live in `src/emails/`:
+Templates live in `src/emails/` and share the layout and components in `src/emails/_components/layout.tsx`:
 
-- **Auth:** confirm signup, magic link, reset password, email change, invite, reauthentication
+- **Auth (via the Supabase hook):** confirm signup, magic link, reset password, email change, invite, reauthentication
 - **Onboarding:** welcome
 - **Billing:** purchase receipt, membership started, membership canceled, payment failed
 - **Progress:** course completed (certificate)
 - **Engagement:** streak reminder, weekly digest
-- **Contact & newsletter:** contact notification, contact auto-reply, newsletter welcome
+- **Security:** password changed, account deleted
+- **Newsletter & announcements:** newsletter welcome, newsletter issue (the Thursday letter), notification (general announcement)
+- **Contact:** contact notification, contact auto-reply
 
 ### 3. Stripe
 
@@ -162,7 +176,7 @@ npm run test:e2e          # Playwright on a production build, desktop + mobile, 
 npm run test:all          # unit + integration + e2e
 ```
 
-- **Unit tests** cover catalog integrity, access rules, gamification, player timing, Bunny URL signing, route guards, validation, every email template, the auth-hook email mapping and checkout parameters.
+- **Unit tests** cover catalog integrity, access rules, gamification, player timing, Bunny URL signing, route guards, validation, every email template, unsubscribe token signing, the auth-hook email mapping and checkout parameters.
 - **Database tests** (`supabase/tests/rls.sql`) assert:
   - profile creation;
   - blocked role escalation;
@@ -176,7 +190,8 @@ npm run test:all          # unit + integration + e2e
   - the data store, including admin operations;
   - the Stripe webhook, with events signed like Stripe signs them;
   - the Supabase Send Email hook, with real signatures;
-  - SMTP delivery;
+  - SMTP delivery and batch sends;
+  - newsletter subscribe, issues and one-click unsubscribe, and learner announcements;
   - the engagement cron.
 
   Every email is read back from the Mailpit inbox.
@@ -191,6 +206,7 @@ npm run test:all          # unit + integration + e2e
   - locked lessons;
   - Stripe Checkout (created on stripe-mock), then a signed webhook that unlocks the course or membership and sends the receipt;
   - account deletion and admin editing;
+  - writing and sending the newsletter from Admin → Emails, then unsubscribing from the delivered issue;
   - the public site and quiz;
   - axe accessibility checks.
 

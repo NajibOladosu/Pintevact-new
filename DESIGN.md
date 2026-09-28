@@ -98,6 +98,9 @@ Outfit for everything, set tight:
   - Panels are rounded 2rem cards, and the dashboard opens with an art frame for "Up next".
 - **Progress.** Rounded orange bars. Lesson stations sit on a 4px rounded rail.
 - **Emails.** Paper background, a 28px-radius panel, Outfit, an orange eyebrow over each headline, an orange pill button, and a PINTEVACT wordmark in the footer.
+  - Each email can open with a papercut art band (`public/email/band-{violet,amber,dawn,dusk}.jpg`). They're JPG because mail clients don't reliably show WebP.
+  - Shared parts live in `src/emails/_components/layout.tsx`: `Heading`, `CTA`, `Callout` (violet), `Steps` (orange 01/02 numbering), `Stats` (dark tiles), `Details` (receipt rows), `OtpCode`, `SecurityNote`.
+  - Layout is table-based with inline styles. A single 480px media query tightens padding and type on phones.
 
 ## Motion
 
