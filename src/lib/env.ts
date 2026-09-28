@@ -26,6 +26,8 @@ export const env = {
   bunnyTokenKey: () => process.env.BUNNY_STREAM_TOKEN_KEY ?? "",
   bunnyTokenTtl: () => Number(process.env.BUNNY_STREAM_TOKEN_TTL ?? 14400) || 14400,
   cronSecret: () => process.env.CRON_SECRET ?? "",
+  /** Signs learner unsubscribe links. Falls back to the service-role key so links always verify server-side. */
+  emailUnsubscribeSecret: () => process.env.EMAIL_UNSUBSCRIBE_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "",
 };
 
 export function isSupabaseConfigured() {

@@ -8,6 +8,6 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     // Everything except static assets, images and webhook endpoints (which verify their own signatures).
-    "/((?!_next/static|_next/image|favicon.ico|icon|api/stripe/webhook|api/hooks|api/cron|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icon|api/stripe/webhook|api/hooks|api/cron|api/unsubscribe|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml)$).*)",
   ],
 };
