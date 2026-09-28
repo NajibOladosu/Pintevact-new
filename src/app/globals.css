@@ -274,8 +274,10 @@
   }
 }
 
+/* Two identical copies so the zoom can restart on every swap without remounting the art. */
 @keyframes art-breathe {
-  0% {
+  0%,
+  100% {
     transform: scale(1);
     filter: saturate(1);
   }
@@ -283,17 +285,16 @@
     transform: scale(1.08);
     filter: saturate(1.12) contrast(1.04);
   }
+}
+@keyframes art-breathe-alt {
+  0%,
   100% {
     transform: scale(1);
     filter: saturate(1);
   }
-}
-@keyframes art-sheen {
-  from {
-    transform: translateX(-120%);
-  }
-  to {
-    transform: translateX(120%);
+  45% {
+    transform: scale(1.08);
+    filter: saturate(1.12) contrast(1.04);
   }
 }
 @keyframes piece-in {
@@ -443,9 +444,6 @@ html.motion-ready [data-reveal="list"] > :nth-child(n + 6) { transition-delay: 3
   from { box-shadow: 0 0 0 0 rgb(238 66 23 / 0.55); }
   to { box-shadow: 0 0 0 1.4rem rgb(238 66 23 / 0); }
 }
-@keyframes marquee {
-  to { transform: translateX(-50%); }
-}
 @keyframes pop-in {
   0% { opacity: 0; transform: scale(0.6) rotate(-8deg); }
   60% { opacity: 1; transform: scale(1.08) rotate(2deg); }
@@ -482,12 +480,6 @@ html.motion-ready [data-reveal="list"] > :nth-child(n + 6) { transition-delay: 3
   .ring-pulse {
     animation: ring-pulse 0.9s var(--ease-soft) 2;
   }
-  .marquee-track {
-    animation: marquee 38s linear infinite;
-  }
-  .marquee:hover .marquee-track {
-    animation-play-state: paused;
-  }
   .pop-in {
     animation: pop-in 0.6s var(--ease-out-expo) both;
   }
@@ -520,8 +512,7 @@ html.motion-ready [data-reveal="list"] > :nth-child(n + 6) { transition-delay: 3
     clip-path: none !important;
     filter: none !important;
   }
-  .hero-art,
-  .marquee-track {
+  .hero-art {
     animation: none !important;
   }
   .mask-line > span {

@@ -1,17 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CaretLeft } from "@/components/icons";
 import { Logo } from "@/components/brand/logo";
 import { AccountSwitch, siteBarRow, type AccountMode } from "@/components/brand/account-pill";
 import { cn } from "@/lib/utils";
-
-const quotes: Record<AccountMode, { text: string; caption: string }> = {
-  signin: { text: "A small moment of reflection can change how you handle the next real one.", caption: "Learn by answering" },
-  signup: { text: "You do not need to know every answer about yourself. You need a place to practise finding one.", caption: "Your pace. Your patterns." },
-};
 
 const EASE = "ease-[cubic-bezier(0.76,0,0.24,1)]";
 
@@ -39,12 +33,11 @@ export function AuthShell({
   next?: string | null;
   children: React.ReactNode;
 }) {
-  const quote = quotes[artSide === "left" ? "signup" : "signin"];
-  const [swapKey, setSwapKey] = useState(0);
+  const [swapCount, setSwapCount] = useState(0);
   const [lastSide, setLastSide] = useState(artSide);
   if (artSide !== lastSide) {
     setLastSide(artSide);
-    setSwapKey((k) => k + 1);
+    setSwapCount((n) => n + 1);
   }
 
   return (
@@ -65,27 +58,22 @@ export function AuthShell({
               artSide === "left" ? "lg:left-3" : "lg:left-[calc(50%+0.75rem)]",
             )}
           >
+            {/*
+              On desktop the art is sized to the whole frame and counter-slides against the panel with the
+              same timing, so the picture holds still while the panel pans across it like a window.
+              Panel width is 50% - 1.5rem of the frame, so the frame is 200% + 3rem of the panel.
+            */}
             <div
-              key={swapKey}
               className={cn(
-                "absolute inset-0 bg-[url(/art/papercut.webp)] bg-cover transition-[background-position] duration-[820ms] lg:[background-size:auto_100%]",
+                "absolute inset-0 bg-[url(/art/papercut.webp)] bg-cover bg-center transition-[left] duration-[820ms] lg:-inset-y-3 lg:right-auto lg:w-[calc(200%+3rem)]",
                 EASE,
-                artSide === "left" ? "bg-[position:0%_50%]" : "bg-[position:100%_50%]",
-                swapKey > 0 && "motion-safe:animate-[art-breathe_0.82s_cubic-bezier(0.76,0,0.24,1)]",
+                artSide === "left" ? "lg:-left-3" : "lg:left-[calc(-100%-2.25rem)]",
+                swapCount > 0 &&
+                  (swapCount % 2
+                    ? "motion-safe:animate-[art-breathe_0.82s_cubic-bezier(0.76,0,0.24,1)]"
+                    : "motion-safe:animate-[art-breathe-alt_0.82s_cubic-bezier(0.76,0,0.24,1)]"),
               )}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(3_3_9/0.04)_0%,rgb(3_3_9/0.12)_38%,rgb(3_3_9/0.72)_100%)]" />
-            {swapKey > 0 ? <div key={`sheen-${swapKey}`} className="absolute inset-0 motion-safe:animate-[art-sheen_0.8s_ease-out_both] bg-[linear-gradient(100deg,transparent_18%,rgb(255_255_255/0.22)_48%,transparent_78%)] mix-blend-screen" /> : null}
-            <figure key={`q-${artSide}`} className="absolute inset-x-10 bottom-10 hidden max-w-[30rem] animate-enter lg:block">
-              <p className="text-[clamp(1.05rem,1.55vw,1.4rem)] leading-[1.45] tracking-[-0.01em] text-white [text-shadow:0_1px_16px_rgb(14_22_40/0.4)]">“{quote.text}”</p>
-              <figcaption className="mt-5 flex items-center gap-3">
-                <Image src="/art/approach.webp" alt="" width={40} height={40} className="h-10 w-10 rounded-full object-cover" />
-                <span>
-                  <strong className="block text-sm font-semibold text-white">The Pintevact approach</strong>
-                  <span className="block text-[0.78rem] text-white/70">{quote.caption}</span>
-                </span>
-              </figcaption>
-            </figure>
           </aside>
           {children}
         </main>

@@ -8,7 +8,6 @@ import { FaqSection } from "@/components/marketing/faq";
 import { CtaBand } from "@/components/marketing/cta-band";
 import { Progress } from "@/components/ui/progress";
 import { HeroArt } from "@/components/motion/hero-art";
-import { Marquee } from "@/components/marketing/marquee";
 import { getCourses } from "@/lib/data";
 import { flattenLessons } from "@/lib/course";
 import { MEMBERSHIP, yearlySavingsPercent } from "@/lib/pricing";
@@ -67,8 +66,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      <Marquee items={["Checkpoints", "Reflections", "Live polls", "Self-ratings", "Insights", "Certificates"]} />
 
       {/* The catalogue: a dark frame holding the courses. */}
       <section className="shell mt-10 sm:mt-14">
