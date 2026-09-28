@@ -8,6 +8,7 @@ import { env, isStripeConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe";
+import { notify } from "@/lib/notifications";
 import { emailSchema, fieldErrors, passwordSchema, profileSchema, type FormState } from "@/lib/validation";
 
 async function viewerOrThrow() {
@@ -53,6 +54,7 @@ export async function changePassword(_: FormState, formData: FormData): Promise<
   if (authError) return { errors: { current: "Current password is incorrect." } };
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
   if (error) return { message: error.message };
+  await notify.passwordChanged({ email: viewer.email, name: viewer.profile.fullName }).catch(console.error);
   return { ok: true, message: "Password updated." };
 }
 
@@ -67,6 +69,7 @@ export async function deleteAccount(_: FormState, formData: FormData): Promise<F
   }
   const { error } = await createAdminClient().auth.admin.deleteUser(viewer.id);
   if (error) return { message: "We couldn't delete your account. Please contact support." };
+  await notify.accountDeleted({ email: viewer.email, name: viewer.profile.fullName }).catch(console.error);
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/?deleted=1");

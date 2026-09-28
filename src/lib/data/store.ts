@@ -89,7 +89,8 @@ export interface Store {
 
   // Marketing
   saveContactMessage(m: { name: string; email: string; topic: string; message: string }): Promise<void>;
-  subscribeNewsletter(email: string): Promise<void>;
+  /** Adds (or re-activates) a subscriber. `isNew` is false when they were already subscribed. */
+  subscribeNewsletter(email: string): Promise<{ token: string; isNew: boolean }>;
 
   // Admin
   adminStats(): Promise<AdminStats>;

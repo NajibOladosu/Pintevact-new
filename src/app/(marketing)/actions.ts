@@ -8,8 +8,8 @@ export async function subscribeNewsletter(_: FormState, formData: FormData): Pro
   const parsed = emailSchema.safeParse(formData.get("email"));
   if (!parsed.success) return { ok: false, errors: { email: parsed.error.issues[0].message } };
   try {
-    await getStore().subscribeNewsletter(parsed.data);
-    await notify.newsletterWelcome(parsed.data);
+    const { token, isNew } = await getStore().subscribeNewsletter(parsed.data);
+    if (isNew) await notify.newsletterWelcome(parsed.data, token);
     return { ok: true, message: "You're in. First letter lands Thursday." };
   } catch (e) {
     console.error(e);

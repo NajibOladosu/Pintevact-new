@@ -44,7 +44,7 @@ export async function GET(request: Request) {
   const plan = planEngagementEmails(users);
   let sent = 0;
   for (const email of plan) {
-    const to = { email: email.to.email, name: email.to.name };
+    const to = { id: email.to.id, email: email.to.email, name: email.to.name };
     const res =
       email.kind === "streak"
         ? await notify.streakReminder(to, { streak: email.streak, nextLessonTitle: email.nextLesson.title, nextLessonUrl: email.nextLesson.url })

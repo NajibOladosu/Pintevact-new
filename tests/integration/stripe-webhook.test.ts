@@ -95,7 +95,7 @@ describe("POST /api/stripe/webhook", () => {
     expect(sub).toMatchObject({ status: "active", interval: "year", price_id: "price_yearly", cancel_at_period_end: false });
 
     await deliver(eventOf("customer.subscription.updated", subscription(user.id, customer, { cancel_at_period_end: true })));
-    await waitForEmail(user.email, /membership was canceled/);
+    await waitForEmail(user.email, /All-Access membership (will end|has ended)/);
 
     await deliver(eventOf("customer.subscription.deleted", subscription(user.id, customer, { status: "canceled" })));
     const { data: ended } = await admin().from("subscriptions").select("status").eq("user_id", user.id).single();
@@ -107,7 +107,7 @@ describe("POST /api/stripe/webhook", () => {
     const customer = `cus_f_${user.id.slice(0, 8)}`;
     await admin().from("profiles").update({ stripe_customer_id: customer }).eq("id", user.id);
     await deliver(eventOf("invoice.payment_failed", { object: "invoice", customer, amount_due: 2900, currency: "usd" }));
-    const mail = await waitForEmail(user.email, /payment failed/);
+    const mail = await waitForEmail(user.email, /payment didn.t go through/);
     expect(mail.Text).toContain("29");
   });
 });

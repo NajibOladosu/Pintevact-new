@@ -338,7 +338,16 @@ export function createSupabaseStore(clients: SupabaseStoreClients = {}): Store {
       check(await admin().from("contact_messages").insert(m));
     },
     async subscribeNewsletter(email) {
-      check(await admin().from("newsletter_subscribers").upsert({ email: email.toLowerCase() }, { ignoreDuplicates: true }));
+      const address = email.toLowerCase();
+      const db = admin();
+      const existing = check(await db.from("newsletter_subscribers").select("unsubscribe_token, unsubscribed_at").eq("email", address).maybeSingle()) as { unsubscribe_token: string; unsubscribed_at: string | null } | null;
+      if (existing && !existing.unsubscribed_at) return { token: existing.unsubscribe_token, isNew: false };
+      if (existing) {
+        check(await db.from("newsletter_subscribers").update({ unsubscribed_at: null }).eq("email", address));
+        return { token: existing.unsubscribe_token, isNew: true };
+      }
+      const row = check(await db.from("newsletter_subscribers").insert({ email: address }).select("unsubscribe_token").single()) as { unsubscribe_token: string };
+      return { token: row.unsubscribe_token, isNew: true };
     },
 
     async adminStats(): Promise<AdminStats> {

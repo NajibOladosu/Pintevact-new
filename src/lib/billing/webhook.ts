@@ -16,10 +16,10 @@ export interface CommerceRepo {
 }
 
 export interface BillingNotifier {
-  purchaseReceipt(to: { email: string; name: string | null }, p: { courseTitle: string; courseSlug: string; amountCents: number; currency: string; orderId: string }): Promise<unknown>;
-  membershipStarted(to: { email: string; name: string | null }, p: { interval: "month" | "year"; amountCents: number; currency: string; renewsOn: string | null }): Promise<unknown>;
-  membershipCanceled(to: { email: string; name: string | null }, accessUntil: string | null): Promise<unknown>;
-  paymentFailed(to: { email: string; name: string | null }, amountCents: number, currency: string): Promise<unknown>;
+  purchaseReceipt(to: { email: string; name: string | null }, p: { courseTitle: string; courseSlug: string; amountCents: number; currency: string; orderId: string; ref?: string }): Promise<unknown>;
+  membershipStarted(to: { email: string; name: string | null }, p: { interval: "month" | "year"; amountCents: number; currency: string; renewsOn: string | null; ref?: string }): Promise<unknown>;
+  membershipCanceled(to: { email: string; name: string | null }, accessUntil: string | null, ref?: string): Promise<unknown>;
+  paymentFailed(to: { email: string; name: string | null }, amountCents: number, currency: string, ref?: string): Promise<unknown>;
 }
 
 export type WebhookDeps = {
@@ -80,7 +80,7 @@ export async function handleStripeEvent(event: Stripe.Event, deps: WebhookDeps):
           });
           await repo.enroll(userId, course.id, "purchase");
           if (created && user) {
-            await notify.purchaseReceipt(user, { courseTitle: course.title, courseSlug: course.slug, amountCents: session.amount_total ?? 0, currency: session.currency ?? "usd", orderId: session.id.slice(-12) });
+            await notify.purchaseReceipt(user, { courseTitle: course.title, courseSlug: course.slug, amountCents: session.amount_total ?? 0, currency: session.currency ?? "usd", orderId: session.id.slice(-12), ref: session.id });
           }
           return "purchase recorded";
         }
@@ -91,7 +91,7 @@ export async function handleStripeEvent(event: Stripe.Event, deps: WebhookDeps):
           const sub = mapStripeSubscription(await deps.retrieveSubscription(subId));
           const previous = await repo.upsertSubscription(userId, sub);
           if (user && (!previous || (previous.status !== "active" && previous.status !== "trialing"))) {
-            await notify.membershipStarted(user, { interval: sub.interval ?? "month", amountCents: session.amount_total ?? 0, currency: session.currency ?? "usd", renewsOn: sub.currentPeriodEnd });
+            await notify.membershipStarted(user, { interval: sub.interval ?? "month", amountCents: session.amount_total ?? 0, currency: session.currency ?? "usd", renewsOn: sub.currentPeriodEnd, ref: sub.id });
           }
           return "subscription started";
         }
@@ -109,9 +109,9 @@ export async function handleStripeEvent(event: Stripe.Event, deps: WebhookDeps):
         const previous = await repo.upsertSubscription(userId, sub);
         const user = await repo.getUser(userId);
         if (user && event.type === "customer.subscription.deleted") {
-          await notify.membershipCanceled(user, null);
+          await notify.membershipCanceled(user, null, event.id);
         } else if (user && sub.cancelAtPeriodEnd && previous && !previous.cancelAtPeriodEnd) {
-          await notify.membershipCanceled(user, sub.currentPeriodEnd);
+          await notify.membershipCanceled(user, sub.currentPeriodEnd, event.id);
         }
         return `subscription ${sub.status}`;
       }
@@ -120,7 +120,7 @@ export async function handleStripeEvent(event: Stripe.Event, deps: WebhookDeps):
         const invoice = event.data.object as Stripe.Invoice;
         const userId = await resolveUser(repo, null, idOf(invoice.customer));
         const user = userId ? await repo.getUser(userId) : null;
-        if (user) await notify.paymentFailed(user, invoice.amount_due ?? 0, invoice.currency ?? "usd");
+        if (user) await notify.paymentFailed(user, invoice.amount_due ?? 0, invoice.currency ?? "usd", event.id);
         return "payment failed notice";
       }
 

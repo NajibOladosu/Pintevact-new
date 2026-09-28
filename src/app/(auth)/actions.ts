@@ -87,6 +87,7 @@ export async function updatePassword(_: FormState, formData: FormData): Promise<
   if (!data.user) return { message: "Your reset link has expired. Please request a new one." };
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
   if (error) return { message: friendlyAuthError(error.message) };
+  if (data.user.email) await notify.passwordChanged({ email: data.user.email, name: data.user.user_metadata?.full_name ?? null }).catch(console.error);
   redirect("/dashboard?password=updated");
 }
 
