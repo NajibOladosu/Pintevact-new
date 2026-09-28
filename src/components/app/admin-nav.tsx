@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-export function AdminNav({ active }: { active: "overview" | "courses" | "users" }) {
+export function AdminNav({ active }: { active: "overview" | "courses" | "users" | "emails" }) {
   const items = [
     { id: "overview", href: "/admin", label: "Overview" },
     { id: "courses", href: "/admin/courses", label: "Courses" },
     { id: "users", href: "/admin/users", label: "Learners" },
+    { id: "emails", href: "/admin/emails", label: "Emails" },
   ] as const;
   return (
     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">

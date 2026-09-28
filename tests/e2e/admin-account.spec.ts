@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { signInAsNewUser } from "./helpers";
-import { admin } from "../support/supabase";
+import { admin, uniqueEmail } from "../support/supabase";
+import { linkIn, waitForEmail } from "../support/mailpit";
 
 test.describe("account & admin", () => {
   test("learners can update their profile and delete their account", async ({ page }) => {
@@ -51,5 +52,38 @@ test.describe("account & admin", () => {
 
     await page.goto("/admin/users");
     await expect(page.getByRole("table")).toBeVisible();
+  });
+});
+
+test.describe("admin emails", () => {
+  test("admins write and send the Thursday letter, and subscribers can unsubscribe", async ({ page }) => {
+    const reader = uniqueEmail("reader");
+    await admin().from("newsletter_subscribers").insert({ email: reader });
+    const me = await signInAsNewUser(page, { role: "admin" });
+    await page.goto("/admin/emails");
+    await expect(page.getByRole("heading", { name: "Write the Thursday letter" })).toBeVisible();
+
+    const subject = `Letter ${Date.now()}`;
+    const letter = page.locator("form").filter({ has: page.locator("#letter-subject") });
+    await letter.getByLabel("Subject line").fill(subject);
+    await letter.getByLabel("Headline").fill("The space between");
+    await letter.getByLabel("The idea").fill("First thought.\n\nSecond thought.");
+    await letter.getByLabel("This week's experiment").fill("Pause for one breath before you answer.");
+
+    await letter.getByRole("button", { name: "Send test to me" }).click();
+    await expect(letter.getByText(`Test sent to ${me.email}.`)).toBeVisible();
+    await waitForEmail(me.email, new RegExp(`\\[Test\\] ${subject}`));
+
+    page.once("dialog", (d) => d.accept());
+    await letter.getByRole("button", { name: /^Send to \d+ subscribers?$/ }).click();
+    await expect(letter.getByText(/^Issue \d+ sent to \d+ subscribers?/)).toBeVisible();
+    await expect(page.getByText(subject)).toBeVisible();
+
+    const mail = await waitForEmail(reader, new RegExp(subject));
+    await page.goto(linkIn(mail, /\/unsubscribe\?t=n\./).replace(/^https?:\/\/[^/]+/, ""));
+    await page.getByRole("button", { name: /unsubscribe/i }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("You're off the Thursday list.");
+    const { data } = await admin().from("newsletter_subscribers").select("unsubscribed_at").eq("email", reader).single();
+    expect(data?.unsubscribed_at).not.toBeNull();
   });
 });

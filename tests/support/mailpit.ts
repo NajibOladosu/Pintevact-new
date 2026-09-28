@@ -25,3 +25,8 @@ export function linkIn(message: Message, pattern: RegExp) {
   if (!found) throw new Error(`No link matching ${pattern} in "${message.Subject}"`);
   return found;
 }
+
+/** Raw headers of a delivered message (Mailpit returns each header as a list of values). */
+export async function headersOf(message: Message): Promise<Record<string, string[]>> {
+  return (await (await fetch(`${local.mailpitUrl}/api/v1/message/${message.ID}/headers`)).json()) as Record<string, string[]>;
+}
