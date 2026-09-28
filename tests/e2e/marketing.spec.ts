@@ -14,7 +14,7 @@ test.describe("public site", () => {
     await expect(page.getByRole("link", { name: /View course.*Emotional Alchemy/ })).toHaveAttribute("href", "/courses/emotional-alchemy");
     await expectNoHorizontalScroll(page);
     await openMobileMenuIfNeeded(page);
-    await page.getByRole("link", { name: "Courses" }).first().click();
+    await page.getByRole("link", { name: "Explore" }).first().click();
     await expect(page).toHaveURL(/\/courses$/);
   });
 

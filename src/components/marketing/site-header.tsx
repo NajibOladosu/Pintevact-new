@@ -2,7 +2,7 @@ import { getViewer } from "@/lib/data";
 import { HeaderShell } from "./header-shell";
 
 export const marketingNav = [
-  { href: "/courses", label: "Courses" },
+  { href: "/courses", label: "Explore" },
   { href: "/discover", label: "Mind quiz" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
